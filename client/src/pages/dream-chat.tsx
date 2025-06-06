@@ -4,11 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
+import { SleepCycleTracker } from '@/components/sleep-cycle-tracker';
+import { DreamNotificationSystem } from '@/components/dream-notification-system';
 
 
 export default function DreamChat() {
@@ -88,6 +90,7 @@ export default function DreamChat() {
         const frequencies = {
           chat: 220,
           journal: 180,
+          sleep: 160,
           insights: 270,
           symbols: 150,
           vision: 200
@@ -274,25 +277,29 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
-            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
-              <MessageCircle className="w-4 h-4 mr-1" />
+          <TabsList className="grid w-full grid-cols-6 bg-gray-900 border border-gray-700">
+            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <MessageCircle className="w-3 h-3 mr-1" />
               Chat
             </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
-              <BookOpen className="w-4 h-4 mr-1" />
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <BookOpen className="w-3 h-3 mr-1" />
               Journal
             </TabsTrigger>
-            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
-              <Brain className="w-4 h-4 mr-1" />
+            <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Clock className="w-3 h-3 mr-1" />
+              Sleep
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Brain className="w-3 h-3 mr-1" />
               Insights
             </TabsTrigger>
-            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
-              <Book className="w-4 h-4 mr-1" />
+            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Book className="w-3 h-3 mr-1" />
               Symbols
             </TabsTrigger>
-            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
-              <Palette className="w-4 h-4 mr-1" />
+            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Palette className="w-3 h-3 mr-1" />
               Vision
             </TabsTrigger>
           </TabsList>
@@ -303,6 +310,10 @@ export default function DreamChat() {
           
           <TabsContent value="journal" className="mt-6">
             <DreamJournal />
+          </TabsContent>
+          
+          <TabsContent value="sleep" className="mt-6">
+            <SleepCycleTracker />
           </TabsContent>
           
           <TabsContent value="insights" className="mt-6">
