@@ -73,7 +73,7 @@ export default function DreamChat() {
   return (
     <div className="max-w-md mx-auto bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 text-white min-h-screen relative overflow-hidden">
       {/* Header */}
-      <header className="text-center py-8 px-6">
+      <header className="text-center py-4 px-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
             <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin relative" style={{
