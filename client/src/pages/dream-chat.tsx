@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MessageCircle, BookOpen, Brain, Moon, User } from 'lucide-react';
 import { ChatInterface } from '@/components/chat-interface';
@@ -6,27 +6,54 @@ import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
 
 export default function DreamChat() {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDay = (date: Date) => {
+    return date.getDate().toString();
+  };
+
+  const formatDayName = (date: Date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false 
+    });
+  };
+
   return (
     <div className="max-w-md mx-auto bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 text-white min-h-screen relative overflow-hidden">
       {/* Header */}
       <header className="text-center py-8 px-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin" style={{
-              background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
-              border: '2px solid #1f2937'
+            <div className="w-12 h-12 rounded-lg flex flex-col items-center justify-center" style={{
+              background: 'linear-gradient(135deg, #3b82f6, #1e40af)',
+              border: '2px solid #1e40af',
+              boxShadow: '0 4px 8px rgba(59, 130, 246, 0.3)'
             }}>
-              <div className="w-6 h-6 rounded-full relative" style={{
-                background: 'radial-gradient(circle at 30% 30%, #3b82f6, #1e40af, #0f172a)',
-                border: '1px solid #1e40af'
-              }}>
-                <div className="w-2 h-2 rounded-full absolute top-1 left-1" style={{
-                  background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
-                  boxShadow: '0 0 4px rgba(255, 255, 255, 0.8)'
-                }}></div>
+              <div className="text-xs font-bold text-white leading-none">
+                {formatDayName(currentDate)}
+              </div>
+              <div className="text-lg font-black text-white leading-none">
+                {formatDay(currentDate)}
               </div>
             </div>
-            <span className="text-sm font-medium">TODAY</span>
+            <div className="flex flex-col">
+              <span className="text-xs font-medium opacity-75">{formatTime(currentDate)}</span>
+              <span className="text-sm font-medium">TODAY</span>
+            </div>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm font-medium">PROFILE</span>
