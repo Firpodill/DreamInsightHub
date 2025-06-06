@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MessageCircle, BookOpen, Brain, Moon, User } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera } from 'lucide-react';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
 
 export default function DreamChat() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [profileName, setProfileName] = useState(localStorage.getItem('profileName') || '');
+  const [profilePhoto, setProfilePhoto] = useState(localStorage.getItem('profilePhoto') || '');
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [tempName, setTempName] = useState(profileName);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,6 +38,27 @@ export default function DreamChat() {
       minute: '2-digit',
       hour12: false 
     });
+  };
+
+  const handleSaveProfile = () => {
+    setProfileName(tempName);
+    localStorage.setItem('profileName', tempName);
+    if (profilePhoto) {
+      localStorage.setItem('profilePhoto', profilePhoto);
+    }
+    setIsProfileOpen(false);
+  };
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfilePhoto(result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -62,10 +91,90 @@ export default function DreamChat() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium">PROFILE</span>
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-              <User className="w-6 h-6 text-gray-600" />
-            </div>
+            <span className="text-sm font-medium">{profileName || 'PROFILE'}</span>
+            <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+              <DialogTrigger asChild>
+                <button className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105" style={{
+                  background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
+                  border: '2px solid #6b7280'
+                }}>
+                  {profilePhoto ? (
+                    <img 
+                      src={profilePhoto} 
+                      alt="Profile" 
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-6 h-6 text-gray-600" />
+                  )}
+                </button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px] bg-slate-800 border-slate-600">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Edit Profile</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right text-white">
+                      Name
+                    </Label>
+                    <Input
+                      id="name"
+                      value={tempName}
+                      onChange={(e) => setTempName(e.target.value)}
+                      className="col-span-3 bg-slate-700 border-slate-600 text-white"
+                      placeholder="Enter your name"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="photo" className="text-right text-white">
+                      Photo
+                    </Label>
+                    <div className="col-span-3 flex items-center gap-2">
+                      <input
+                        id="photo"
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById('photo')?.click()}
+                        className="border-slate-600 text-white hover:bg-slate-700"
+                      >
+                        <Camera className="w-4 h-4 mr-2" />
+                        Choose Photo
+                      </Button>
+                      {profilePhoto && (
+                        <img 
+                          src={profilePhoto} 
+                          alt="Preview" 
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setIsProfileOpen(false)}
+                    className="border-slate-600 text-white hover:bg-slate-700"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleSaveProfile}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Save
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         
