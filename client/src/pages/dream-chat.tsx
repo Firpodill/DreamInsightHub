@@ -200,7 +200,7 @@ export default function DreamChat() {
         <div className="text-center -mt-6">
           <div className="mb-0" style={{
             background: '#E53E3E',
-            padding: '16px 24px',
+            padding: '16px 24px 32px 24px',
             borderRadius: '12px',
             border: '4px solid #000000',
             transform: 'rotate(-1deg)',
@@ -230,7 +230,7 @@ export default function DreamChat() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="px-6 mb-2 -mt-12">
+      <div className="px-6 mb-2 mt-0">
         <Tabs defaultValue="chat" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
