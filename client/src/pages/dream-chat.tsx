@@ -230,9 +230,58 @@ export default function DreamChat() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="flex-1 px-6">
-        <ChatInterface />
+      {/* Navigation Tabs */}
+      <div className="px-6 mb-6">
+        <Tabs defaultValue="chat" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
+            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Chat
+            </TabsTrigger>
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+              <BookOpen className="w-4 h-4 mr-2" />
+              Journal
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+              <Brain className="w-4 h-4 mr-2" />
+              Insights
+            </TabsTrigger>
+            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+              <Book className="w-4 h-4 mr-2" />
+              Symbols
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="chat" className="mt-6">
+            <ChatInterface />
+          </TabsContent>
+          
+          <TabsContent value="journal" className="mt-6">
+            <DreamJournal />
+          </TabsContent>
+          
+          <TabsContent value="insights" className="mt-6">
+            <InsightsDashboard />
+          </TabsContent>
+          
+          <TabsContent value="symbols" className="mt-6">
+            <div className="text-center space-y-4">
+              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
+                <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
+                <p className="text-gray-400 mb-4">
+                  Explore comprehensive Jungian interpretations of dream symbols
+                </p>
+                <Button 
+                  onClick={() => navigate('/symbols')}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Open Encyclopedia
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
