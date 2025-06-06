@@ -139,22 +139,32 @@ export function ChatInterface() {
                 }} />
                 <div 
                   style={{ 
-                    color: '#FFFFFF',
-                    backgroundColor: 'transparent',
+                    position: 'relative',
+                    zIndex: 10
+                  }}>
+                  <span style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    color: '#000000',
                     fontSize: '14px',
                     fontWeight: '900',
                     lineHeight: '1.0',
-                    textShadow: '6px 6px 12px rgba(0,0,0,1), 3px 3px 6px rgba(0,0,0,1), 1px 1px 2px rgba(0,0,0,1)',
-                    WebkitTextStroke: '2px rgba(0,0,0,1)',
                     letterSpacing: '0.8px',
-                    animation: 'pulse-glow 2s ease-in-out infinite',
-                    opacity: 1,
-                    filter: 'contrast(2) brightness(1.2)',
-                    WebkitFontSmoothing: 'antialiased',
-                    textRendering: 'optimizeLegibility',
-                    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif'
-                  }}>
-                  DECODE<br />DREAM<br />NOW
+                    transform: 'translate(2px, 2px)',
+                    opacity: 0.8
+                  }}>DECODE<br />DREAM<br />NOW</span>
+                  <span style={{
+                    position: 'relative',
+                    color: '#FFFFFF',
+                    fontSize: '14px',
+                    fontWeight: '900',
+                    lineHeight: '1.0',
+                    letterSpacing: '0.8px',
+                    display: 'block',
+                    textAlign: 'center',
+                    animation: 'pulse-glow 2s ease-in-out infinite'
+                  }}>DECODE<br />DREAM<br />NOW</span>
                 </div>
               </div>
             </button>
