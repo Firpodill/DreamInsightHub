@@ -42,7 +42,7 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col space-y-8 pb-8">
+    <div className="flex flex-col space-y-6 pb-8">
       {/* Voice Interface - Realistic Red Lips */}
       <div className="flex justify-center">
         <button
@@ -240,7 +240,7 @@ export function ChatInterface() {
             <Textarea
               value={dreamText}
               onChange={(e) => setDreamText(e.target.value)}
-              placeholder="Describe your dream here..."
+              placeholder=""
               className="w-full h-20 bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-500 text-sm leading-relaxed font-medium"
               disabled={isDecoding}
             />
