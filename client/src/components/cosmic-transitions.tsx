@@ -8,24 +8,34 @@ interface CosmicTransitionProps {
 }
 
 export function CosmicTransition({ isActive, onComplete, type = 'galaxy' }: CosmicTransitionProps) {
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number }>>([]);
+  const [particles, setParticles] = useState<Array<{ 
+    id: number; 
+    x: number; 
+    y: number; 
+    size: number; 
+    delay: number;
+    speed: number;
+    color: string;
+  }>>([]);
 
   useEffect(() => {
     if (isActive) {
       // Generate cosmic particles
-      const newParticles = Array.from({ length: 50 }, (_, i) => ({
+      const newParticles = Array.from({ length: 80 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 4 + 1,
-        delay: Math.random() * 0.5
+        size: Math.random() * 6 + 1,
+        delay: Math.random() * 0.8,
+        speed: Math.random() * 2 + 1,
+        color: Math.random() > 0.7 ? 'rgba(255, 215, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
       }));
       setParticles(newParticles);
 
       // Complete transition after animation
       const timer = setTimeout(() => {
         onComplete?.();
-      }, 2000);
+      }, 2500);
 
       return () => clearTimeout(timer);
     }
@@ -56,30 +66,45 @@ export function CosmicTransition({ isActive, onComplete, type = 'galaxy' }: Cosm
         />
       </div>
 
-      {/* Particle Field */}
+      {/* Enhanced Particle Field */}
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full bg-white"
+          className="absolute rounded-full"
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
             width: particle.size,
             height: particle.size,
+            background: `radial-gradient(circle, ${particle.color} 0%, transparent 70%)`,
+            boxShadow: `0 0 ${particle.size * 2}px ${particle.color.replace('0.9', '0.5').replace('0.8', '0.4')}`,
           }}
-          initial={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
           animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1, 0],
-            rotate: [0, 360],
+            opacity: [0, 1, 1, 0],
+            scale: [0, 1, 1.2, 0],
+            rotate: [0, 360 * particle.speed],
+            x: [0, (Math.random() - 0.5) * 100],
+            y: [0, (Math.random() - 0.5) * 100],
           }}
           transition={{
-            duration: 1.5,
+            duration: 2.5,
             delay: particle.delay,
-            ease: 'easeOut',
+            ease: 'easeInOut',
           }}
         />
       ))}
+      
+      {/* Cosmic Energy Waves */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.3, 0] }}
+        transition={{ duration: 2, ease: 'easeInOut' }}
+      >
+        <div className="absolute inset-0 bg-gradient-radial from-purple-400/20 via-blue-500/10 to-transparent animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-conic from-purple-600/20 via-blue-600/20 to-purple-600/20 animate-spin" style={{ animationDuration: '4s' }} />
+      </motion.div>
 
       {/* Central Portal Effect */}
       {type === 'portal' && (

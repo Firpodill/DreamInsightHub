@@ -338,6 +338,13 @@ export default function DreamChat() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Cosmic Transition Overlay */}
+      <CosmicTransition 
+        isActive={isTransitioning}
+        type={transitionType}
+        onComplete={completeTransition}
+      />
     </div>
   );
 }
