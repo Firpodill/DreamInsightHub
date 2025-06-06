@@ -9,6 +9,7 @@ import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
+import { CosmicTransition, useCosmicTransition, CosmicPageWrapper } from '@/components/cosmic-transitions';
 
 export default function DreamChat() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -18,6 +19,8 @@ export default function DreamChat() {
   const [tempName, setTempName] = useState(profileName);
   const [isMilitaryTime, setIsMilitaryTime] = useState(localStorage.getItem('militaryTime') === 'true');
   const [location, navigate] = useLocation();
+  const [activeTab, setActiveTab] = useState('chat');
+  const { isTransitioning, transitionType, triggerTransition, completeTransition } = useCosmicTransition();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,6 +70,27 @@ export default function DreamChat() {
         setProfilePhoto(result);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle cosmic tab transitions
+  const handleTabChange = (newTab: string) => {
+    if (newTab !== activeTab) {
+      // Determine transition type based on the tab
+      const transitionTypes = {
+        chat: 'portal' as const,
+        journal: 'galaxy' as const,
+        insights: 'nebula' as const,
+        symbols: 'starfield' as const,
+        vision: 'portal' as const
+      };
+      
+      triggerTransition(transitionTypes[newTab as keyof typeof transitionTypes] || 'galaxy');
+      
+      // Delay tab change until transition starts
+      setTimeout(() => {
+        setActiveTab(newTab);
+      }, 300);
     }
   };
 
@@ -231,76 +255,86 @@ export default function DreamChat() {
 
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
-        <Tabs defaultValue="chat" className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
-            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
               <MessageCircle className="w-4 h-4 mr-1" />
               Chat
             </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
               <BookOpen className="w-4 h-4 mr-1" />
               Journal
             </TabsTrigger>
-            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
               <Brain className="w-4 h-4 mr-1" />
               Insights
             </TabsTrigger>
-            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
               <Book className="w-4 h-4 mr-1" />
               Symbols
             </TabsTrigger>
-            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300">
               <Palette className="w-4 h-4 mr-1" />
               Vision
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="chat" className="mt-6">
-            <ChatInterface />
+            <CosmicPageWrapper transitionKey={`chat-${activeTab}`}>
+              <ChatInterface />
+            </CosmicPageWrapper>
           </TabsContent>
           
           <TabsContent value="journal" className="mt-6">
-            <DreamJournal />
+            <CosmicPageWrapper transitionKey={`journal-${activeTab}`}>
+              <DreamJournal />
+            </CosmicPageWrapper>
           </TabsContent>
           
           <TabsContent value="insights" className="mt-6">
-            <InsightsDashboard />
+            <CosmicPageWrapper transitionKey={`insights-${activeTab}`}>
+              <InsightsDashboard />
+            </CosmicPageWrapper>
           </TabsContent>
           
           <TabsContent value="symbols" className="mt-6">
-            <div className="text-center space-y-4">
-              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
-                <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
-                <p className="text-gray-400 mb-4">
-                  Explore comprehensive Jungian interpretations of dream symbols
-                </p>
-                <Button 
-                  onClick={() => navigate('/symbols')}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Open Encyclopedia
-                </Button>
+            <CosmicPageWrapper transitionKey={`symbols-${activeTab}`}>
+              <div className="text-center space-y-4">
+                <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                  <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
+                  <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
+                  <p className="text-gray-400 mb-4">
+                    Explore comprehensive Jungian interpretations of dream symbols
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/symbols')}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Open Encyclopedia
+                  </Button>
+                </div>
               </div>
-            </div>
+            </CosmicPageWrapper>
           </TabsContent>
           
           <TabsContent value="vision" className="mt-6">
-            <div className="text-center space-y-4">
-              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
-                <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
-                <p className="text-gray-400 mb-4">
-                  Create visual collages of your dreams with AI-generated imagery
-                </p>
-                <Button 
-                  onClick={() => navigate('/vision-board')}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Create Vision Board
-                </Button>
+            <CosmicPageWrapper transitionKey={`vision-${activeTab}`}>
+              <div className="text-center space-y-4">
+                <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                  <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+                  <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
+                  <p className="text-gray-400 mb-4">
+                    Create visual collages of your dreams with AI-generated imagery
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/vision-board')}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Create Vision Board
+                  </Button>
+                </div>
               </div>
-            </div>
+            </CosmicPageWrapper>
           </TabsContent>
         </Tabs>
       </div>
