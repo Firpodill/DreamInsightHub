@@ -148,16 +148,16 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gradient-to-b from-purple-50/30 to-blue-50/30">
       {/* Welcome Message */}
       {messages.length === 0 && !isLoading && (
-        <div className="flex justify-center mb-6 p-4">
-          <Card className="p-4 max-w-xs text-center border border-purple-100">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full mx-auto mb-3 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+        <div className="flex justify-center mb-6 p-6">
+          <Card className="p-6 max-w-xs text-center border border-purple-200 bg-gradient-to-br from-white to-purple-50 shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center shadow-xl shadow-purple-500/30 animate-float">
+              <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <p className="text-sm text-gray-600 mb-2">Welcome to your dream sanctuary</p>
-            <p className="text-xs text-gray-500">Share your dreams and discover their deeper meanings through Jungian analysis</p>
+            <h3 className="text-lg font-serif font-semibold text-gray-800 mb-2">Welcome to your dream sanctuary</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">Share your dreams and discover their deeper meanings through Jungian analysis</p>
           </Card>
         </div>
       )}
@@ -165,23 +165,30 @@ export function ChatInterface() {
       {/* Dream Text Area */}
       {dreamText && (
         <div className="mx-4 mb-4">
-          <Card className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200">
-            <div className="flex items-start justify-between mb-2">
-              <h4 className="font-medium text-gray-800 text-sm">Your Dream Entry</h4>
+          <Card className="p-5 bg-gradient-to-br from-purple-100/80 via-blue-50/80 to-indigo-100/80 border border-purple-300 shadow-lg backdrop-blur-sm">
+            <div className="flex items-start justify-between mb-3">
+              <h4 className="font-serif font-semibold text-gray-800 text-base">Your Dream Entry</h4>
               <Button 
                 onClick={handleDecodeDream}
                 disabled={!dreamText.trim() || isDecoding}
-                className="bg-gradient-to-r from-primary to-primary-dark text-white text-sm px-4 py-2"
+                className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 text-white font-medium px-6 py-3 shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105"
                 size="sm"
               >
-                <Wand2 className="w-4 h-4 mr-1" />
+                <Wand2 className="w-5 h-5 mr-2" />
                 {isDecoding ? 'Decoding...' : 'Decode My Dream'}
               </Button>
             </div>
-            <div className="bg-white rounded-lg p-3 max-h-32 overflow-y-auto border">
-              <p className="text-sm text-gray-700">{dreamText}</p>
+            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 max-h-40 overflow-y-auto border border-purple-200 shadow-inner">
+              <p className="text-sm text-gray-700 leading-relaxed font-medium">{dreamText}</p>
             </div>
-            <p className="text-xs text-gray-500 mt-2">{dreamText.length} characters</p>
+            <div className="flex justify-between items-center mt-3">
+              <p className="text-xs text-purple-600 font-medium">{dreamText.length} characters</p>
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+              </div>
+            </div>
           </Card>
         </div>
       )}
@@ -217,38 +224,38 @@ export function ChatInterface() {
         )}
       </div>
 
-      {/* Input Area */}
-      <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-        <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+      {/* Enhanced Input Area */}
+      <div className="sticky bottom-0 bg-gradient-to-t from-white via-purple-50/50 to-transparent border-t border-purple-200 p-4 backdrop-blur-sm">
+        <form onSubmit={handleSubmit} className="flex items-center space-x-4">
           <Button
             type="button"
             onClick={() => setIsVoiceRecording(true)}
-            className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+            className="w-14 h-14 bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 hover:from-purple-600 hover:via-indigo-600 hover:to-blue-600 rounded-full flex items-center justify-center shadow-xl shadow-purple-500/30 active:scale-95 transition-all duration-300 border-2 border-white/20"
           >
-            <Mic className="w-5 h-5 text-white" />
+            <Mic className="w-6 h-6 text-white drop-shadow-sm" />
           </Button>
           
           <div className="flex-1 relative">
             <Input
               type="text"
-              placeholder="Add to your dream..."
+              placeholder="Add to your dream story..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="py-3 px-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50 focus:border-transparent"
+              className="py-4 px-5 border-2 border-purple-200 rounded-2xl focus:ring-2 focus:ring-purple-400/50 focus:border-purple-400 bg-white/80 backdrop-blur-sm text-gray-700 placeholder-gray-500 font-medium shadow-sm"
               disabled={isDecoding}
             />
             <Button
               type="submit"
               disabled={!inputValue.trim() || isDecoding}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 h-auto bg-transparent hover:bg-transparent text-primary"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 h-auto bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 rounded-xl shadow-lg transition-all duration-200"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-5 h-5 text-white" />
             </Button>
           </div>
         </form>
         
-        <p className="text-xs text-gray-500 mt-2 text-center">
-          Speak or type to build your dream • Press "Decode My Dream" when ready
+        <p className="text-sm text-purple-600 mt-3 text-center font-medium">
+          ✨ Speak or type to build your dream • Press "Decode My Dream" when ready
         </p>
       </div>
 

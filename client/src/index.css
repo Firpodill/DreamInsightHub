@@ -13,12 +13,13 @@
   --card-foreground: 20 14.3% 4.1%;
   --border: 20 5.9% 90%;
   --input: 20 5.9% 90%;
-  --primary: 261 70% 54%; /* #6B46C1 - Purple primary */
-  --primary-foreground: 261 100% 99%; /* #FEFCFF */
-  --secondary: 45 93% 47%; /* #F59E0B - Golden secondary */
-  --secondary-foreground: 45 100% 99%;
-  --accent: 262 80% 75%; /* #C084FC - Lavender accent */
-  --accent-foreground: 262 20% 15%;
+  --primary: 250 84% 54%; /* #4F46E5 - Deep mystical purple */
+  --primary-foreground: 250 100% 99%;
+  --primary-dark: 240 70% 40%; /* Darker purple for gradients */
+  --secondary: 280 65% 60%; /* #A855F7 - Mystical lavender */
+  --secondary-foreground: 280 100% 99%;
+  --accent: 310 60% 70%; /* #D946EF - Dream pink accent */
+  --accent-foreground: 310 20% 15%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 60 9.1% 97.8%;
   --ring: 261 70% 54%;
@@ -58,7 +59,9 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased text-foreground;
+    background: linear-gradient(135deg, #0f0c29 0%, #24243e 50%, #302b63 100%);
+    min-height: 100vh;
   }
 
   /* Mobile optimizations */
