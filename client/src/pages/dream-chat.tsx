@@ -38,16 +38,21 @@ export default function DreamChat() {
       <header className="text-center py-8 px-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 rounded-lg flex flex-col items-center justify-center" style={{
-              background: 'linear-gradient(135deg, #3b82f6, #1e40af)',
-              border: '2px solid #1e40af',
-              boxShadow: '0 4px 8px rgba(59, 130, 246, 0.3)'
+            <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin relative" style={{
+              background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
+              border: '2px solid #1f2937'
             }}>
-              <div className="text-xs font-bold text-white leading-none">
-                {formatDayName(currentDate)}
-              </div>
-              <div className="text-lg font-black text-white leading-none">
-                {formatDay(currentDate)}
+              <div className="w-6 h-6 rounded-full relative flex items-center justify-center" style={{
+                background: 'radial-gradient(circle at 30% 30%, #3b82f6, #1e40af, #0f172a)',
+                border: '1px solid #1e40af'
+              }}>
+                <div className="text-xs font-bold text-white leading-none absolute inset-0 flex items-center justify-center">
+                  {formatDay(currentDate)}
+                </div>
+                <div className="w-1 h-1 rounded-full absolute top-0.5 left-0.5" style={{
+                  background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
+                  boxShadow: '0 0 2px rgba(255, 255, 255, 0.8)'
+                }}></div>
               </div>
             </div>
             <div className="flex flex-col">
