@@ -10,7 +10,7 @@ import type { Dream } from '@shared/schema';
 export function DreamJournal() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('calendar');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { data: allDreams = [], isLoading } = useDreams();
@@ -203,20 +203,10 @@ export function DreamJournal() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant={viewMode === 'calendar' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setViewMode('calendar')}
-          className="text-xs"
-        >
-          <Calendar className="w-3 h-3 mr-1" />
-          Calendar
-        </Button>
-        
-        {selectedDate && viewMode === 'list' && (
-          <div className="flex items-center space-x-2">
+      {/* Date Filter */}
+      {selectedDate && viewMode === 'list' && (
+        <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center space-x-2 bg-yellow-100 rounded-lg p-2">
             <span className="text-sm font-medium text-gray-700">
               {selectedDate.toLocaleDateString('en-US', { 
                 weekday: 'long', 
@@ -230,15 +220,15 @@ export function DreamJournal() {
               size="sm"
               onClick={() => {
                 setSelectedDate(null);
-                setViewMode('list');
+                setViewMode('calendar');
               }}
               className="text-xs text-gray-600 hover:text-gray-800"
             >
-              Clear Filter
+              Back to Calendar
             </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Search Bar */}
       {viewMode === 'list' && (
