@@ -198,8 +198,8 @@ export default function DreamChat() {
           </div>
         </div>
         
-        <div className="text-center -mt-20">
-          <div style={{
+        <div className="text-center">
+          <div className="-mb-8" style={{
             background: '#E53E3E',
             padding: '16px 24px',
             borderRadius: '12px',
@@ -207,8 +207,7 @@ export default function DreamChat() {
             transform: 'rotate(-1deg)',
             boxShadow: '8px 8px 0px #000000',
             position: 'relative',
-            zIndex: 10,
-            display: 'inline-block'
+            zIndex: 10
           }}>
             <h1 className="text-5xl font-black" style={{
               color: '#FFFF00',
@@ -232,7 +231,7 @@ export default function DreamChat() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="px-6 mb-6 -mt-2">
+      <div className="px-6 mb-6">
         <Tabs defaultValue="chat" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
