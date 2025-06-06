@@ -9,6 +9,7 @@ import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
+import { DailyJungQuote } from '@/components/daily-jung-quote';
 
 export default function DreamChat() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -253,7 +254,10 @@ export default function DreamChat() {
           </TabsList>
           
           <TabsContent value="chat" className="mt-6">
-            <ChatInterface />
+            <div className="space-y-6">
+              <DailyJungQuote />
+              <ChatInterface />
+            </div>
           </TabsContent>
           
           <TabsContent value="journal" className="mt-6">
