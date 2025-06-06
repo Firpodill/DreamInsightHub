@@ -105,6 +105,16 @@ export function DreamJournal() {
         <p className="text-sm text-gray-600">Track your dream patterns and insights over time</p>
       </div>
 
+      {/* Daily Jung Quote */}
+      <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
+        <div className="text-center">
+          <p className="text-xs text-gray-300 italic mb-1">
+            "Your vision becomes clear when you look into your heart. Who looks outside, dreams. Who looks inside, awakens."
+          </p>
+          <p className="text-xs text-gray-500">— Carl Jung</p>
+        </div>
+      </div>
+
       {/* Search Bar */}
       <div className="relative">
         <Input
