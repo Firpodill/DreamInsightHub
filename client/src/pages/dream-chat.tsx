@@ -45,7 +45,7 @@ export default function DreamChat() {
               filter: 'contrast(1.4) saturate(1.5)',
               lineHeight: '1',
               marginBottom: '4px'
-            }}>DREAMSPEAK<span style={{ fontSize: '0.3em', verticalAlign: 'super' }}>©</span></h1>
+            }}>DREAMSPEAK<span style={{ fontSize: '0.3em', verticalAlign: 'super', color: '#FFFF00', WebkitTextStroke: '0.5px #000000' }}>©</span></h1>
             <h2 className="text-sm font-bold" style={{
               color: '#FFFF00',
               WebkitTextStroke: '1px #000000',
