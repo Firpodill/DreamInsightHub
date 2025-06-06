@@ -118,15 +118,28 @@ export function DreamJournal() {
       </div>
 
       {/* Search Bar */}
-      <div className="relative">
-        <Input
-          type="text"
-          placeholder="Search your dreams..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
-        />
-        <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      <div className="space-y-3">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Search your dreams..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
+          />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
+        
+        {/* Voice Search Hint */}
+        <div className="text-center">
+          <p className="text-xs text-gray-500 mb-2">
+            Or try voice search with commands like "Find my dreams about flying"
+          </p>
+          <div className="inline-flex items-center gap-1 text-xs text-red-600 bg-red-50 px-2 py-1 rounded-full">
+            <Search size={12} />
+            <span>Look for the voice search button →</span>
+          </div>
+        </div>
       </div>
 
       {/* Voice Search Component */}

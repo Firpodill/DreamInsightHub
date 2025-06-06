@@ -46,13 +46,14 @@ export function VoiceSearch({ onDreamSelect, onClose }: VoiceSearchProps) {
 
   if (!isVisible) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-20 right-6 z-[60] animate-bounce">
         <Button
           onClick={() => {
             setIsVisible(true);
             startVoiceSearch();
           }}
-          className="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg"
+          className="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-xl border-2 border-yellow-400"
+          title="Voice Search Dreams"
         >
           <Search size={20} />
         </Button>
