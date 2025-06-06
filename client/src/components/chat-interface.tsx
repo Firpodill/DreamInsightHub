@@ -225,7 +225,7 @@ export function ChatInterface() {
       </div>
 
       {/* Enhanced Input Area */}
-      <div className="sticky bottom-0 bg-gradient-to-t from-white via-purple-50/50 to-transparent border-t border-purple-200 p-4 backdrop-blur-sm">
+      <div className="sticky bottom-0 bg-gradient-to-t from-white via-purple-50/50 to-transparent border-t border-purple-200 p-4 backdrop-blur-sm z-10">
         <form onSubmit={handleSubmit} className="flex items-center space-x-4">
           <Button
             type="button"

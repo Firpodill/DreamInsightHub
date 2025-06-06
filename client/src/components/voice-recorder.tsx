@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Mic, Square, Pause, Play } from 'lucide-react';
 import { useSpeechRecognition } from '@/hooks/use-speech-recognition';
@@ -95,7 +96,11 @@ export function VoiceRecorder({ open, onClose, onTranscriptionComplete }: VoiceR
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm mx-auto">
+      <DialogContent className="max-w-sm mx-auto z-[9999] bg-white border-0 shadow-2xl">
+        <VisuallyHidden>
+          <DialogTitle>Voice Recording</DialogTitle>
+          <DialogDescription>Record your dream using voice input</DialogDescription>
+        </VisuallyHidden>
         <div className="text-center p-6 voice-recording">
           <div className="relative">
             <div className={`w-24 h-24 bg-gradient-to-br from-primary to-primary-dark rounded-full mx-auto mb-4 flex items-center justify-center ${isListening && !isPaused ? 'animate-pulse' : ''}`}>
