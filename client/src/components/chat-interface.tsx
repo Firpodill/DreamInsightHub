@@ -123,7 +123,7 @@ export function ChatInterface() {
           <button
             onClick={handleDecodeClick}
             disabled={!dreamText.trim() || isDecoding}
-            className="w-32 h-32 bg-black bg-opacity-95 text-white font-bold text-sm border-3 border-white rounded-full hover:bg-opacity-100 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
+            className="w-32 h-32 bg-black bg-opacity-100 text-white font-bold text-sm border-3 border-white rounded-full hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
             style={{
               boxShadow: '4px 4px 0px #ff6b6b'
             }}
