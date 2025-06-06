@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic } from "lucide-react";
+import { Mic, Brain } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
@@ -128,9 +128,12 @@ export function ChatInterface() {
               boxShadow: '4px 4px 0px #ff6b6b'
             }}
           >
-            <span className="text-center leading-tight">
-              {isDecoding ? 'DECODE\nNOW' : 'DECODE\nNOW'}
-            </span>
+            <div className="flex flex-col items-center justify-center">
+              <Brain size={20} className="text-white mb-1" />
+              <span className="text-center leading-none text-xs font-bold">
+                DECODE<br />NOW
+              </span>
+            </div>
           </button>
         </div>
       </div>
