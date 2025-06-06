@@ -59,35 +59,6 @@ export function ChatInterface() {
       {/* Interactive overlay */}
       <div className="relative z-10 min-h-screen">
         
-        {/* DREAMSPEAK Title */}
-        <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-20">
-          <div className="text-center">
-            <h1 style={{
-              fontSize: '2.5rem',
-              fontWeight: '900',
-              color: '#FFFFFF',
-              textShadow: '4px 4px 0px #ff6b6b, 8px 8px 0px #000000, 12px 12px 0px rgba(0,0,0,0.3)',
-              letterSpacing: '0.1em',
-              fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-              WebkitTextStroke: '2px #000000',
-              animation: 'title-glow 3s ease-in-out infinite alternate'
-            }}>
-              DREAMSPEAK
-            </h1>
-            <div style={{
-              fontSize: '0.9rem',
-              fontWeight: '700',
-              color: '#ff6b6b',
-              textShadow: '2px 2px 0px #000000, 4px 4px 0px rgba(0,0,0,0.3)',
-              letterSpacing: '0.15em',
-              marginTop: '-0.5rem',
-              WebkitTextStroke: '1px #000000'
-            }}>
-              JUNGIAN DREAM DECODER
-            </div>
-          </div>
-        </div>
-        
         {/* Text area positioned over the speech bubble in the image */}
         <div className="absolute top-[12%] left-[5%] w-[40%] h-[35%]">
           <div className="w-full h-full flex items-center justify-center p-6">
@@ -148,7 +119,7 @@ export function ChatInterface() {
         </div>
 
         {/* Decode Button positioned at bottom */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
           <div className="relative">
             <button
               onClick={handleDecodeClick}

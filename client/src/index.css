@@ -36,15 +36,6 @@
   }
 }
 
-@keyframes title-glow {
-  0% {
-    text-shadow: 4px 4px 0px #ff6b6b, 8px 8px 0px #000000, 12px 12px 0px rgba(0,0,0,0.3);
-  }
-  100% {
-    text-shadow: 4px 4px 0px #ff6b6b, 8px 8px 0px #000000, 12px 12px 0px rgba(0,0,0,0.3), 0 0 30px rgba(255,107,107,0.6);
-  }
-}
-
 @keyframes speakPulse {
   0%, 100% {
     opacity: 1;

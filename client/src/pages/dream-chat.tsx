@@ -7,26 +7,35 @@ import { InsightsDashboard } from '@/components/insights-dashboard';
 
 export default function DreamChat() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Header with spacing */}
-      <header className="relative z-30 py-4 px-6">
-        <div className="flex items-center justify-between">
+    <div className="max-w-md mx-auto bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 text-white min-h-screen relative overflow-hidden">
+      {/* Header */}
+      <header className="text-center py-8 px-6">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
               <Moon className="w-6 h-6 text-gray-600" />
             </div>
-            <span className="text-sm font-medium text-white">TODAY</span>
+            <span className="text-sm font-medium">TODAY</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-white">PROFILE</span>
+            <span className="text-sm font-medium">PROFILE</span>
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-gray-600" />
             </div>
           </div>
         </div>
+        
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">DREAMSPEAK</h1>
+          <h2 className="text-lg font-semibold">JUNGIAN DREAM</h2>
+          <h2 className="text-lg font-semibold mb-8">DECODER</h2>
+        </div>
       </header>
 
-      <ChatInterface />
+      {/* Main Content */}
+      <div className="flex-1 px-6">
+        <ChatInterface />
+      </div>
     </div>
   );
 }
