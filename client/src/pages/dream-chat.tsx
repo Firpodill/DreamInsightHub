@@ -26,7 +26,15 @@ export default function DreamChat() {
         </div>
         
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">DREAMSPEAK</h1>
+          <h1 className="text-3xl font-black mb-2" style={{
+            background: 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+            letterSpacing: '2px',
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif'
+          }}>DREAMSPEAK</h1>
           <h2 className="text-lg font-semibold">JUNGIAN DREAM</h2>
           <h2 className="text-lg font-semibold mb-8">DECODER</h2>
         </div>
