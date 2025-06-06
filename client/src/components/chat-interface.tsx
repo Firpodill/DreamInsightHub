@@ -123,12 +123,16 @@ export function ChatInterface() {
           <button
             onClick={handleDecodeClick}
             disabled={!dreamText.trim() || isDecoding}
-            className="px-8 py-4 bg-black text-white font-black text-xl tracking-wider border-4 border-black hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            className="relative px-12 py-5 bg-gradient-to-r from-red-500 to-pink-500 text-white font-black text-2xl tracking-widest border-4 border-white rounded-lg hover:from-red-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-110 hover:rotate-1 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl"
             style={{
-              boxShadow: '6px 6px 0px #ff6b6b'
+              boxShadow: '8px 8px 0px #000, 12px 12px 20px rgba(0,0,0,0.3)',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
             }}
           >
-            {isDecoding ? 'DECODING...' : 'DECODE MY DREAM NOW'}
+            <span className="relative z-10">
+              {isDecoding ? '🔮 DECODING...' : '🔮 DECODE MY DREAM NOW'}
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-red-400 opacity-20 rounded-lg animate-pulse"></div>
           </button>
         </div>
       </div>
