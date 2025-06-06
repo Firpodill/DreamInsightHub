@@ -36,7 +36,7 @@ export default function DreamChat() {
             textTransform: 'uppercase',
             filter: 'contrast(1.3)'
           }}>DREAMSPEAK</h1>
-          <h2 className="text-lg font-semibold mb-8">JUNGIAN DREAM DECODER</h2>
+          <h2 className="text-lg font-semibold mb-4">JUNGIAN DREAM DECODER</h2>
         </div>
       </header>
 
