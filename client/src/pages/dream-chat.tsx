@@ -4,7 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
@@ -16,6 +17,7 @@ export default function DreamChat() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [tempName, setTempName] = useState(profileName);
   const [isMilitaryTime, setIsMilitaryTime] = useState(localStorage.getItem('militaryTime') === 'true');
+  const [location, navigate] = useLocation();
 
   useEffect(() => {
     const timer = setInterval(() => {
