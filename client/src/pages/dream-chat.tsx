@@ -91,7 +91,12 @@ export default function DreamChat() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium">{profileName || 'PROFILE'}</span>
+            <span className="text-sm font-medium px-2 py-1 rounded" style={{
+              backgroundColor: profileName ? '#E53E3E' : 'transparent',
+              color: profileName ? '#FFFFFF' : 'inherit'
+            }}>
+              {profileName || 'PROFILE'}
+            </span>
             <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
               <DialogTrigger asChild>
                 <button className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105" style={{
