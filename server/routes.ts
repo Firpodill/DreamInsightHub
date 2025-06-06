@@ -94,7 +94,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Image generation endpoint
+  // Custom image generation endpoint for vision boards
+  app.post("/api/generate-image", async (req, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      if (!prompt) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      const result = await generateImage(prompt);
+      
+      res.json({
+        imageUrl: result.url,
+        prompt: prompt
+      });
+    } catch (error) {
+      console.error('Image generation error:', error);
+      res.status(500).json({ error: "Failed to generate image", details: error.message });
+    }
+  });
+
+  // Image generation endpoint for dreams
   app.post("/api/dreams/:dreamId/generate-image", async (req, res) => {
     try {
       const dreamId = parseInt(req.params.dreamId);

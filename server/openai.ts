@@ -101,6 +101,24 @@ Mood: Contemplative, mysterious, and psychologically profound.`;
   }
 }
 
+export async function generateImage(prompt: string): Promise<{ url: string }> {
+  try {
+    // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024",
+      quality: "standard",
+    });
+
+    return { url: response.data[0].url || '' };
+  } catch (error) {
+    console.error('Image generation error:', error);
+    throw new Error(`Failed to generate image: ${error.message}`);
+  }
+}
+
 export async function transcribeAudio(audioBuffer: Buffer): Promise<{ text: string }> {
   try {
     // Note: In a real implementation, you'd save the buffer to a temporary file

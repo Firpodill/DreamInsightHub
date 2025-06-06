@@ -78,12 +78,17 @@ export function useGenerateImage() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (dreamId: number) => {
-      const response = await apiRequest('POST', `/api/dreams/${dreamId}/generate-image`);
-      return response.json();
+    mutationFn: async (params: { prompt: string; dreamId?: number }) => {
+      if (params.dreamId) {
+        const response = await apiRequest('POST', `/api/dreams/${params.dreamId}/generate-image`);
+        return response.json();
+      } else {
+        const response = await apiRequest('POST', '/api/generate-image', { prompt: params.prompt });
+        return response.json();
+      }
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/dreams', data.dream?.id] });
+      queryClient.invalidateQueries({ queryKey: ['/api/dreams'] });
       queryClient.invalidateQueries({ queryKey: ['/api/chat/messages'] });
     }
   });
