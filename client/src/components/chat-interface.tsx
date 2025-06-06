@@ -130,10 +130,11 @@ export function ChatInterface() {
           >
             <div className="flex flex-col items-center justify-center relative z-10">
               <Brain size={24} className="text-white mb-1 drop-shadow-lg" style={{ color: '#ffffff', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))' }} />
-              <span className="text-center leading-none text-sm font-bold text-white drop-shadow-lg" style={{ 
+              <span className="text-center leading-none text-base font-black text-white drop-shadow-lg" style={{ 
                 color: '#ffffff', 
-                textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(255,255,255,0.3)',
-                fontWeight: '900'
+                textShadow: '3px 3px 6px rgba(0,0,0,1), 0 0 12px rgba(255,255,255,0.8), 2px 2px 0px rgba(0,0,0,1)',
+                fontWeight: '900',
+                WebkitTextStroke: '1px rgba(0,0,0,0.5)'
               }}>
                 DECODE<br />DREAM<br />NOW
               </span>
