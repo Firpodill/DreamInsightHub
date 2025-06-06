@@ -55,15 +55,11 @@ export function ChatInterface() {
             className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center rounded-full"
             disabled={isDecoding}
           >
-            {/* SPEAK text positioned below lips */}
-          </button>
-          
-          {/* SPEAK text positioned below the lips area */}
-          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-            <span className="text-black font-black text-xl tracking-wider drop-shadow-lg">
+            {/* SPEAK text in center of mouth */}
+            <span className="text-white font-black text-xl tracking-wider drop-shadow-lg bg-black bg-opacity-70 px-4 py-1 rounded">
               SPEAK
             </span>
-          </div>
+          </button>
         </div>
 
         {/* Decode Button positioned at bottom */}
