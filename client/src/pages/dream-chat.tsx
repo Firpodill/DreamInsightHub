@@ -15,6 +15,7 @@ export default function DreamChat() {
   const [profilePhoto, setProfilePhoto] = useState(localStorage.getItem('profilePhoto') || '');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [tempName, setTempName] = useState(profileName);
+  const [isMilitaryTime, setIsMilitaryTime] = useState(localStorage.getItem('militaryTime') === 'true');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -36,8 +37,14 @@ export default function DreamChat() {
     return date.toLocaleTimeString('en-US', { 
       hour: '2-digit', 
       minute: '2-digit',
-      hour12: false 
+      hour12: !isMilitaryTime 
     });
+  };
+
+  const toggleTimeFormat = () => {
+    const newFormat = !isMilitaryTime;
+    setIsMilitaryTime(newFormat);
+    localStorage.setItem('militaryTime', newFormat.toString());
   };
 
   const handleSaveProfile = () => {
@@ -85,7 +92,13 @@ export default function DreamChat() {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-medium opacity-75">{formatTime(currentDate)}</span>
+              <button 
+                onClick={toggleTimeFormat}
+                className="text-xs font-medium opacity-75 hover:opacity-100 transition-opacity text-left"
+                title={`Switch to ${isMilitaryTime ? 'Standard' : 'Military'} Time`}
+              >
+                {formatTime(currentDate)}
+              </button>
               <span className="text-sm font-medium">TODAY</span>
               <span className="text-xs font-bold" style={{ color: '#E53E3E' }}>{formatDayName(currentDate)}</span>
             </div>
