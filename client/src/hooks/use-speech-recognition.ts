@@ -60,8 +60,8 @@ export function useSpeechRecognition(
         let finalTranscript = '';
         let interimTranscript = '';
 
-        // Process all results to build complete transcript
-        for (let i = 0; i < event.results.length; i++) {
+        // Process only new results from the current recognition event
+        for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcriptSegment = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcriptSegment + ' ';
@@ -70,13 +70,15 @@ export function useSpeechRecognition(
           }
         }
 
-        // Update transcript by appending to existing content
+        // Update transcript cleanly
         setTranscript(prev => {
-          const newFinalPart = finalTranscript.trim();
-          if (newFinalPart && !prev.includes(newFinalPart)) {
-            return (prev + ' ' + newFinalPart + ' ' + interimTranscript).trim();
+          const trimmedFinal = finalTranscript.trim();
+          if (trimmedFinal) {
+            // Add final results permanently
+            return (prev + ' ' + trimmedFinal + (interimTranscript ? ' ' + interimTranscript : '')).trim();
           }
-          return prev + ' ' + interimTranscript;
+          // Just show interim results without permanently adding them
+          return prev + (interimTranscript ? ' ' + interimTranscript : '');
         });
       };
 
