@@ -74,7 +74,7 @@ export default function DreamChat() {
     <div className="max-w-md mx-auto bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 text-white min-h-screen relative overflow-hidden">
       {/* Header */}
       <header className="text-center py-4 px-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin relative" style={{
               background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
@@ -199,7 +199,7 @@ export default function DreamChat() {
         </div>
         
         <div className="text-center">
-          <div className="-mb-8" style={{
+          <div className="-mb-4" style={{
             background: '#E53E3E',
             padding: '16px 24px',
             borderRadius: '12px',
