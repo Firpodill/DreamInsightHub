@@ -1,8 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Mountain, Key, Eye, TrendingUp, Target } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Brain, Mountain, Key, Eye, TrendingUp, Crown, BarChart3 } from 'lucide-react';
 import { useDreamInsights } from '@/hooks/use-dreams';
+import { ArchetypeVisualization } from './archetype-visualization';
 import type { ArchetypeFrequency, RecentPattern } from '@/types/dream';
 
 export function InsightsDashboard() {
@@ -21,7 +23,7 @@ export function InsightsDashboard() {
 
   const getArchetypeColor = (archetype: string) => {
     const colors = {
-      'Hero': 'bg-primary',
+      'Hero': 'bg-red-600',
       'Shadow': 'bg-gray-600',
       'Self': 'bg-yellow-500',
       'Anima': 'bg-pink-500',
@@ -36,18 +38,18 @@ export function InsightsDashboard() {
 
   if (isLoading) {
     return (
-      <div className="p-4 space-y-4">
-        <div className="bg-gradient-to-r from-yellow-500/10 to-primary/10 rounded-2xl p-4">
-          <div className="h-6 bg-gray-200 rounded mb-2 animate-pulse"></div>
-          <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+      <div className="space-y-4">
+        <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+          <div className="h-6 bg-gray-700 rounded mb-2 animate-pulse"></div>
+          <div className="h-4 bg-gray-700 rounded w-3/4 animate-pulse"></div>
         </div>
         {[...Array(3)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
+          <Card key={i} className="bg-gray-900 border-gray-700 animate-pulse">
             <CardContent className="p-4">
-              <div className="h-5 bg-gray-200 rounded mb-3"></div>
+              <div className="h-5 bg-gray-700 rounded mb-3"></div>
               <div className="space-y-2">
-                <div className="h-3 bg-gray-200 rounded"></div>
-                <div className="h-3 bg-gray-200 rounded w-4/5"></div>
+                <div className="h-3 bg-gray-700 rounded"></div>
+                <div className="h-3 bg-gray-700 rounded w-4/5"></div>
               </div>
             </CardContent>
           </Card>
@@ -58,141 +60,129 @@ export function InsightsDashboard() {
 
   if (!insights) {
     return (
-      <div className="p-4 text-center py-8">
-        <Brain className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-        <p className="text-gray-500">No insights available yet</p>
+      <div className="text-center py-8">
+        <Brain className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+        <p className="text-gray-300">No insights available yet</p>
         <p className="text-sm text-gray-400 mt-1">Record some dreams to generate insights</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 space-y-4">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-yellow-500/10 to-primary/10 rounded-2xl p-4">
-        <h2 className="font-serif text-xl font-semibold text-gray-800 mb-2">Your Insights</h2>
-        <p className="text-sm text-gray-600">Discover patterns in your unconscious mind</p>
-      </div>
-
-      {/* Overview Stats */}
-      <div className="grid grid-cols-2 gap-3">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="w-8 h-8 bg-primary/10 rounded-full mx-auto mb-2 flex items-center justify-center">
-              <Brain className="w-4 h-4 text-primary" />
-            </div>
-            <div className="text-lg font-semibold text-gray-800">{insights.totalDreams}</div>
-            <div className="text-xs text-gray-500">Dreams Recorded</div>
-          </CardContent>
-        </Card>
+    <div className="space-y-6">
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 bg-gray-900 border border-gray-700">
+          <TabsTrigger value="overview" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="archetypes" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+            <Crown className="w-4 h-4 mr-2" />
+            Archetypes
+          </TabsTrigger>
+        </TabsList>
         
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="w-8 h-8 bg-green-500/10 rounded-full mx-auto mb-2 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-green-600" />
+        <TabsContent value="overview" className="mt-6">
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <h2 className="text-xl font-semibold text-white mb-2">Your Dream Insights</h2>
+              <p className="text-sm text-gray-400">Discover patterns in your unconscious mind</p>
             </div>
-            <div className="text-lg font-semibold text-gray-800">{insights.dreamStreak}</div>
-            <div className="text-xs text-gray-500">Day Streak</div>
-          </CardContent>
-        </Card>
-      </div>
 
-      {/* Archetype Chart */}
-      <Card>
-        <CardContent className="p-4">
-          <h3 className="font-medium text-gray-800 mb-4">Archetype Frequency</h3>
-          <div className="space-y-3">
-            {insights.archetypeFrequencies.slice(0, 5).map((item: ArchetypeFrequency) => (
-              <div key={item.archetype} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-4 h-4 ${getArchetypeColor(item.archetype)} rounded`}></div>
-                  <span className="text-sm font-medium">{item.archetype}</span>
+            {/* Overview Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4 text-center">
+                  <div className="w-8 h-8 bg-blue-500/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <Brain className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <div className="text-lg font-semibold text-white">{insights.totalDreams}</div>
+                  <div className="text-xs text-gray-400">Dreams Recorded</div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4 text-center">
+                  <div className="w-8 h-8 bg-green-500/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-green-400" />
+                  </div>
+                  <div className="text-lg font-semibold text-white">{insights.dreamStreak}</div>
+                  <div className="text-xs text-gray-400">Day Streak</div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Archetype Chart */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardContent className="p-4">
+                <h3 className="font-medium text-white mb-4">Archetype Frequency</h3>
+                <div className="space-y-3">
+                  {insights.archetypeFrequencies.slice(0, 5).map((item: ArchetypeFrequency) => (
+                    <div key={item.archetype} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 ${getArchetypeColor(item.archetype)} rounded`}></div>
+                        <span className="text-sm font-medium text-white">{item.archetype}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={item.frequency} className="w-20 h-2" />
+                        <span className="text-sm text-gray-400 w-8">{item.frequency}%</span>
+                      </div>
+                    </div>
+                  ))}
+                  {insights.archetypeFrequencies.length === 0 && (
+                    <p className="text-sm text-gray-400 text-center py-4">
+                      No archetypes detected yet. Record more dreams for analysis.
+                    </p>
+                  )}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Progress value={item.frequency} className="w-20 h-2" />
-                  <span className="text-sm text-gray-600 w-8">{item.frequency}%</span>
-                </div>
-              </div>
-            ))}
-            {insights.archetypeFrequencies.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-4">
-                No archetype data available yet
-              </p>
+              </CardContent>
+            </Card>
+
+            {/* Recent Patterns */}
+            {insights.recentPatterns.length > 0 && (
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4">
+                  <h3 className="font-medium text-white mb-4">Recent Patterns</h3>
+                  <div className="space-y-3">
+                    {insights.recentPatterns.map((pattern: RecentPattern, index: number) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-purple-900/20 rounded-xl border border-purple-700/30">
+                        <div className="text-purple-400 mt-1">
+                          {getPatternIcon(pattern.icon)}
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium text-white">{pattern.title}</h4>
+                          <p className="text-xs text-gray-400">{pattern.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Symbol Insights */}
+            {insights.symbolFrequencies.length > 0 && (
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4">
+                  <h3 className="font-medium text-white mb-4">Recurring Symbols</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {insights.symbolFrequencies.slice(0, 10).map((symbol) => (
+                      <Badge key={symbol.symbol} variant="outline" className="text-xs text-green-400 border-green-400">
+                        {symbol.symbol} ({symbol.count})
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Individuation Progress */}
-      <Card>
-        <CardContent className="p-4">
-          <h3 className="font-medium text-gray-800 mb-4">Individuation Journey</h3>
-          <div className="text-center">
-            <div className="relative w-24 h-24 mx-auto mb-4">
-              <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
-              <div 
-                className="absolute inset-0 w-24 h-24 border-4 border-primary rounded-full transition-all duration-300"
-                style={{
-                  borderTopColor: 'transparent',
-                  transform: `rotate(${(insights.individuationProgress / 100) * 360 - 90}deg)`
-                }}
-              ></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-semibold text-primary">
-                  {insights.individuationProgress}%
-                </span>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 mb-2">Integration Level</p>
-            <p className="text-xs text-gray-500">
-              {insights.individuationProgress >= 70 
-                ? "Strong progress in understanding your unconscious patterns"
-                : insights.individuationProgress >= 40
-                ? "Making steady progress on your individuation journey"
-                : "Beginning to explore your unconscious patterns"
-              }
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Recent Patterns */}
-      {insights.recentPatterns.length > 0 && (
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="font-medium text-gray-800 mb-4">Recent Patterns</h3>
-            <div className="space-y-3">
-              {insights.recentPatterns.map((pattern: RecentPattern, index: number) => (
-                <div key={index} className="flex items-start space-x-3 p-3 bg-purple-50 rounded-xl">
-                  <div className="text-primary mt-1">
-                    {getPatternIcon(pattern.icon)}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-800">{pattern.title}</h4>
-                    <p className="text-xs text-gray-600">{pattern.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Symbol Insights */}
-      {insights.symbolFrequencies.length > 0 && (
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="font-medium text-gray-800 mb-4">Recurring Symbols</h3>
-            <div className="flex flex-wrap gap-2">
-              {insights.symbolFrequencies.slice(0, 10).map((symbol) => (
-                <Badge key={symbol.symbol} variant="secondary" className="text-xs">
-                  {symbol.symbol} ({symbol.count})
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+        </TabsContent>
+        
+        <TabsContent value="archetypes" className="mt-6">
+          <ArchetypeVisualization />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
