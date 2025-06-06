@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Search, Brain, Image as ImageIcon, Calendar } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
-import { VoiceSearch } from '@/components/voice-search';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -130,19 +129,7 @@ export function DreamJournal() {
           <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
         
-        {/* Voice Search */}
-        <div className="text-center">
-          <p className="text-xs text-gray-500 mb-2">
-            Or try voice search with commands like "Find my dreams about flying"
-          </p>
-          <VoiceSearch 
-            inline={true}
-            onDreamSelect={(dream) => {
-              setSelectedDream(dream);
-              setSearchQuery(dream.content.substring(0, 50));
-            }}
-          />
-        </div>
+
       </div>
 
       {/* Dream Entries */}
