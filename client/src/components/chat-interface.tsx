@@ -131,7 +131,7 @@ export function ChatInterface() {
             <div className="flex flex-col items-center justify-center">
               <Brain size={20} className="text-white mb-1" />
               <span className="text-center leading-none text-xs font-bold">
-                DECODE<br />NOW
+                DECODE<br />DREAM<br />NOW
               </span>
             </div>
           </button>
