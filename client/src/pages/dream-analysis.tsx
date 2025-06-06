@@ -177,7 +177,7 @@ export default function DreamAnalysis() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {analysis.archetypes.map((archetype: string, index: number) => (
+                    {(analysis.archetypes || []).map((archetype: string, index: number) => (
                       <Badge key={index} variant="outline" className="text-red-400 border-red-400 text-xs">
                         {archetype}
                       </Badge>
@@ -192,7 +192,7 @@ export default function DreamAnalysis() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {analysis.symbols.map((symbol: string, index: number) => (
+                    {(analysis.symbols || []).map((symbol: string, index: number) => (
                       <Badge key={index} variant="outline" className="text-green-400 border-green-400 text-xs">
                         {symbol}
                       </Badge>
