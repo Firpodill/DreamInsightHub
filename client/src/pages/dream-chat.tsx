@@ -96,7 +96,7 @@ export default function DreamChat() {
               <DialogTrigger asChild>
                 <button className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105" style={{
                   background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
-                  border: '2px solid #6b7280'
+                  border: '2px solid #FFFF00'
                 }}>
                   {profilePhoto ? (
                     <img 
