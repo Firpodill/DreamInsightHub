@@ -58,6 +58,7 @@ export default function DreamChat() {
             <div className="flex flex-col">
               <span className="text-xs font-medium opacity-75">{formatTime(currentDate)}</span>
               <span className="text-sm font-medium">TODAY</span>
+              <span className="text-xs font-bold" style={{ color: '#E53E3E' }}>{formatDayName(currentDate)}</span>
             </div>
           </div>
           <div className="flex items-center space-x-2">
