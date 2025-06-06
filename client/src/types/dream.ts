@@ -29,6 +29,11 @@ export interface DreamAnalysisResponse {
   summary: string;
   archetypes: string[];
   symbols: string[];
+  predominantSymbol: {
+    name: string;
+    meaning: string;
+    jungianSignificance: string;
+  };
   jungianInterpretation: string;
   shadowWork: string;
   individuationStage: string;

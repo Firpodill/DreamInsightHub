@@ -9,6 +9,11 @@ export interface DreamAnalysis {
   summary: string;
   archetypes: string[];
   symbols: string[];
+  predominantSymbol: {
+    name: string;
+    meaning: string;
+    jungianSignificance: string;
+  };
   jungianInterpretation: string;
   shadowWork: string;
   individuationStage: string;
@@ -36,12 +41,19 @@ export async function analyzeDream(dreamContent: string, previousDreams?: string
 - Symbolic interpretation through amplification
 - Compensation theory (how dreams balance conscious attitudes)
 
-Provide thoughtful, nuanced analysis that respects the dreamer's unique psychological landscape. Respond with valid JSON in this exact format:
+Focus on identifying the single most significant symbol that carries the deepest psychological meaning according to Jung's symbolic framework. This should be the symbol that most powerfully represents the dream's core message about the dreamer's unconscious state.
+
+Respond with valid JSON in this exact format:
 
 {
   "summary": "Brief summary of dream themes",
   "archetypes": ["array", "of", "detected", "archetypes"],
   "symbols": ["key", "symbolic", "elements"],
+  "predominantSymbol": {
+    "name": "The single most psychologically significant symbol",
+    "meaning": "What this symbol represents in the dream context",
+    "jungianSignificance": "Deep Jungian interpretation of why this symbol is the most important for the dreamer's psychological development"
+  },
   "jungianInterpretation": "Detailed Jungian analysis of the dream's meaning and psychological significance",
   "shadowWork": "Insights about shadow elements and integration opportunities",
   "individuationStage": "Assessment of where this dream fits in the individuation journey",
@@ -63,6 +75,11 @@ Provide thoughtful, nuanced analysis that respects the dreamer's unique psycholo
       summary: result.summary || 'Dream analysis completed',
       archetypes: Array.isArray(result.archetypes) ? result.archetypes : [],
       symbols: Array.isArray(result.symbols) ? result.symbols : [],
+      predominantSymbol: result.predominantSymbol || {
+        name: 'Unknown Symbol',
+        meaning: 'Symbol analysis in progress',
+        jungianSignificance: 'Psychological significance being evaluated'
+      },
       jungianInterpretation: result.jungianInterpretation || 'Analysis pending',
       shadowWork: result.shadowWork || 'Shadow work insights to be explored',
       individuationStage: result.individuationStage || 'Stage assessment in progress',

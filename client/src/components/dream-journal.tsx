@@ -181,6 +181,18 @@ export function DreamJournal() {
         <p className="text-sm text-gray-600 mb-3 line-clamp-3">
           {dream.content}
         </p>
+
+        {/* Predominant Symbol Display */}
+        {dream.analysis?.predominantSymbol && (
+          <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-3 mb-3 border border-red-200">
+            <div className="flex items-center mb-1">
+              <div className="w-2 h-2 bg-red-600 rounded-full mr-2"></div>
+              <span className="text-sm font-bold text-gray-800">Core Symbol: {dream.analysis.predominantSymbol.name}</span>
+            </div>
+            <p className="text-xs text-gray-600 mb-1">{dream.analysis.predominantSymbol.meaning}</p>
+            <p className="text-xs text-gray-500 italic">{dream.analysis.predominantSymbol.jungianSignificance}</p>
+          </div>
+        )}
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 text-xs text-gray-500">
