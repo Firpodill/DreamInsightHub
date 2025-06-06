@@ -119,7 +119,7 @@ export function ChatInterface() {
         </div>
 
         {/* Decode Button positioned at bottom */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+        <div className="absolute left-1/2 transform -translate-x-1/2" style={{ bottom: '-10px' }}>
           <div className="relative">
             <button
               onClick={handleDecodeClick}
