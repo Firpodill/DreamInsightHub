@@ -36,30 +36,34 @@ export function ChatInterface() {
       <div className="relative z-10 min-h-screen">
         
         {/* Text area positioned over the speech bubble in the image */}
-        <div className="absolute top-[15%] left-[8%] w-[35%] h-[30%]">
-          <div className="w-full h-full flex items-center justify-center p-4">
+        <div className="absolute top-[12%] left-[5%] w-[40%] h-[35%]">
+          <div className="w-full h-full flex items-center justify-center p-6">
             <Textarea
               value={dreamText}
               onChange={(e) => setDreamText(e.target.value)}
-              placeholder="Tell me about your dream..."
-              className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-800 placeholder-gray-600 text-lg leading-relaxed font-medium text-center"
+              placeholder=""
+              className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center"
               disabled={isDecoding}
             />
           </div>
         </div>
 
         {/* Interactive button positioned over the lips in the image */}
-        <div className="absolute bottom-[15%] left-1/2 transform -translate-x-1/2 w-[60%] h-[25%]">
+        <div className="absolute bottom-[20%] left-1/2 transform -translate-x-1/2 w-[55%] h-[20%]">
           <button
             onClick={() => setIsVoiceRecording(true)}
-            className="w-full h-full bg-transparent hover:bg-white hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center"
+            className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center rounded-full"
             disabled={isDecoding}
           >
-            {/* Invisible clickable area over the lips */}
-            <span className="text-black font-black text-2xl tracking-wider bg-white bg-opacity-80 px-4 py-2 rounded">
+            {/* SPEAK text positioned below lips */}
+          </button>
+          
+          {/* SPEAK text positioned below the lips area */}
+          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
+            <span className="text-black font-black text-xl tracking-wider drop-shadow-lg">
               SPEAK
             </span>
-          </button>
+          </div>
         </div>
 
         {/* Decode Button positioned at bottom */}
