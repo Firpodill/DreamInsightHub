@@ -48,7 +48,6 @@ export default function DreamChat() {
             }}>DREAMSPEAK<span style={{ fontSize: '0.3em', verticalAlign: 'super', color: '#FFFF00', WebkitTextStroke: '0.5px #000000' }}>©</span></h1>
             <h2 className="text-sm font-bold" style={{
               color: '#FFFF00',
-              WebkitTextStroke: '1px #000000',
               letterSpacing: '2px',
               fontFamily: 'Impact, Arial Black, sans-serif',
               textTransform: 'uppercase',
