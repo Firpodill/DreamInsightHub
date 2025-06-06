@@ -232,9 +232,45 @@ export function useCosmicTransition() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionType, setTransitionType] = useState<'galaxy' | 'nebula' | 'starfield' | 'portal'>('galaxy');
 
+  const playCosmicSound = (type: string) => {
+    // Create subtle cosmic sound effect using Web Audio API
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Different frequencies for different transition types
+      const frequencies = {
+        galaxy: [220, 330, 440],
+        nebula: [180, 270, 360],
+        starfield: [150, 225, 300],
+        portal: [100, 200, 400]
+      };
+      
+      const freq = frequencies[type as keyof typeof frequencies] || frequencies.galaxy;
+      oscillator.frequency.setValueAtTime(freq[0], audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(freq[1], audioContext.currentTime + 0.5);
+      oscillator.frequency.exponentialRampToValueAtTime(freq[2], audioContext.currentTime + 1);
+      
+      oscillator.type = 'sine';
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 1.5);
+    } catch (error) {
+      // Silently fail if Web Audio API is not supported
+    }
+  };
+
   const triggerTransition = (type: 'galaxy' | 'nebula' | 'starfield' | 'portal' = 'galaxy') => {
     setTransitionType(type);
     setIsTransitioning(true);
+    playCosmicSound(type);
   };
 
   const completeTransition = () => {
