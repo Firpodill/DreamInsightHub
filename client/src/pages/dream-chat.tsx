@@ -14,8 +14,8 @@ export default function DreamChat() {
       <header className="bg-gradient-to-r from-primary to-primary/90 text-white p-4 sticky top-0 z-50 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center animate-pulse">
-              <Moon className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center animate-pulse shadow-lg shadow-blue-400/50">
+              <Moon className="w-4 h-4 text-white drop-shadow-sm" />
             </div>
             <div>
               <h1 className="font-serif text-lg font-semibold">DreamWeaver</h1>

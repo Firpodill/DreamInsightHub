@@ -60,16 +60,24 @@ export function useSpeechRecognition(
         let finalTranscript = '';
         let interimTranscript = '';
 
-        for (let i = event.resultIndex; i < event.results.length; i++) {
+        // Process all results to build complete transcript
+        for (let i = 0; i < event.results.length; i++) {
           const transcriptSegment = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
-            finalTranscript += transcriptSegment;
+            finalTranscript += transcriptSegment + ' ';
           } else {
             interimTranscript += transcriptSegment;
           }
         }
 
-        setTranscript(finalTranscript + interimTranscript);
+        // Update transcript by appending to existing content
+        setTranscript(prev => {
+          const newFinalPart = finalTranscript.trim();
+          if (newFinalPart && !prev.includes(newFinalPart)) {
+            return (prev + ' ' + newFinalPart + ' ' + interimTranscript).trim();
+          }
+          return prev + ' ' + interimTranscript;
+        });
       };
 
       recognition.onerror = (event) => {
@@ -79,6 +87,19 @@ export function useSpeechRecognition(
 
       recognition.onend = () => {
         setIsListening(false);
+        // Auto-restart if continuous mode and still supposed to be listening
+        if (continuous && recognitionRef.current && !error) {
+          setTimeout(() => {
+            if (recognitionRef.current) {
+              try {
+                recognitionRef.current.start();
+                setIsListening(true);
+              } catch (err) {
+                // Recognition might have stopped intentionally
+              }
+            }
+          }, 100);
+        }
       };
 
       recognition.start();
