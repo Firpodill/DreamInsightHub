@@ -204,37 +204,21 @@ export function DreamJournal() {
   return (
     <div className="p-4 space-y-4">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-4">
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h2 className="font-serif text-xl font-semibold text-gray-800">Dream Journal</h2>
-            <p className="text-sm text-gray-600">Track your dream patterns and insights over time</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className="text-xs"
-            >
-              List View
-            </Button>
-            <Button
-              variant={viewMode === 'calendar' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('calendar')}
-              className="text-xs"
-            >
-              <Calendar className="w-3 h-3 mr-1" />
-              Calendar
-            </Button>
-          </div>
-        </div>
+      <div className="flex items-center justify-between mb-4">
+        <Button
+          variant={viewMode === 'calendar' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setViewMode('calendar')}
+          className="text-xs"
+        >
+          <Calendar className="w-3 h-3 mr-1" />
+          Calendar
+        </Button>
         
         {selectedDate && viewMode === 'list' && (
-          <div className="flex items-center justify-between mt-3 p-2 bg-yellow-100 rounded-lg">
+          <div className="flex items-center space-x-2">
             <span className="text-sm font-medium text-gray-700">
-              Viewing dreams from {selectedDate.toLocaleDateString('en-US', { 
+              {selectedDate.toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
@@ -256,31 +240,21 @@ export function DreamJournal() {
         )}
       </div>
 
-      {/* Daily Jung Quote */}
-      <div className="bg-gray-900 rounded-lg p-3 border border-gray-700">
-        <div className="text-center">
-          <p className="text-xs text-gray-300 italic mb-1">
-            "Your vision becomes clear when you look into your heart. Who looks outside, dreams. Who looks inside, awakens."
-          </p>
-          <p className="text-xs text-gray-500">— Carl Jung</p>
-        </div>
-      </div>
-
       {/* Search Bar */}
-      <div className="space-y-3">
-        <div className="relative">
-          <Input
-            type="text"
-            placeholder="Search your dreams..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
-          />
-          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      {viewMode === 'list' && (
+        <div className="space-y-3 mb-4">
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder="Search your dreams..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
+            />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          </div>
         </div>
-        
-
-      </div>
+      )}
 
       {/* Calendar View */}
       {viewMode === 'calendar' && (
