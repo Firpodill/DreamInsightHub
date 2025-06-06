@@ -9,7 +9,7 @@ import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
-import { CosmicTransition, useCosmicTransition, CosmicPageWrapper } from '@/components/cosmic-transitions';
+
 
 export default function DreamChat() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,7 +20,6 @@ export default function DreamChat() {
   const [isMilitaryTime, setIsMilitaryTime] = useState(localStorage.getItem('militaryTime') === 'true');
   const [location, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState('chat');
-  const { isTransitioning, transitionType, triggerTransition, completeTransition } = useCosmicTransition();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -73,24 +72,43 @@ export default function DreamChat() {
     }
   };
 
-  // Handle cosmic tab transitions
+  // Handle tab transitions with sound feedback
   const handleTabChange = (newTab: string) => {
     if (newTab !== activeTab) {
-      // Determine transition type based on the tab
-      const transitionTypes = {
-        chat: 'portal' as const,
-        journal: 'galaxy' as const,
-        insights: 'nebula' as const,
-        symbols: 'starfield' as const,
-        vision: 'portal' as const
-      };
+      // Play subtle sound feedback
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Different frequencies for different tabs
+        const frequencies = {
+          chat: 220,
+          journal: 180,
+          insights: 270,
+          symbols: 150,
+          vision: 200
+        };
+        
+        const freq = frequencies[newTab as keyof typeof frequencies] || 200;
+        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(freq * 1.5, audioContext.currentTime + 0.1);
+        
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+      } catch (error) {
+        // Silently fail if Web Audio API is not supported
+      }
       
-      triggerTransition(transitionTypes[newTab as keyof typeof transitionTypes] || 'galaxy');
-      
-      // Delay tab change until transition starts
-      setTimeout(() => {
-        setActiveTab(newTab);
-      }, 100);
+      setActiveTab(newTab);
     }
   };
 
@@ -280,71 +298,56 @@ export default function DreamChat() {
           </TabsList>
           
           <TabsContent value="chat" className="mt-6">
-            <CosmicPageWrapper transitionKey={`chat-${activeTab}`}>
-              <ChatInterface />
-            </CosmicPageWrapper>
+            <ChatInterface />
           </TabsContent>
           
           <TabsContent value="journal" className="mt-6">
-            <CosmicPageWrapper transitionKey={`journal-${activeTab}`}>
-              <DreamJournal />
-            </CosmicPageWrapper>
+            <DreamJournal />
           </TabsContent>
           
           <TabsContent value="insights" className="mt-6">
-            <CosmicPageWrapper transitionKey={`insights-${activeTab}`}>
-              <InsightsDashboard />
-            </CosmicPageWrapper>
+            <InsightsDashboard />
           </TabsContent>
           
           <TabsContent value="symbols" className="mt-6">
-            <CosmicPageWrapper transitionKey={`symbols-${activeTab}`}>
-              <div className="text-center space-y-4">
-                <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                  <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
-                  <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
-                  <p className="text-gray-400 mb-4">
-                    Explore comprehensive Jungian interpretations of dream symbols
-                  </p>
-                  <Button 
-                    onClick={() => navigate('/symbols')}
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Open Encyclopedia
-                  </Button>
-                </div>
+            <div className="text-center space-y-4">
+              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
+                <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
+                <p className="text-gray-400 mb-4">
+                  Explore comprehensive Jungian interpretations of dream symbols
+                </p>
+                <Button 
+                  onClick={() => navigate('/symbols')}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Open Encyclopedia
+                </Button>
               </div>
-            </CosmicPageWrapper>
+            </div>
           </TabsContent>
           
           <TabsContent value="vision" className="mt-6">
-            <CosmicPageWrapper transitionKey={`vision-${activeTab}`}>
-              <div className="text-center space-y-4">
-                <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                  <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
-                  <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
-                  <p className="text-gray-400 mb-4">
-                    Create visual collages of your dreams with AI-generated imagery
-                  </p>
-                  <Button 
-                    onClick={() => navigate('/vision-board')}
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Create Vision Board
-                  </Button>
-                </div>
+            <div className="text-center space-y-4">
+              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+                <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
+                <p className="text-gray-400 mb-4">
+                  Create visual collages of your dreams with AI-generated imagery
+                </p>
+                <Button 
+                  onClick={() => navigate('/vision-board')}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Create Vision Board
+                </Button>
               </div>
-            </CosmicPageWrapper>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* Cosmic Transition Overlay */}
-      <CosmicTransition 
-        isActive={isTransitioning}
-        type={transitionType}
-        onComplete={completeTransition}
-      />
+
     </div>
   );
 }
