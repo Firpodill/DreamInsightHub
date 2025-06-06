@@ -5,6 +5,7 @@ import { Mic, Brain } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
+import { useLocation } from "wouter";
 import backgroundImage from "@assets/vecteezy_open-red-lips-with-speech-bubble-pop-art-background-on-dot_.jpg";
 
 export function ChatInterface() {
@@ -13,6 +14,7 @@ export function ChatInterface() {
   const [isDecoding, setIsDecoding] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState("");
+  const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
 
   const {

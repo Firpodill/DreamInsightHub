@@ -1,0 +1,215 @@
+import { useState, useEffect } from 'react';
+import { useLocation, Link } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb } from 'lucide-react';
+import { useAnalyzeDream } from '@/hooks/use-dreams';
+
+export default function DreamAnalysis() {
+  const [location, navigate] = useLocation();
+  const [dreamText, setDreamText] = useState('');
+  const analyzeDream = useAnalyzeDream();
+
+  useEffect(() => {
+    // Get dream text from URL params or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const dreamFromUrl = urlParams.get('dream');
+    const dreamFromStorage = localStorage.getItem('currentDreamText');
+    
+    const text = dreamFromUrl || dreamFromStorage || '';
+    setDreamText(text);
+    
+    if (text && !analyzeDream.data && !analyzeDream.isPending) {
+      analyzeDream.mutate(text);
+    }
+  }, []);
+
+  const analysis = analyzeDream.data;
+
+  return (
+    <div className="max-w-md mx-auto bg-black text-white min-h-screen relative overflow-hidden">
+      {/* Header */}
+      <header className="p-6 border-b border-gray-800">
+        <div className="flex items-center justify-between mb-4">
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          </Link>
+          <div className="text-center">
+            <div className="text-sm font-bold px-3 py-1 rounded" style={{
+              backgroundColor: '#E53E3E',
+              color: '#FFFF00',
+              border: '2px solid #000000',
+              transform: 'rotate(-1deg)',
+              boxShadow: '3px 3px 0px rgba(0,0,0,0.5)'
+            }}>
+              DREAM DECODED
+            </div>
+          </div>
+          <div className="w-16"></div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="p-6 space-y-6">
+        {/* Dream Text */}
+        <Card className="bg-gray-900 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center">
+              <Eye className="w-5 h-5 mr-2" />
+              Your Dream
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              {dreamText || 'No dream text available'}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Loading State */}
+        {analyzeDream.isPending && (
+          <Card className="bg-gray-900 border-gray-700">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+                <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse delay-100"></div>
+                <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse delay-200"></div>
+              </div>
+              <p className="text-center text-gray-400 mt-4">Analyzing your dream...</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Analysis Results */}
+        {analysis && (
+          <>
+            {/* Summary */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Brain className="w-5 h-5 mr-2" />
+                  Dream Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {analysis.summary}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Jungian Interpretation */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Star className="w-5 h-5 mr-2" />
+                  Jungian Interpretation
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                  {analysis.jungianInterpretation}
+                </p>
+                <div className="mb-4">
+                  <h4 className="text-white font-semibold mb-2">Individuation Stage:</h4>
+                  <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                    {analysis.individuationStage}
+                  </Badge>
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold mb-2">Emotional Tone:</h4>
+                  <Badge variant="outline" className="text-blue-400 border-blue-400">
+                    {analysis.emotionalTone}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Archetypes & Symbols */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-gray-900 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-sm">Archetypes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.archetypes.map((archetype: string, index: number) => (
+                      <Badge key={index} variant="outline" className="text-red-400 border-red-400 text-xs">
+                        {archetype}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gray-900 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-sm">Symbols</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {analysis.symbols.map((symbol: string, index: number) => (
+                      <Badge key={index} variant="outline" className="text-green-400 border-green-400 text-xs">
+                        {symbol}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Shadow Work */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Heart className="w-5 h-5 mr-2" />
+                  Shadow Work
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {analysis.shadowWork}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Recommendations */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Lightbulb className="w-5 h-5 mr-2" />
+                  Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {analysis.recommendations.map((rec: string, index: number) => (
+                    <li key={index} className="text-gray-300 text-sm flex items-start">
+                      <span className="text-yellow-400 mr-2">•</span>
+                      {rec}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {/* Error State */}
+        {analyzeDream.isError && (
+          <Card className="bg-red-900 border-red-700">
+            <CardContent className="p-6">
+              <p className="text-red-200 text-center">
+                Failed to analyze dream. Please try again.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}
