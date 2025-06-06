@@ -36,7 +36,7 @@ export default function DreamChat() {
             position: 'relative',
             zIndex: 10
           }}>
-            <h1 className="text-5xl font-black" style={{
+            <h1 className="text-7xl font-black" style={{
               color: '#FFFF00',
               WebkitTextStroke: '3px #000000',
               letterSpacing: '4px',
