@@ -50,138 +50,87 @@ export function ChatInterface() {
           className="relative group transition-all duration-300 hover:scale-105 focus:outline-none"
           disabled={isDecoding}
         >
-          {/* Professional Vector Lips */}
+          {/* Vector Lips from EPS */}
           <div className="relative w-80 h-32">
-            <svg viewBox="0 0 320 128" className="w-full h-full filter drop-shadow-lg">
+            <svg viewBox="0 0 8000 3000" className="w-full h-full filter drop-shadow-lg">
               <defs>
-                {/* Main lip gradient */}
-                <linearGradient id="lipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ff6b7a" />
-                  <stop offset="25%" stopColor="#e55039" />
-                  <stop offset="50%" stopColor="#c44569" />
-                  <stop offset="75%" stopColor="#a0253f" />
-                  <stop offset="100%" stopColor="#8b2635" />
+                {/* Lip gradient from EPS */}
+                <linearGradient id="epsLipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#d52f34" />
+                  <stop offset="30%" stopColor="#c42d32" />
+                  <stop offset="60%" stopColor="#b02a30" />
+                  <stop offset="100%" stopColor="#4d2d27" />
                 </linearGradient>
                 
-                {/* Highlight gradient */}
-                <linearGradient id="lipHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ffffff" opacity="0.7" />
-                  <stop offset="40%" stopColor="#ffffff" opacity="0.3" />
+                {/* Highlight overlay */}
+                <radialGradient id="epsHighlight" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" stopColor="#ffffff" opacity="0.6" />
+                  <stop offset="50%" stopColor="#ffffff" opacity="0.2" />
                   <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-                
-                {/* Shadow gradient */}
-                <linearGradient id="lipShadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="60%" stopColor="#6b1229" opacity="0.3" />
-                  <stop offset="100%" stopColor="#6b1229" opacity="0.6" />
-                </linearGradient>
-                
-                {/* Mouth interior */}
-                <radialGradient id="mouthInterior" cx="50%" cy="50%" r="70%">
-                  <stop offset="0%" stopColor="#2c1810" />
-                  <stop offset="60%" stopColor="#1a0a06" />
-                  <stop offset="100%" stopColor="#000000" />
                 </radialGradient>
+                
+                {/* Shadow definition */}
+                <linearGradient id="epsShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="transparent" />
+                  <stop offset="70%" stopColor="#4d2d27" opacity="0.4" />
+                  <stop offset="100%" stopColor="#4d2d27" opacity="0.7" />
+                </linearGradient>
               </defs>
               
-              {/* Drop shadow */}
-              <ellipse cx="160" cy="68" rx="110" ry="20" fill="#000000" opacity="0.2" transform="translate(0, 4)"/>
-              
-              {/* Main lip shape - classic vector style */}
+              {/* Main lip shape from EPS file - scaled and positioned */}
               <path
-                d="M 50 64 Q 70 30, 100 38 Q 130 22, 160 22 Q 190 22, 220 38 Q 250 30, 270 64 Q 250 90, 220 86 Q 190 98, 160 98 Q 130 98, 100 86 Q 70 90, 50 64 Z"
-                fill="url(#lipGradient)"
-                stroke="#8b2635"
-                strokeWidth="1.5"
+                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
+                fill="url(#epsLipGradient)"
+                stroke="#4d2d27"
+                strokeWidth="8"
+                transform="scale(0.8, 0.6) translate(400, -200)"
               />
               
-              {/* Top lip highlight */}
+              {/* Teeth from EPS */}
               <path
-                d="M 60 58 Q 90 35, 130 42 Q 145 32, 160 32 Q 175 32, 190 42 Q 230 35, 260 58 Q 230 48, 190 45 Q 175 40, 160 40 Q 145 40, 130 45 Q 90 48, 60 58 Z"
-                fill="url(#lipHighlight)"
-              />
-              
-              {/* Bottom lip highlight */}
-              <ellipse
-                cx="160"
-                cy="78"
-                rx="80"
-                ry="12"
-                fill="url(#lipHighlight)"
-                opacity="0.5"
-              />
-              
-              {/* Cupid's bow */}
-              <path
-                d="M 145 34 Q 152 28, 160 30 Q 168 28, 175 34 Q 168 38, 160 36 Q 152 38, 145 34 Z"
-                fill="#ff8a95"
-                opacity="0.8"
-              />
-              
-              {/* Shadow on bottom */}
-              <path
-                d="M 50 64 Q 70 30, 100 38 Q 130 22, 160 22 Q 190 22, 220 38 Q 250 30, 270 64 Q 250 90, 220 86 Q 190 98, 160 98 Q 130 98, 100 86 Q 70 90, 50 64 Z"
-                fill="url(#lipShadow)"
-              />
-              
-              {/* Mouth opening */}
-              <ellipse
-                cx="160"
-                cy="64"
-                rx="70"
-                ry="15"
-                fill="url(#mouthInterior)"
-              />
-              
-              {/* Teeth hint */}
-              <ellipse
-                cx="160"
-                cy="58"
-                rx="50"
-                ry="6"
-                fill="#f8f9fa"
-                opacity="0.6"
-              />
-              
-              {/* Glossy shine - top */}
-              <ellipse
-                cx="130"
-                cy="48"
-                rx="20"
-                ry="8"
+                d="M 3725,2645 C 3655,2645 3589,2662 3531,2651 C 3445,2636 3339,2614 3266,2662 C 3226,2684 3199,2727 3199,2775 V 2815 H 3951 V 2775 C 3951,2714 3859,2653 3725,2645"
                 fill="#ffffff"
-                opacity="0.6"
-                transform="rotate(-20 130 48)"
+                transform="scale(0.8, 0.6) translate(400, -200)"
               />
               
-              {/* Glossy shine - top right */}
-              <ellipse
-                cx="190"
-                cy="48"
-                rx="20"
-                ry="8"
+              <path
+                d="M 4538,2645 C 4468,2645 4402,2662 4344,2651 C 4258,2636 4152,2614 4079,2662 C 4039,2684 4012,2727 4012,2775 V 2815 H 4764 V 2775 C 4764,2714 4672,2653 4538,2645"
                 fill="#ffffff"
-                opacity="0.6"
-                transform="rotate(20 190 48)"
+                transform="scale(0.8, 0.6) translate(400, -200)"
               />
               
-              {/* Bottom lip shine */}
-              <ellipse
-                cx="160"
-                cy="85"
-                rx="30"
-                ry="6"
+              <path
+                d="M 5351,2679 C 5281,2679 5215,2696 5157,2685 C 5071,2670 4965,2648 4892,2696 C 4852,2718 4825,2761 4825,2809 V 2849 H 5577 V 2809 C 5577,2748 5485,2687 5351,2679"
                 fill="#ffffff"
-                opacity="0.4"
+                transform="scale(0.8, 0.6) translate(400, -200)"
               />
               
-              {/* Microphone */}
-              <circle cx="160" cy="64" r="16" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="1.5"/>
-              <circle cx="160" cy="64" r="12" fill="rgba(248,249,250,0.9)"/>
-              <foreignObject x="150" y="54" width="20" height="20">
+              <path
+                d="M 2912,2679 C 2842,2679 2776,2696 2718,2685 C 2632,2670 2526,2648 2453,2696 C 2413,2718 2386,2761 2386,2809 V 2849 H 3138 V 2809 C 3138,2748 3046,2687 2912,2679"
+                fill="#ffffff"
+                transform="scale(0.8, 0.6) translate(400, -200)"
+              />
+              
+              {/* Highlight overlay */}
+              <path
+                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
+                fill="url(#epsHighlight)"
+                transform="scale(0.8, 0.6) translate(400, -200)"
+              />
+              
+              {/* Shadow overlay */}
+              <path
+                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
+                fill="url(#epsShadow)"
+                transform="scale(0.8, 0.6) translate(400, -200)"
+              />
+              
+              {/* Microphone positioned in center */}
+              <circle cx="4000" cy="1500" r="200" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="15"/>
+              <circle cx="4000" cy="1500" r="150" fill="rgba(248,249,250,0.9)"/>
+              <foreignObject x="3900" y="1400" width="200" height="200">
                 <div className="flex items-center justify-center w-full h-full">
-                  <Mic className="w-4 h-4 text-gray-600" />
+                  <Mic className="w-16 h-16 text-gray-600" />
                 </div>
               </foreignObject>
             </svg>
