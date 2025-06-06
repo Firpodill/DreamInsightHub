@@ -267,6 +267,7 @@ export function DreamAudioEnhancement() {
   };
 
   const stopAudio = () => {
+    // Stop all oscillators and audio sources
     if (oscillatorRef.current) {
       try {
         if ('stop' in oscillatorRef.current) {
@@ -277,14 +278,40 @@ export function DreamAudioEnhancement() {
       } catch (error) {
         // Ignore errors when stopping
       }
-      oscillatorRef.current = null;
     }
     
+    // Disconnect gain node
+    if (gainNodeRef.current) {
+      try {
+        gainNodeRef.current.disconnect();
+      } catch (error) {
+        // Ignore errors when disconnecting
+      }
+    }
+    
+    // Close audio context if it exists
+    if (audioContextRef.current) {
+      try {
+        if (audioContextRef.current.state !== 'closed') {
+          audioContextRef.current.close();
+        }
+      } catch (error) {
+        // Ignore errors when closing
+      }
+      audioContextRef.current = null;
+    }
+    
+    // Clear timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
     
+    // Reset refs
+    oscillatorRef.current = null;
+    gainNodeRef.current = null;
+    
+    // Update state
     setIsPlaying(false);
     setCurrentTime(0);
   };
@@ -462,8 +489,21 @@ export function DreamAudioEnhancement() {
                         size="sm"
                         onClick={stopAudio}
                         className="text-white hover:bg-gray-700"
+                        disabled={!isPlaying}
                       >
                         Stop
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          stopAudio();
+                          setCurrentTrack(null);
+                        }}
+                        className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white text-xs"
+                      >
+                        Turn Off Audio
                       </Button>
                     </div>
 
