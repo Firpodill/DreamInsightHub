@@ -69,6 +69,38 @@
   }
 }
 
+@keyframes globeSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    background: linear-gradient(45deg, #0EA5E9, #3B82F6, #6366F1, #0EA5E9);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+    background: linear-gradient(45deg, #3B82F6, #6366F1, #0EA5E9, #3B82F6);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+    background: linear-gradient(45deg, #6366F1, #0EA5E9, #3B82F6, #6366F1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+    background: linear-gradient(45deg, #0EA5E9, #3B82F6, #6366F1, #0EA5E9);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    background: linear-gradient(45deg, #0EA5E9, #3B82F6, #6366F1, #0EA5E9);
+  }
+}
+
+@keyframes globePulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.5), inset 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.8), inset 0 0 30px rgba(99, 102, 241, 0.5);
+  }
+}
+
 .animate-speak-pulse {
   animation: speakPulse 1s ease-in-out infinite;
 }
@@ -79,6 +111,10 @@
 
 .animate-mic-green-pulse {
   animation: micPulseGreen 1s ease-in-out infinite;
+}
+
+.animate-globe-spin {
+  animation: globeSpin 3s linear infinite, globePulse 2s ease-in-out infinite;
 }
 
 :root {
