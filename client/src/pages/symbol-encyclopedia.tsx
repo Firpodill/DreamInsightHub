@@ -77,6 +77,186 @@ const dreamSymbols: DreamSymbol[] = [
     individuationPhase: "Associated with spiritual development and the transcendence of ego limitations.",
     commonVariations: ["Flying", "Caged bird", "Eagle", "Owl", "Dove", "Crow", "Flock of birds"],
     icon: Bird
+  },
+  {
+    name: "Snake",
+    category: "Animals",
+    jungianMeaning: "Represents transformation, healing, and primal wisdom. The ouroboros symbolizes the cycle of death and rebirth, while the serpent represents kundalini energy.",
+    psychologicalContext: "Snake dreams often appear during major life transitions or when confronting fears and transformative experiences.",
+    shadowAspects: "Venomous or threatening snakes may represent toxic influences, betrayal, or fear of change.",
+    individuationPhase: "Central to transformation and the shedding of old patterns to embrace new growth.",
+    commonVariations: ["Python", "Cobra", "Snake bite", "Shedding skin", "Multiple snakes", "Snake charmer"],
+    icon: Trees
+  },
+  {
+    name: "Fire",
+    category: "Elements",
+    jungianMeaning: "Represents passion, transformation, purification, and the divine spark. Fire symbolizes the libido and creative energy.",
+    psychologicalContext: "Fire dreams often occur during periods of intense emotion, creative inspiration, or spiritual awakening.",
+    shadowAspects: "Destructive fire may represent uncontrolled passion, anger, or the burning away of illusions.",
+    individuationPhase: "Associated with purification and the burning away of ego attachments.",
+    commonVariations: ["Candle", "Wildfire", "Fireplace", "Being burned", "Phoenix", "Sacred fire"],
+    icon: Sun
+  },
+  {
+    name: "Bridge",
+    category: "Architecture",
+    jungianMeaning: "Represents transition, connection between opposites, and the path of transformation. Bridges symbolize the transcendent function.",
+    psychologicalContext: "Bridge dreams appear during life transitions or when seeking to reconcile conflicting aspects of the psyche.",
+    shadowAspects: "Broken or dangerous bridges may represent fear of change or difficulty in making transitions.",
+    individuationPhase: "Critical for integrating opposites and moving between different stages of development.",
+    commonVariations: ["Crossing bridge", "Broken bridge", "Building bridge", "Drawbridge", "Rope bridge", "Golden bridge"],
+    icon: House
+  },
+  {
+    name: "Mirror",
+    category: "Objects",
+    jungianMeaning: "Represents self-reflection, truth, and the confrontation with one's true nature. Mirrors symbolize the process of self-examination.",
+    psychologicalContext: "Mirror dreams occur when the psyche is ready to examine itself honestly or confront hidden aspects.",
+    shadowAspects: "Broken or distorted mirrors may represent fragmented self-image or fear of self-knowledge.",
+    individuationPhase: "Essential for developing self-awareness and confronting the shadow.",
+    commonVariations: ["Broken mirror", "Magic mirror", "Mirror image", "No reflection", "Multiple mirrors", "Foggy mirror"],
+    icon: Eye
+  },
+  {
+    name: "Mountain",
+    category: "Landscape",
+    jungianMeaning: "Represents spiritual ascension, challenges to overcome, and the axis mundi connecting earth and heaven.",
+    psychologicalContext: "Mountain dreams appear when facing significant challenges or seeking spiritual elevation.",
+    shadowAspects: "Impassable mountains may represent insurmountable obstacles or fear of spiritual growth.",
+    individuationPhase: "Symbolizes the journey toward self-realization and overcoming ego limitations.",
+    commonVariations: ["Climbing mountain", "Mountain peak", "Avalanche", "Cave in mountain", "Sacred mountain", "Mountain path"],
+    icon: Trees
+  },
+  {
+    name: "Ocean",
+    category: "Elements",
+    jungianMeaning: "Represents the collective unconscious, vast emotional depths, and the source of all life. The ocean symbolizes the Great Mother.",
+    psychologicalContext: "Ocean dreams occur when exploring deep emotions or connecting with universal themes.",
+    shadowAspects: "Stormy seas or drowning may represent being overwhelmed by unconscious contents.",
+    individuationPhase: "Important for understanding one's connection to the collective unconscious.",
+    commonVariations: ["Calm sea", "Storm", "Waves", "Underwater", "Island", "Shore"],
+    icon: Droplets
+  },
+  {
+    name: "Key",
+    category: "Objects",
+    jungianMeaning: "Represents access to hidden knowledge, unlocking potential, and the solution to mysteries. Keys symbolize initiation and discovery.",
+    psychologicalContext: "Key dreams appear when the dreamer is ready to unlock new understanding or access hidden aspects of the psyche.",
+    shadowAspects: "Lost keys may represent feeling locked out of one's own potential or fear of discovery.",
+    individuationPhase: "Associated with gaining access to deeper levels of consciousness.",
+    commonVariations: ["Lost key", "Golden key", "Many keys", "Skeleton key", "Broken key", "Key ring"],
+    icon: House
+  },
+  {
+    name: "Cat",
+    category: "Animals",
+    jungianMeaning: "Represents feminine intuition, independence, mystery, and connection to the unconscious. Cats symbolize the anima and psychic abilities.",
+    psychologicalContext: "Cat dreams often relate to developing intuition or embracing independent feminine qualities.",
+    shadowAspects: "Aggressive or black cats may represent neglected feminine aspects or fear of independence.",
+    individuationPhase: "Important for integrating feminine wisdom and intuitive abilities.",
+    commonVariations: ["Black cat", "White cat", "Cat attacking", "Kitten", "Wild cat", "Cat eyes"],
+    icon: Eye
+  },
+  {
+    name: "Door",
+    category: "Architecture",
+    jungianMeaning: "Represents opportunities, transitions, and thresholds between consciousness states. Doors symbolize new possibilities and choices.",
+    psychologicalContext: "Door dreams appear when facing decisions or preparing for new phases in life.",
+    shadowAspects: "Locked or blocked doors may represent missed opportunities or fear of change.",
+    individuationPhase: "Critical for recognizing and embracing new opportunities for growth.",
+    commonVariations: ["Locked door", "Open door", "Secret door", "Revolving door", "Door knocker", "Many doors"],
+    icon: House
+  },
+  {
+    name: "Star",
+    category: "Celestial",
+    jungianMeaning: "Represents guidance, hope, destiny, and connection to the divine. Stars symbolize the Self and higher aspirations.",
+    psychologicalContext: "Star dreams appear when seeking guidance or during times of spiritual awakening.",
+    shadowAspects: "Falling stars may represent lost hope or disconnection from higher purpose.",
+    individuationPhase: "Associated with recognizing one's true destiny and divine nature.",
+    commonVariations: ["Shooting star", "North star", "Constellation", "Star map", "Bright star", "Star formation"],
+    icon: Sun
+  },
+  {
+    name: "Wolf",
+    category: "Animals",
+    jungianMeaning: "Represents instinctual wisdom, loyalty, and the wild nature of the psyche. Wolves symbolize the untamed aspects of the self.",
+    psychologicalContext: "Wolf dreams often appear when reconnecting with primal instincts or natural wisdom.",
+    shadowAspects: "Threatening wolves may represent fear of one's own wild nature or aggressive instincts.",
+    individuationPhase: "Important for integrating instinctual wisdom and natural rhythms.",
+    commonVariations: ["Wolf pack", "Lone wolf", "Wolf howling", "White wolf", "Wolf eyes", "Wolf transformation"],
+    icon: Eye
+  },
+  {
+    name: "Garden",
+    category: "Nature",
+    jungianMeaning: "Represents cultivation of the soul, growth potential, and the paradise within. Gardens symbolize the conscious development of natural gifts.",
+    psychologicalContext: "Garden dreams appear when cultivating personal growth or creating harmony in life.",
+    shadowAspects: "Neglected or dead gardens may represent unused potential or spiritual stagnation.",
+    individuationPhase: "Associated with conscious cultivation of one's gifts and potential.",
+    commonVariations: ["Rose garden", "Vegetable garden", "Overgrown garden", "Secret garden", "Garden path", "Garden gate"],
+    icon: Trees
+  },
+  {
+    name: "Clock",
+    category: "Objects",
+    jungianMeaning: "Represents time consciousness, mortality, and the cyclical nature of existence. Clocks symbolize the temporal aspect of individuation.",
+    psychologicalContext: "Clock dreams often relate to timing in life decisions or awareness of life's finite nature.",
+    shadowAspects: "Stopped clocks may represent feeling stuck in time or fear of aging and death.",
+    individuationPhase: "Important for understanding the timing of psychological development.",
+    commonVariations: ["Broken clock", "Grandfather clock", "Alarm clock", "Clock striking", "No time", "Time running out"],
+    icon: Sun
+  },
+  {
+    name: "Butterfly",
+    category: "Animals",
+    jungianMeaning: "Represents transformation, rebirth, and the soul's journey. The butterfly symbolizes the process of metamorphosis and spiritual evolution.",
+    psychologicalContext: "Butterfly dreams appear during major life transformations or spiritual awakenings.",
+    shadowAspects: "Dead butterflies may represent interrupted transformation or fear of change.",
+    individuationPhase: "Central symbol of the individuation process and psychological metamorphosis.",
+    commonVariations: ["Caterpillar", "Cocoon", "Emerging butterfly", "Butterfly collection", "Colorful butterfly", "Butterfly wings"],
+    icon: Bird
+  },
+  {
+    name: "Sword",
+    category: "Objects",
+    jungianMeaning: "Represents discrimination, truth, and the masculine principle. Swords symbolize the ability to cut through illusion and defend truth.",
+    psychologicalContext: "Sword dreams appear when needing to make clear distinctions or defend one's values.",
+    shadowAspects: "Broken swords may represent loss of power or inability to discriminate truth from falsehood.",
+    individuationPhase: "Associated with developing discernment and the courage to defend one's authentic self.",
+    commonVariations: ["Double-edged sword", "Broken sword", "Sheathed sword", "Sword fight", "Magic sword", "Sword in stone"],
+    icon: Eye
+  },
+  {
+    name: "Crown",
+    category: "Objects",
+    jungianMeaning: "Represents sovereignty, authority, and the realization of the Self. Crowns symbolize spiritual kingship and achieved wholeness.",
+    psychologicalContext: "Crown dreams appear when approaching self-mastery or recognizing one's inherent nobility.",
+    shadowAspects: "Heavy or burdensome crowns may represent the weight of responsibility or false authority.",
+    individuationPhase: "Symbolizes the achievement of psychological sovereignty and self-realization.",
+    commonVariations: ["Golden crown", "Broken crown", "Crown of thorns", "Crown jewels", "Placing crown", "Crown falling"],
+    icon: Sun
+  },
+  {
+    name: "Cave",
+    category: "Landscape",
+    jungianMeaning: "Represents the womb of rebirth, hidden knowledge, and the descent into the unconscious. Caves symbolize the place of inner transformation.",
+    psychologicalContext: "Cave dreams appear when exploring deep unconscious contents or preparing for inner transformation.",
+    shadowAspects: "Dark or scary caves may represent fear of the unconscious or resistance to inner exploration.",
+    individuationPhase: "Important for the descent into the unconscious and the retrieval of hidden wisdom.",
+    commonVariations: ["Crystal cave", "Dark cave", "Cave painting", "Cave entrance", "Underground cave", "Cave dwelling"],
+    icon: Moon
+  },
+  {
+    name: "Phoenix",
+    category: "Mythical",
+    jungianMeaning: "Represents rebirth, resurrection, and the triumph over destruction. The phoenix symbolizes the eternal nature of the Self.",
+    psychologicalContext: "Phoenix dreams appear after major losses or when emerging from difficult transformations.",
+    shadowAspects: "The burning phase represents the necessary destruction of old patterns before renewal.",
+    individuationPhase: "Symbolizes the cyclical nature of psychological death and rebirth in the individuation process.",
+    commonVariations: ["Phoenix rising", "Phoenix burning", "Phoenix egg", "Phoenix feather", "Phoenix nest", "Phoenix song"],
+    icon: Bird
   }
 ];
 
