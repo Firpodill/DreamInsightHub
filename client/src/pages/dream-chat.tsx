@@ -32,7 +32,9 @@ export default function DreamChat() {
             borderRadius: '12px',
             border: '4px solid #000000',
             transform: 'rotate(-1deg)',
-            boxShadow: '8px 8px 0px #000000'
+            boxShadow: '8px 8px 0px #000000',
+            position: 'relative',
+            zIndex: 10
           }}>
             <h1 className="text-5xl font-black" style={{
               color: '#FFFF00',
