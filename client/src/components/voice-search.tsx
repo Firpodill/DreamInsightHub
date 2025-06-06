@@ -8,9 +8,10 @@ import type { Dream } from '@shared/schema';
 interface VoiceSearchProps {
   onDreamSelect?: (dream: Dream) => void;
   onClose?: () => void;
+  inline?: boolean;
 }
 
-export function VoiceSearch({ onDreamSelect, onClose }: VoiceSearchProps) {
+export function VoiceSearch({ onDreamSelect, onClose, inline = false }: VoiceSearchProps) {
   const [isVisible, setIsVisible] = useState(false);
   
   const {
@@ -45,6 +46,22 @@ export function VoiceSearch({ onDreamSelect, onClose }: VoiceSearchProps) {
   };
 
   if (!isVisible) {
+    if (inline) {
+      return (
+        <Button
+          onClick={() => {
+            setIsVisible(true);
+            startVoiceSearch();
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full shadow-lg border-2 border-yellow-400"
+          title="Voice Search Dreams"
+        >
+          <Search size={16} className="mr-2" />
+          Voice Search Dreams
+        </Button>
+      );
+    }
+    
     return (
       <div className="fixed bottom-20 right-6 z-[60] animate-bounce">
         <Button
