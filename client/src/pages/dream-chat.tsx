@@ -28,7 +28,6 @@ export default function DreamChat() {
         <div className="text-center">
           <h1 className="text-4xl font-black mb-2" style={{
             color: '#ffffff',
-            WebkitTextStroke: '4px #000000',
             textShadow: '4px 4px 0px #ff6b6b',
             letterSpacing: '3px',
             fontFamily: 'Arial Black, Impact, sans-serif',
