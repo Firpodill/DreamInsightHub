@@ -3,14 +3,16 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Brain, Image as ImageIcon, Calendar } from 'lucide-react';
+import { Search, Brain, Image as ImageIcon, Calendar, Headphones } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { VoiceSearch } from '@/components/voice-search';
+import { DreamAudioEnhancement } from '@/components/dream-audio-enhancement';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
+  const [showAudioEnhancement, setShowAudioEnhancement] = useState(false);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
 
@@ -130,20 +132,41 @@ export function DreamJournal() {
           <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
         
-        {/* Voice Search Button */}
-        <div className="text-center">
-          <p className="text-xs text-gray-500 mb-2">
-            Or try voice search with commands like "Find my dreams about flying"
-          </p>
-          <VoiceSearch 
-            inline={true}
-            onDreamSelect={(dream) => {
-              setSelectedDream(dream);
-              setSearchQuery(dream.content.substring(0, 50));
-            }}
-          />
+        {/* Voice Search and Audio Enhancement */}
+        <div className="flex items-center justify-between">
+          <div className="text-center flex-1">
+            <p className="text-xs text-gray-500 mb-2">
+              Or try voice search with commands like "Find my dreams about flying"
+            </p>
+            <VoiceSearch 
+              inline={true}
+              onDreamSelect={(dream) => {
+                setSelectedDream(dream);
+                setSearchQuery(dream.content.substring(0, 50));
+              }}
+            />
+          </div>
+          
+          <div className="ml-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAudioEnhancement(!showAudioEnhancement)}
+              className="border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white"
+            >
+              <Headphones className="w-4 h-4 mr-2" />
+              {showAudioEnhancement ? 'Hide Audio' : 'Audio Enhancement'}
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* Audio Enhancement Section */}
+      {showAudioEnhancement && (
+        <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-lg p-4 border border-purple-600/30">
+          <DreamAudioEnhancement />
+        </div>
+      )}
 
       {/* Dream Entries */}
       <div className="space-y-3">
