@@ -26,15 +26,20 @@ export default function DreamChat() {
         </div>
         
         <div className="text-center">
-          <h1 className="text-4xl font-black mb-2" style={{
-            color: '#ffffff',
-            textShadow: '4px 4px 0px #E53E3E, 8px 8px 0px #000000',
-            letterSpacing: '3px',
-            fontFamily: 'Arial Black, Impact, sans-serif',
-            transform: 'scale(1.1)',
+          <h1 className="text-5xl font-black mb-2" style={{
+            background: '#E53E3E',
+            color: '#FFFF00',
+            WebkitTextStroke: '3px #000000',
+            textShadow: '6px 6px 0px #000000',
+            letterSpacing: '4px',
+            fontFamily: 'Impact, Arial Black, sans-serif',
+            transform: 'scale(1.1) rotate(-1deg)',
             transformOrigin: 'center',
             textTransform: 'uppercase',
-            filter: 'contrast(1.3)'
+            filter: 'contrast(1.4) saturate(1.5)',
+            padding: '8px 16px',
+            borderRadius: '12px',
+            border: '4px solid #000000'
           }}>DREAMSPEAK</h1>
           <h2 className="text-lg font-semibold mb-4">JUNGIAN DREAM DECODER</h2>
         </div>
