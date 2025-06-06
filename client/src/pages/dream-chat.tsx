@@ -200,7 +200,7 @@ export default function DreamChat() {
         <div className="text-center -mt-6">
           <div className="mb-0" style={{
             background: '#E53E3E',
-            padding: '16px 24px 32px 24px',
+            padding: '16px 24px 64px 24px',
             borderRadius: '12px',
             border: '4px solid #000000',
             transform: 'rotate(-1deg)',
