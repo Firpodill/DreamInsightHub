@@ -49,7 +49,7 @@ export function ChatInterface() {
         </div>
 
         {/* Interactive button positioned over the lips in the image */}
-        <div className="absolute bottom-[20%] left-[55%] transform -translate-x-1/2 w-[30%] h-[12%]">
+        <div className="absolute bottom-[22%] left-[62%] transform -translate-x-1/2 w-[25%] h-[10%]">
           <button
             onClick={() => setIsVoiceRecording(true)}
             className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center"
