@@ -26,22 +26,33 @@ export default function DreamChat() {
         </div>
         
         <div className="text-center">
-          <h1 className="text-5xl font-black mb-2" style={{
+          <div className="mb-4" style={{
             background: '#E53E3E',
-            color: '#FFFF00',
-            WebkitTextStroke: '3px #000000',
-            textShadow: '6px 6px 0px #000000',
-            letterSpacing: '4px',
-            fontFamily: 'Impact, Arial Black, sans-serif',
-            transform: 'scale(1.1) rotate(-1deg)',
-            transformOrigin: 'center',
-            textTransform: 'uppercase',
-            filter: 'contrast(1.4) saturate(1.5)',
-            padding: '8px 16px',
+            padding: '12px 20px',
             borderRadius: '12px',
-            border: '4px solid #000000'
-          }}>DREAMSPEAK</h1>
-          <h2 className="text-lg font-semibold mb-4">JUNGIAN DREAM DECODER</h2>
+            border: '4px solid #000000',
+            transform: 'rotate(-1deg)',
+            boxShadow: '8px 8px 0px #000000'
+          }}>
+            <h1 className="text-5xl font-black" style={{
+              color: '#FFFF00',
+              WebkitTextStroke: '3px #000000',
+              letterSpacing: '4px',
+              fontFamily: 'Impact, Arial Black, sans-serif',
+              textTransform: 'uppercase',
+              filter: 'contrast(1.4) saturate(1.5)',
+              lineHeight: '1',
+              marginBottom: '4px'
+            }}>DREAMSPEAK</h1>
+            <h2 className="text-sm font-bold" style={{
+              color: '#FFFF00',
+              WebkitTextStroke: '1px #000000',
+              letterSpacing: '2px',
+              fontFamily: 'Impact, Arial Black, sans-serif',
+              textTransform: 'uppercase',
+              lineHeight: '1'
+            }}>JUNGIAN DREAM DECODER</h2>
+          </div>
         </div>
       </header>
 
