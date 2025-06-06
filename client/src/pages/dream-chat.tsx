@@ -197,8 +197,7 @@ export default function DreamChat() {
             </Dialog>
           </div>
         </div>
-        
-        <div className="text-center">
+        <div className="text-center -mt-6">
           <div className="mb-0" style={{
             background: '#E53E3E',
             padding: '16px 24px',
