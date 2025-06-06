@@ -12,14 +12,19 @@ export default function DreamChat() {
       <header className="text-center py-8 px-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center animate-globe-spin" style={{
-              background: 'linear-gradient(45deg, #0EA5E9, #3B82F6, #6366F1, #0EA5E9)',
-              border: '2px solid #1E40AF'
+            <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin" style={{
+              background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
+              border: '2px solid #1f2937'
             }}>
-              <div className="w-8 h-8 rounded-full" style={{
-                background: 'radial-gradient(circle at 30% 30%, #60A5FA, #3B82F6, #1E40AF)',
-                boxShadow: 'inset 0 0 10px rgba(30, 64, 175, 0.5)'
-              }}></div>
+              <div className="w-6 h-6 rounded-full relative" style={{
+                background: 'radial-gradient(circle at 30% 30%, #3b82f6, #1e40af, #0f172a)',
+                border: '1px solid #1e40af'
+              }}>
+                <div className="w-2 h-2 rounded-full absolute top-1 left-1" style={{
+                  background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
+                  boxShadow: '0 0 4px rgba(255, 255, 255, 0.8)'
+                }}></div>
+              </div>
             </div>
             <span className="text-sm font-medium">TODAY</span>
           </div>
