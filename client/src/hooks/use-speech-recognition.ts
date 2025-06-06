@@ -29,6 +29,7 @@ export function useSpeechRecognition(
   const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const finalTranscriptRef = useRef('');
 
   const isSupported = typeof window !== 'undefined' && 
     ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
@@ -70,16 +71,13 @@ export function useSpeechRecognition(
           }
         }
 
-        // Update transcript cleanly
-        setTranscript(prev => {
-          const trimmedFinal = finalTranscript.trim();
-          if (trimmedFinal) {
-            // Add final results permanently
-            return (prev + ' ' + trimmedFinal + (interimTranscript ? ' ' + interimTranscript : '')).trim();
-          }
-          // Just show interim results without permanently adding them
-          return prev + (interimTranscript ? ' ' + interimTranscript : '');
-        });
+        // Update final transcript reference only with new final results
+        if (finalTranscript.trim()) {
+          finalTranscriptRef.current += finalTranscript;
+        }
+
+        // Set display transcript to final + current interim
+        setTranscript(finalTranscriptRef.current + interimTranscript);
       };
 
       recognition.onerror = (event) => {
@@ -123,6 +121,7 @@ export function useSpeechRecognition(
   const resetTranscript = useCallback(() => {
     setTranscript('');
     setError(null);
+    finalTranscriptRef.current = '';
   }, []);
 
   return {
