@@ -139,12 +139,12 @@ export function ChatInterface() {
                   className="animate-pulse"
                   style={{ 
                     color: '#ffffff',
-                    fontSize: '11px',
+                    fontSize: '14px',
                     fontWeight: '900',
-                    lineHeight: '0.9',
-                    textShadow: '2px 2px 4px rgba(0,0,0,1), 0 0 8px rgba(255,255,255,0.5)',
-                    WebkitTextStroke: '0.5px rgba(255,255,255,0.3)',
-                    letterSpacing: '0.5px',
+                    lineHeight: '1.0',
+                    textShadow: '3px 3px 6px rgba(0,0,0,1), 0 0 12px rgba(255,255,255,0.7)',
+                    WebkitTextStroke: '0.5px rgba(0,0,0,0.8)',
+                    letterSpacing: '0.8px',
                     animation: 'pulse-glow 2s ease-in-out infinite'
                   }}>
                   DECODE<br />DREAM<br />NOW
