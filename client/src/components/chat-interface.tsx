@@ -110,7 +110,7 @@ export function ChatInterface() {
             {/* SPEAK text in center of black mouth area */}
             <span className="text-white font-black text-lg tracking-wider drop-shadow-lg px-3 py-1 rounded flex items-center gap-2">
               <Mic size={16} className="text-white" />
-              <span className={isTranscribing ? "animate-pulse" : ""}>SPEAK</span>
+              <span className={isTranscribing ? "animate-speak-pulse" : ""}>SPEAK</span>
             </span>
           </button>
         </div>
