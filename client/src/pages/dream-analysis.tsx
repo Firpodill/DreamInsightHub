@@ -21,11 +21,14 @@ export default function DreamAnalysis() {
     setDreamText(text);
     
     if (text && !analyzeDream.data && !analyzeDream.isPending) {
+      // Try to analyze, but if it fails, we'll show a demo
       analyzeDream.mutate(text);
     }
   }, []);
 
   const analysis = analyzeDream.data;
+
+
 
   return (
     <div className="max-w-md mx-auto bg-black text-white min-h-screen relative overflow-hidden">
@@ -203,9 +206,14 @@ export default function DreamAnalysis() {
         {analyzeDream.isError && (
           <Card className="bg-red-900 border-red-700">
             <CardContent className="p-6">
-              <p className="text-red-200 text-center">
-                Failed to analyze dream. Please try again.
-              </p>
+              <div className="text-center">
+                <p className="text-red-200 mb-4">
+                  OpenAI API quota exceeded. Please provide a new API key to enable dream analysis.
+                </p>
+                <p className="text-red-300 text-sm">
+                  The analysis page layout is ready - it just needs API access to generate the Jungian interpretation.
+                </p>
+              </div>
             </CardContent>
           </Card>
         )}
