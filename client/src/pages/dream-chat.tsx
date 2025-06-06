@@ -26,7 +26,7 @@ export default function DreamChat() {
         </div>
         
         <div className="text-center">
-          <div className="-mb-4" style={{
+          <div className="-mb-8" style={{
             background: '#E53E3E',
             padding: '12px 20px',
             borderRadius: '12px',
