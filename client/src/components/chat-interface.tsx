@@ -43,78 +43,150 @@ export function ChatInterface() {
 
   return (
     <div className="flex flex-col space-y-8 pb-8">
-      {/* Voice Interface - Red Lips */}
+      {/* Voice Interface - Realistic Red Lips */}
       <div className="flex justify-center">
         <button
           onClick={() => setIsVoiceRecording(true)}
-          className="relative group transition-transform hover:scale-105"
+          className="relative group transition-all duration-300 hover:scale-105 focus:outline-none"
           disabled={isDecoding}
         >
-          {/* Red Lips Shape - More realistic */}
-          <div className="relative w-72 h-28">
-            <svg viewBox="0 0 288 112" className="w-full h-full filter drop-shadow-xl">
+          {/* Lips Container */}
+          <div className="relative w-80 h-32">
+            <svg viewBox="0 0 320 128" className="w-full h-full filter drop-shadow-2xl">
               <defs>
-                <linearGradient id="lipsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ff6b6b" />
-                  <stop offset="30%" stopColor="#ee5a52" />
-                  <stop offset="70%" stopColor="#e74c3c" />
-                  <stop offset="100%" stopColor="#c0392b" />
-                </linearGradient>
-                <linearGradient id="lipsHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ff9999" opacity="0.8" />
-                  <stop offset="50%" stopColor="#ff6666" opacity="0.4" />
+                {/* Main lip gradient */}
+                <radialGradient id="lipsMainGradient" cx="50%" cy="30%" r="70%">
+                  <stop offset="0%" stopColor="#ff4757" />
+                  <stop offset="30%" stopColor="#ff3838" />
+                  <stop offset="60%" stopColor="#e55039" />
+                  <stop offset="90%" stopColor="#c44569" />
+                  <stop offset="100%" stopColor="#8b2635" />
+                </radialGradient>
+                
+                {/* Top lip highlight gradient */}
+                <linearGradient id="topLipHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ff6b7a" opacity="0.9" />
+                  <stop offset="50%" stopColor="#ff4757" opacity="0.6" />
                   <stop offset="100%" stopColor="transparent" />
                 </linearGradient>
+                
+                {/* Bottom lip highlight */}
+                <radialGradient id="bottomLipHighlight" cx="50%" cy="70%" r="60%">
+                  <stop offset="0%" stopColor="#ff6b7a" opacity="0.8" />
+                  <stop offset="70%" stopColor="transparent" />
+                </radialGradient>
+                
+                {/* Inner mouth gradient */}
+                <radialGradient id="mouthGradient" cx="50%" cy="50%" r="70%">
+                  <stop offset="0%" stopColor="#1a1a2e" />
+                  <stop offset="50%" stopColor="#16213e" />
+                  <stop offset="100%" stopColor="#0f0f23" />
+                </radialGradient>
+                
+                {/* Soft glow filter */}
+                <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge> 
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
               </defs>
               
-              {/* Main lip shape - more curved and realistic */}
+              {/* Outer lip shadow */}
               <path
-                d="M 24 56 Q 48 16, 72 24 Q 96 12, 144 12 Q 192 12, 216 24 Q 240 16, 264 56 Q 240 96, 216 88 Q 192 100, 144 100 Q 96 100, 72 88 Q 48 96, 24 56 Z"
-                fill="url(#lipsGradient)"
-                stroke="#a93226"
-                strokeWidth="1.5"
+                d="M 32 64 Q 56 24, 80 32 Q 120 16, 160 16 Q 200 16, 240 32 Q 264 24, 288 64 Q 264 104, 240 96 Q 200 112, 160 112 Q 120 112, 80 96 Q 56 104, 32 64 Z"
+                fill="#8b2635"
+                opacity="0.4"
+                transform="translate(2, 3)"
+                filter="url(#softGlow)"
               />
               
-              {/* Top lip highlight */}
+              {/* Main lip shape */}
               <path
-                d="M 36 48 Q 72 20, 144 18 Q 216 20, 252 48 Q 228 40, 144 36 Q 60 40, 36 48 Z"
-                fill="url(#lipsHighlight)"
+                d="M 30 64 Q 54 22, 78 30 Q 118 14, 160 14 Q 202 14, 242 30 Q 266 22, 290 64 Q 266 106, 242 98 Q 202 114, 160 114 Q 118 114, 78 98 Q 54 106, 30 64 Z"
+                fill="url(#lipsMainGradient)"
+                stroke="#a0253f"
+                strokeWidth="2"
               />
               
-              {/* Mouth opening - more natural shape */}
+              {/* Top lip definition and highlight */}
               <path
-                d="M 60 56 Q 90 44, 144 44 Q 198 44, 228 56 Q 198 68, 144 68 Q 90 68, 60 56 Z"
-                fill="#2c3e50"
+                d="M 40 56 Q 78 26, 120 32 Q 140 24, 160 24 Q 180 24, 200 32 Q 242 26, 280 56 Q 242 48, 200 44 Q 180 40, 160 40 Q 140 40, 120 44 Q 78 48, 40 56 Z"
+                fill="url(#topLipHighlight)"
               />
               
-              {/* Inner shadow for depth */}
-              <path
-                d="M 66 58 Q 96 50, 144 50 Q 192 50, 222 58 Q 192 62, 144 62 Q 96 62, 66 58 Z"
-                fill="#1a252f"
+              {/* Bottom lip highlight */}
+              <ellipse
+                cx="160"
+                cy="85"
+                rx="90"
+                ry="18"
+                fill="url(#bottomLipHighlight)"
               />
               
-              {/* Microphone icon in center */}
-              <circle cx="144" cy="56" r="14" fill="rgba(255,255,255,0.9)" />
-              <foreignObject x="134" y="46" width="20" height="20">
+              {/* Cupid's bow detail */}
+              <path
+                d="M 140 30 Q 150 26, 160 28 Q 170 26, 180 30 Q 170 34, 160 32 Q 150 34, 140 30 Z"
+                fill="#ff6b7a"
+                opacity="0.7"
+              />
+              
+              {/* Inner mouth opening */}
+              <ellipse
+                cx="160"
+                cy="64"
+                rx="75"
+                ry="18"
+                fill="url(#mouthGradient)"
+              />
+              
+              {/* Inner mouth depth */}
+              <ellipse
+                cx="160"
+                cy="66"
+                rx="65"
+                ry="12"
+                fill="#0a0a18"
+                opacity="0.8"
+              />
+              
+              {/* Teeth highlight */}
+              <ellipse
+                cx="160"
+                cy="58"
+                rx="60"
+                ry="4"
+                fill="#f8f9fa"
+                opacity="0.3"
+              />
+              
+              {/* Microphone with better styling */}
+              <circle cx="160" cy="64" r="16" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="1"/>
+              <circle cx="160" cy="64" r="12" fill="rgba(248,249,250,0.9)"/>
+              <foreignObject x="150" y="54" width="20" height="20">
                 <div className="flex items-center justify-center w-full h-full">
-                  <Mic className="w-4 h-4 text-gray-700" />
+                  <Mic className="w-4 h-4 text-gray-600" />
                 </div>
               </foreignObject>
             </svg>
             
-            {/* PRESS text */}
-            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-              <span className="text-white font-bold text-lg tracking-[0.3em] drop-shadow-lg">
+            {/* PRESS text with better positioning */}
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+              <span className="text-white font-black text-xl tracking-[0.4em] drop-shadow-xl text-shadow-lg">
                 PRESS
               </span>
             </div>
             
-            {/* SPEAK text */}
-            <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-              <span className="text-white font-bold text-lg tracking-[0.3em] drop-shadow-lg">
+            {/* SPEAK text with better positioning */}
+            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+              <span className="text-white font-black text-xl tracking-[0.4em] drop-shadow-xl text-shadow-lg">
                 SPEAK
               </span>
             </div>
+            
+            {/* Glossy overlay effect */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent rounded-full pointer-events-none"></div>
           </div>
         </button>
       </div>
