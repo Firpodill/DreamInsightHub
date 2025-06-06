@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import DreamChat from "@/pages/dream-chat";
 import DreamAnalysis from "@/pages/dream-analysis";
 import SymbolEncyclopedia from "@/pages/symbol-encyclopedia";
+import VisionBoard from "@/pages/vision-board";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={DreamChat} />
       <Route path="/analysis" component={DreamAnalysis} />
       <Route path="/symbols" component={SymbolEncyclopedia} />
+      <Route path="/vision-board" component={VisionBoard} />
       <Route component={NotFound} />
     </Switch>
   );

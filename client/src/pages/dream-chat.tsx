@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
@@ -232,22 +232,26 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
         <Tabs defaultValue="chat" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
-              <MessageCircle className="w-4 h-4 mr-2" />
+              <MessageCircle className="w-4 h-4 mr-1" />
               Chat
             </TabsTrigger>
             <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
-              <BookOpen className="w-4 h-4 mr-2" />
+              <BookOpen className="w-4 h-4 mr-1" />
               Journal
             </TabsTrigger>
             <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
-              <Brain className="w-4 h-4 mr-2" />
+              <Brain className="w-4 h-4 mr-1" />
               Insights
             </TabsTrigger>
             <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
-              <Book className="w-4 h-4 mr-2" />
+              <Book className="w-4 h-4 mr-1" />
               Symbols
+            </TabsTrigger>
+            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
+              <Palette className="w-4 h-4 mr-1" />
+              Vision
             </TabsTrigger>
           </TabsList>
           
@@ -276,6 +280,24 @@ export default function DreamChat() {
                   className="bg-red-600 hover:bg-red-700 text-white"
                 >
                   Open Encyclopedia
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="vision" className="mt-6">
+            <div className="text-center space-y-4">
+              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+                <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
+                <p className="text-gray-400 mb-4">
+                  Create visual collages of your dreams with AI-generated imagery
+                </p>
+                <Button 
+                  onClick={() => navigate('/vision-board')}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Create Vision Board
                 </Button>
               </div>
             </div>

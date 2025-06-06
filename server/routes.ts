@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { analyzeDream, generateDreamVisualization } from "./openai";
+import { analyzeDream, generateDreamVisualization, generateImage } from "./openai";
 import { insertDreamSchema, insertChatMessageSchema } from "@shared/schema";
 import { z } from "zod";
 
