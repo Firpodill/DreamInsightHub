@@ -135,15 +135,18 @@ export function ChatInterface() {
                   color: '#ffffff',
                   filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
                 }} />
-                <div style={{ 
-                  color: '#ffffff',
-                  fontSize: '11px',
-                  fontWeight: '900',
-                  lineHeight: '0.9',
-                  textShadow: '2px 2px 4px rgba(0,0,0,1), 0 0 8px rgba(255,255,255,0.5)',
-                  WebkitTextStroke: '0.5px rgba(255,255,255,0.3)',
-                  letterSpacing: '0.5px'
-                }}>
+                <div 
+                  className="animate-pulse"
+                  style={{ 
+                    color: '#ffffff',
+                    fontSize: '11px',
+                    fontWeight: '900',
+                    lineHeight: '0.9',
+                    textShadow: '2px 2px 4px rgba(0,0,0,1), 0 0 8px rgba(255,255,255,0.5)',
+                    WebkitTextStroke: '0.5px rgba(255,255,255,0.3)',
+                    letterSpacing: '0.5px',
+                    animation: 'pulse-glow 2s ease-in-out infinite'
+                  }}>
                   DECODE<br />DREAM<br />NOW
                 </div>
               </div>
