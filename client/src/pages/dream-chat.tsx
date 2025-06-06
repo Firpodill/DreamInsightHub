@@ -277,7 +277,7 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-gray-900 border border-gray-700">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <MessageCircle className="w-3 h-3 mr-1" />
               Chat
@@ -293,10 +293,6 @@ export default function DreamChat() {
             <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Brain className="w-3 h-3 mr-1" />
               Insights
-            </TabsTrigger>
-            <TabsTrigger value="symbols" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <Book className="w-3 h-3 mr-1" />
-              Symbols
             </TabsTrigger>
             <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Palette className="w-3 h-3 mr-1" />
@@ -320,23 +316,7 @@ export default function DreamChat() {
             <InsightsDashboard />
           </TabsContent>
           
-          <TabsContent value="symbols" className="mt-6">
-            <div className="text-center space-y-4">
-              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                <Book className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
-                <h3 className="text-xl font-bold mb-2">Dream Symbol Encyclopedia</h3>
-                <p className="text-gray-400 mb-4">
-                  Explore comprehensive Jungian interpretations of dream symbols
-                </p>
-                <Button 
-                  onClick={() => navigate('/symbols')}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Open Encyclopedia
-                </Button>
-              </div>
-            </div>
-          </TabsContent>
+
           
           <TabsContent value="vision" className="mt-6">
             <div className="text-center space-y-4">
