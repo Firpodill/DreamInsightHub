@@ -3,22 +3,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Mic, Send, Brain, User, Sparkles, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { Mic, Send, Brain, User, Sparkles, Image as ImageIcon, Wand2 } from 'lucide-react';
 import { useChatMessages, useAnalyzeDream, useSendMessage, useGenerateImage } from '@/hooks/use-dreams';
 import { VoiceRecorder } from './voice-recorder';
+import { Textarea } from '@/components/ui/textarea';
 import type { ChatMessage } from '@shared/schema';
 
 export function ChatInterface() {
   const [inputValue, setInputValue] = useState('');
   const [isVoiceRecording, setIsVoiceRecording] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [dailyDreamText, setDailyDreamText] = useState('');
-  const [isCollectingDaily, setIsCollectingDaily] = useState(false);
+  const [isDecoding, setIsDecoding] = useState(false);
+  const [dreamText, setDreamText] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: messages = [], isLoading } = useChatMessages();
   const analyzeDream = useAnalyzeDream();
-  const sendMessage = useSendMessage();
   const generateImage = useGenerateImage();
 
   const scrollToBottom = () => {
@@ -31,69 +30,32 @@ export function ChatInterface() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async (content: string) => {
+  const handleAddText = (content: string) => {
     if (!content.trim()) return;
-
+    
     setInputValue('');
-
-    if (isCollectingDaily) {
-      // Add to daily dream text instead of sending immediately
-      setDailyDreamText(prev => (prev + ' ' + content).trim());
-      
-      await sendMessage.mutateAsync({
-        role: 'user',
-        content,
-        messageType: 'daily_entry'
-      });
-    } else {
-      // Send as regular message for immediate analysis
-      setIsTyping(true);
-      try {
-        await sendMessage.mutateAsync({
-          role: 'user',
-          content,
-          messageType: 'text'
-        });
-
-        const result = await analyzeDream.mutateAsync(content);
-        
-        if (result.dream?.id) {
-          setTimeout(() => {
-            generateImage.mutate(result.dream.id);
-          }, 2000);
-        }
-      } catch (error) {
-        console.error('Failed to send message:', error);
-      } finally {
-        setIsTyping(false);
-      }
-    }
+    setDreamText(prev => (prev + ' ' + content).trim());
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSendMessage(inputValue);
+    handleAddText(inputValue);
   };
 
   const handleVoiceComplete = (transcript: string) => {
     setIsVoiceRecording(false);
     if (transcript.trim()) {
-      handleSendMessage(transcript);
+      handleAddText(transcript);
     }
   };
 
-  const handleStartDailyEntry = () => {
-    setIsCollectingDaily(true);
-    setDailyDreamText('');
-  };
+  const handleDecodeDream = async () => {
+    if (!dreamText.trim()) return;
 
-  const handleCompleteDailyEntry = async () => {
-    if (!dailyDreamText.trim()) return;
-
-    setIsTyping(true);
+    setIsDecoding(true);
     try {
-      // Analyze the complete daily dream
-      const result = await analyzeDream.mutateAsync(dailyDreamText);
+      // Analyze the complete dream text
+      const result = await analyzeDream.mutateAsync(dreamText);
       
       // Generate image after analysis
       if (result.dream?.id) {
@@ -102,13 +64,12 @@ export function ChatInterface() {
         }, 2000);
       }
 
-      // Reset daily entry state
-      setIsCollectingDaily(false);
-      setDailyDreamText('');
+      // Clear the dream text after analysis
+      setDreamText('');
     } catch (error) {
-      console.error('Failed to analyze daily dream:', error);
+      console.error('Failed to decode dream:', error);
     } finally {
-      setIsTyping(false);
+      setIsDecoding(false);
     }
   };
 
@@ -188,7 +149,7 @@ export function ChatInterface() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Welcome Message / Daily Entry Status */}
+      {/* Welcome Message */}
       {messages.length === 0 && !isLoading && (
         <div className="flex justify-center mb-6 p-4">
           <Card className="p-4 max-w-xs text-center border border-purple-100">
@@ -196,42 +157,31 @@ export function ChatInterface() {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <p className="text-sm text-gray-600 mb-2">Welcome to your dream sanctuary</p>
-            <p className="text-xs text-gray-500 mb-3">Share your dreams and discover their deeper meanings through Jungian analysis</p>
-            
-            {!isCollectingDaily && (
-              <Button 
-                onClick={handleStartDailyEntry}
-                className="w-full bg-gradient-to-r from-primary to-primary-dark text-white text-sm"
-              >
-                Start Daily Dream Entry
-              </Button>
-            )}
+            <p className="text-xs text-gray-500">Share your dreams and discover their deeper meanings through Jungian analysis</p>
           </Card>
         </div>
       )}
 
-      {/* Daily Entry Progress */}
-      {isCollectingDaily && (
+      {/* Dream Text Area */}
+      {dreamText && (
         <div className="mx-4 mb-4">
-          <Card className="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-medium text-gray-800 text-sm">Daily Dream Entry Active</h4>
-                <p className="text-xs text-gray-600">Add multiple voice/text entries, then complete for analysis</p>
-                {dailyDreamText && (
-                  <p className="text-xs text-primary mt-1">{dailyDreamText.length} characters collected</p>
-                )}
-              </div>
+          <Card className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200">
+            <div className="flex items-start justify-between mb-2">
+              <h4 className="font-medium text-gray-800 text-sm">Your Dream Entry</h4>
               <Button 
-                onClick={handleCompleteDailyEntry}
-                disabled={!dailyDreamText.trim() || analyzeDream.isPending}
-                className="bg-green-600 hover:bg-green-700 text-white text-sm"
+                onClick={handleDecodeDream}
+                disabled={!dreamText.trim() || isDecoding}
+                className="bg-gradient-to-r from-primary to-primary-dark text-white text-sm px-4 py-2"
                 size="sm"
               >
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Complete Entry
+                <Wand2 className="w-4 h-4 mr-1" />
+                {isDecoding ? 'Decoding...' : 'Decode My Dream'}
               </Button>
             </div>
+            <div className="bg-white rounded-lg p-3 max-h-32 overflow-y-auto border">
+              <p className="text-sm text-gray-700">{dreamText}</p>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">{dreamText.length} characters</p>
           </Card>
         </div>
       )}
@@ -248,7 +198,7 @@ export function ChatInterface() {
         )}
 
         {/* Typing Indicator */}
-        {(isTyping || analyzeDream.isPending || generateImage.isPending) && (
+        {(isDecoding || generateImage.isPending) && (
           <div className="flex items-start space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0">
               <Brain className="w-4 h-4 text-white" />
@@ -267,21 +217,13 @@ export function ChatInterface() {
         )}
       </div>
 
-      {/* Chat Input */}
+      {/* Input Area */}
       <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-        {isCollectingDaily && (
-          <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-xs text-yellow-700 text-center font-medium">
-              Daily Entry Mode: Building your complete dream story
-            </p>
-          </div>
-        )}
-        
         <form onSubmit={handleSubmit} className="flex items-center space-x-3">
           <Button
             type="button"
             onClick={() => setIsVoiceRecording(true)}
-            className={`w-12 h-12 ${isCollectingDaily ? 'bg-gradient-to-br from-yellow-500 to-orange-500' : 'bg-gradient-to-br from-primary to-primary-dark'} rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform`}
+            className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
           >
             <Mic className="w-5 h-5 text-white" />
           </Button>
@@ -289,15 +231,15 @@ export function ChatInterface() {
           <div className="flex-1 relative">
             <Input
               type="text"
-              placeholder={isCollectingDaily ? "Add to your daily dream..." : "Describe your dream..."}
+              placeholder="Add to your dream..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               className="py-3 px-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50 focus:border-transparent"
-              disabled={analyzeDream.isPending}
+              disabled={isDecoding}
             />
             <Button
               type="submit"
-              disabled={!inputValue.trim() || analyzeDream.isPending}
+              disabled={!inputValue.trim() || isDecoding}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 h-auto bg-transparent hover:bg-transparent text-primary"
             >
               <Send className="w-5 h-5" />
@@ -305,24 +247,9 @@ export function ChatInterface() {
           </div>
         </form>
         
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-xs text-gray-500">
-            {isCollectingDaily ? 'Building daily entry' : 'Speak or type your dreams'} • All conversations are private
-          </p>
-          {isCollectingDaily && (
-            <Button
-              onClick={() => {
-                setIsCollectingDaily(false);
-                setDailyDreamText('');
-              }}
-              variant="ghost"
-              size="sm"
-              className="text-xs text-gray-500 hover:text-gray-700 h-auto p-1"
-            >
-              Cancel Daily Entry
-            </Button>
-          )}
-        </div>
+        <p className="text-xs text-gray-500 mt-2 text-center">
+          Speak or type to build your dream • Press "Decode My Dream" when ready
+        </p>
       </div>
 
       <VoiceRecorder
