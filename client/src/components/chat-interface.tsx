@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Brain } from "lucide-react";
+import { Mic, Brain, Keyboard } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
@@ -14,6 +14,7 @@ export function ChatInterface() {
   const [isDecoding, setIsDecoding] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState("");
+  const [inputMode, setInputMode] = useState<'text' | 'voice'>('voice'); // Default to voice mode
   const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
 
@@ -61,7 +62,7 @@ export function ChatInterface() {
         {/* Text area positioned over the speech bubble in the image */}
         <div className="absolute top-[12%] left-[5%] w-[40%] h-[35%]">
           <div className="w-full h-full flex items-center justify-center p-6">
-            {isTranscribing ? (
+            {inputMode === 'voice' && isTranscribing ? (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-gray-900 text-base leading-relaxed font-medium text-center">
                   {currentTranscript || "Listening..."}
@@ -74,9 +75,10 @@ export function ChatInterface() {
               <Textarea
                 value={dreamText}
                 onChange={(e) => setDreamText(e.target.value)}
-                placeholder=""
+                placeholder={inputMode === 'text' ? "Type your dream here..." : ""}
                 className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center"
-                disabled={isDecoding}
+                disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
+                readOnly={inputMode === 'voice' && !isTranscribing}
               />
             )}
           </div>
@@ -86,33 +88,60 @@ export function ChatInterface() {
         <div className="absolute bottom-[29%] left-[77%] w-[12%] h-[4%]">
           <button
             onClick={() => {
+              if (inputMode === 'voice') {
+                if (isTranscribing) {
+                  setIsTranscribing(false);
+                  setIsVoiceRecording(false);
+                  stopListening();
+                  if (currentTranscript) {
+                    setDreamText(currentTranscript);
+                    setCurrentTranscript("");
+                  }
+                  resetTranscript();
+                } else {
+                  setIsTranscribing(true);
+                  setIsVoiceRecording(true);
+                  setCurrentTranscript("");
+                  resetTranscript();
+                  startListening();
+                }
+              } else {
+                // In text mode, toggle between voice and text
+                setInputMode('voice');
+              }
+            }}
+            onDoubleClick={() => {
+              // Double-click to toggle modes
+              setInputMode(inputMode === 'voice' ? 'text' : 'voice');
               if (isTranscribing) {
                 setIsTranscribing(false);
                 setIsVoiceRecording(false);
                 stopListening();
-                if (currentTranscript) {
-                  setDreamText(currentTranscript);
-                  setCurrentTranscript("");
-                }
                 resetTranscript();
-              } else {
-                setIsTranscribing(true);
-                setIsVoiceRecording(true);
-                setCurrentTranscript("");
-                resetTranscript();
-                startListening();
               }
             }}
             className={`w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center ${isTranscribing ? 'animate-speak-pulse' : ''}`}
             disabled={isDecoding}
           >
-            {/* SPEAK text in center of black mouth area */}
+            {/* Mode toggle display */}
             <span className="text-white font-black text-lg tracking-wider drop-shadow-lg px-3 py-1 rounded flex items-center gap-2">
-              <Mic 
-                size={16} 
-                className={isTranscribing ? "animate-mic-green-pulse" : "animate-mic-red-pulse"} 
-              />
-              <span>SPEAK</span>
+              {inputMode === 'voice' ? (
+                <>
+                  <Mic 
+                    size={16} 
+                    className={isTranscribing ? "animate-mic-green-pulse" : "animate-mic-red-pulse"} 
+                  />
+                  <span>SPEAK</span>
+                </>
+              ) : (
+                <>
+                  <Keyboard 
+                    size={16} 
+                    className="text-blue-400" 
+                  />
+                  <span>TYPE</span>
+                </>
+              )}
             </span>
           </button>
         </div>
