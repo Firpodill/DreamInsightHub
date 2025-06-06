@@ -35,7 +35,7 @@ export function CosmicTransition({ isActive, onComplete, type = 'galaxy' }: Cosm
       // Complete transition after animation
       const timer = setTimeout(() => {
         onComplete?.();
-      }, 2500);
+      }, 800);
 
       return () => clearTimeout(timer);
     }
@@ -88,8 +88,8 @@ export function CosmicTransition({ isActive, onComplete, type = 'galaxy' }: Cosm
             y: [0, (Math.random() - 0.5) * 100],
           }}
           transition={{
-            duration: 2.5,
-            delay: particle.delay,
+            duration: 0.8,
+            delay: particle.delay * 0.3,
             ease: 'easeInOut',
           }}
         />
@@ -100,7 +100,7 @@ export function CosmicTransition({ isActive, onComplete, type = 'galaxy' }: Cosm
         className="absolute inset-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 0.3, 0] }}
-        transition={{ duration: 2, ease: 'easeInOut' }}
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
       >
         <div className="absolute inset-0 bg-gradient-radial from-purple-400/20 via-blue-500/10 to-transparent animate-pulse" />
         <div className="absolute inset-0 bg-gradient-conic from-purple-600/20 via-blue-600/20 to-purple-600/20 animate-spin" style={{ animationDuration: '4s' }} />
@@ -257,11 +257,11 @@ export function useCosmicTransition() {
       
       oscillator.type = 'sine';
       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.5);
+      gainNode.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
       
       oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 1.5);
+      oscillator.stop(audioContext.currentTime + 0.5);
     } catch (error) {
       // Silently fail if Web Audio API is not supported
     }

@@ -90,7 +90,7 @@ export default function DreamChat() {
       // Delay tab change until transition starts
       setTimeout(() => {
         setActiveTab(newTab);
-      }, 300);
+      }, 100);
     }
   };
 
