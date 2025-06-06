@@ -120,27 +120,35 @@ export function ChatInterface() {
 
         {/* Decode Button positioned at bottom */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-          <button
-            onClick={handleDecodeClick}
-            disabled={!dreamText.trim() || isDecoding}
-            className="w-32 h-32 text-white font-bold text-sm border-3 border-white rounded-full hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
-            style={{
-              backgroundColor: '#000000',
-              boxShadow: '4px 4px 0px #ff6b6b'
-            }}
-          >
-            <div className="flex flex-col items-center justify-center relative z-10">
-              <Brain size={24} className="text-white mb-1 drop-shadow-lg" style={{ color: '#ffffff', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))' }} />
-              <span className="text-center leading-none text-base font-black text-white drop-shadow-lg" style={{ 
-                color: '#ffffff', 
-                textShadow: '3px 3px 6px rgba(0,0,0,1), 0 0 12px rgba(255,255,255,0.8), 2px 2px 0px rgba(0,0,0,1)',
-                fontWeight: '900',
-                WebkitTextStroke: '1px rgba(0,0,0,0.5)'
-              }}>
-                DECODE<br />DREAM<br />NOW
-              </span>
-            </div>
-          </button>
+          <div className="relative">
+            <button
+              onClick={handleDecodeClick}
+              disabled={!dreamText.trim() || isDecoding}
+              className="w-32 h-32 rounded-full border-4 border-white transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+                boxShadow: '4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5)',
+              }}
+            >
+              <div className="flex flex-col items-center justify-center text-center">
+                <Brain size={26} style={{ 
+                  color: '#ffffff',
+                  filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
+                }} />
+                <div style={{ 
+                  color: '#ffffff',
+                  fontSize: '11px',
+                  fontWeight: '900',
+                  lineHeight: '0.9',
+                  textShadow: '2px 2px 4px rgba(0,0,0,1), 0 0 8px rgba(255,255,255,0.5)',
+                  WebkitTextStroke: '0.5px rgba(255,255,255,0.3)',
+                  letterSpacing: '0.5px'
+                }}>
+                  DECODE<br />DREAM<br />NOW
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
