@@ -4,13 +4,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mic } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
+import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
 import backgroundImage from "@assets/vecteezy_open-red-lips-with-speech-bubble-pop-art-background-on-dot_.jpg";
 
 export function ChatInterface() {
   const [dreamText, setDreamText] = useState("");
   const [isVoiceRecording, setIsVoiceRecording] = useState(false);
   const [isDecoding, setIsDecoding] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState("");
   const analyzeDream = useAnalyzeDream();
+
+  const {
+    transcript,
+    isListening,
+    isSupported,
+    startListening,
+    stopListening,
+    resetTranscript,
+    error
+  } = useSpeechRecognition({
+    continuous: true,
+    interimResults: true,
+    lang: 'en-US'
+  });
+
+  // Update current transcript when speech recognition changes
+  useEffect(() => {
+    if (isTranscribing && transcript) {
+      setCurrentTranscript(transcript);
+    }
+  }, [transcript, isTranscribing]);
 
   const handleDecodeClick = async () => {
     if (!dreamText.trim()) return;
@@ -38,20 +62,48 @@ export function ChatInterface() {
         {/* Text area positioned over the speech bubble in the image */}
         <div className="absolute top-[12%] left-[5%] w-[40%] h-[35%]">
           <div className="w-full h-full flex items-center justify-center p-6">
-            <Textarea
-              value={dreamText}
-              onChange={(e) => setDreamText(e.target.value)}
-              placeholder=""
-              className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center"
-              disabled={isDecoding}
-            />
+            {isTranscribing ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-gray-900 text-base leading-relaxed font-medium text-center">
+                  {currentTranscript || "Listening..."}
+                  <div className="mt-2 text-sm text-gray-600">
+                    🎤 Recording... Click SPEAK again to stop
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Textarea
+                value={dreamText}
+                onChange={(e) => setDreamText(e.target.value)}
+                placeholder=""
+                className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center"
+                disabled={isDecoding}
+              />
+            )}
           </div>
         </div>
 
         {/* Interactive button positioned over the lips in the image */}
         <div className="absolute bottom-[29%] left-[77%] w-[12%] h-[4%]">
           <button
-            onClick={() => setIsVoiceRecording(true)}
+            onClick={() => {
+              if (isTranscribing) {
+                setIsTranscribing(false);
+                setIsVoiceRecording(false);
+                stopListening();
+                if (currentTranscript) {
+                  setDreamText(currentTranscript);
+                  setCurrentTranscript("");
+                }
+                resetTranscript();
+              } else {
+                setIsTranscribing(true);
+                setIsVoiceRecording(true);
+                setCurrentTranscript("");
+                resetTranscript();
+                startListening();
+              }
+            }}
             className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center"
             disabled={isDecoding}
           >
@@ -78,15 +130,7 @@ export function ChatInterface() {
         </div>
       </div>
 
-      {/* Voice Recorder Modal */}
-      <VoiceRecorder
-        open={isVoiceRecording}
-        onClose={() => setIsVoiceRecording(false)}
-        onTranscriptionComplete={(text) => {
-          setDreamText(text);
-          setIsVoiceRecording(false);
-        }}
-      />
+
     </div>
   );
 }
