@@ -230,7 +230,7 @@ export default function DreamChat() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="px-6 mb-2">
+      <div className="px-6 mb-2 -mt-1">
         <Tabs defaultValue="chat" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white">
