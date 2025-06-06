@@ -41,14 +41,11 @@ export function ChatInterface() {
   const handleDecodeClick = async () => {
     if (!dreamText.trim()) return;
     
-    try {
-      setIsDecoding(true);
-      await analyzeDream.mutateAsync(dreamText);
-    } catch (error) {
-      console.error("Error analyzing dream:", error);
-    } finally {
-      setIsDecoding(false);
-    }
+    // Save dream text to localStorage for the analysis page
+    localStorage.setItem('currentDreamText', dreamText);
+    
+    // Navigate to analysis page
+    navigate('/analysis');
   };
 
   return (
