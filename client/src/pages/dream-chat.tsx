@@ -28,7 +28,7 @@ export default function DreamChat() {
         <div className="text-center">
           <div className="-mb-8" style={{
             background: '#E53E3E',
-            padding: '12px 20px',
+            padding: '16px 24px',
             borderRadius: '12px',
             border: '4px solid #000000',
             transform: 'rotate(-1deg)',
@@ -36,7 +36,7 @@ export default function DreamChat() {
             position: 'relative',
             zIndex: 10
           }}>
-            <h1 className="text-7xl font-black" style={{
+            <h1 className="text-5xl font-black" style={{
               color: '#FFFF00',
               WebkitTextStroke: '3px #000000',
               letterSpacing: '4px',
