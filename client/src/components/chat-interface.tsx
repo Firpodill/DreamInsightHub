@@ -56,7 +56,7 @@ export function ChatInterface() {
             disabled={isDecoding}
           >
             {/* SPEAK text in center of black mouth area */}
-            <span className="text-white font-black text-lg tracking-wider drop-shadow-lg bg-black bg-opacity-70 px-3 py-1 rounded">
+            <span className="text-white font-black text-lg tracking-wider drop-shadow-lg px-3 py-1 rounded">
               SPEAK
             </span>
           </button>
