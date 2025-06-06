@@ -123,14 +123,14 @@ export function ChatInterface() {
           <button
             onClick={handleDecodeClick}
             disabled={!dreamText.trim() || isDecoding}
-            className="w-32 h-32 bg-white text-black font-bold text-sm border-3 border-black rounded-full hover:bg-black hover:text-white transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
+            className="w-32 h-32 bg-black bg-opacity-90 text-white font-bold text-sm border-3 border-white rounded-full hover:bg-opacity-100 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
             style={{
               boxShadow: '4px 4px 0px #ff6b6b'
             }}
           >
             <div className="flex flex-col items-center justify-center">
-              <Brain size={24} className="mb-1" />
-              <span className="text-center leading-none text-sm font-bold">
+              <Brain size={24} className="text-white mb-1" />
+              <span className="text-center leading-none text-sm font-bold text-white">
                 DECODE<br />DREAM<br />NOW
               </span>
             </div>
