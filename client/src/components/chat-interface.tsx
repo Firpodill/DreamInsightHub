@@ -79,18 +79,18 @@ export function ChatInterface() {
     const isImage = message.messageType === 'image';
 
     return (
-      <div key={message.id} className={`flex items-start space-x-3 ${isUser ? 'justify-end' : ''}`}>
+      <div key={message.id} className={`flex items-start space-x-4 ${isUser ? 'justify-end' : ''} mb-4`}>
         {!isUser && (
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0">
-            <Brain className="w-4 h-4 text-white" />
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
+            <Brain className="w-5 h-5 text-white" />
           </div>
         )}
         
-        <div className={`max-w-xs ${isUser ? 'order-first' : ''}`}>
-          <div className={`rounded-2xl shadow-sm p-4 ${
+        <div className={`max-w-sm ${isUser ? 'order-first' : ''}`}>
+          <div className={`rounded-2xl shadow-lg p-5 ${
             isUser 
-              ? 'bg-gradient-to-r from-primary to-primary-dark text-white rounded-tr-sm' 
-              : 'bg-white rounded-tl-sm'
+              ? 'bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 text-white rounded-tr-sm shadow-purple-500/20' 
+              : 'bg-gradient-to-br from-white to-purple-50 rounded-tl-sm border border-purple-100 shadow-purple-200/20'
           }`}>
             {isAnalysis && message.metadata && (
               <div className="mb-3">
@@ -139,8 +139,8 @@ export function ChatInterface() {
         </div>
 
         {isUser && (
-          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-4 h-4 text-gray-600" />
+          <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+            <User className="w-5 h-5 text-white" />
           </div>
         )}
       </div>
@@ -196,7 +196,7 @@ export function ChatInterface() {
       {/* Chat Messages */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50"
+        className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-purple-50/20 via-white/50 to-blue-50/20"
       >
         {isLoading ? (
           <div className="text-center text-gray-500">Loading messages...</div>
