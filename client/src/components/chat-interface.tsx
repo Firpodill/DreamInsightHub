@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Brain, Keyboard } from "lucide-react";
+import { Mic, Brain, Keyboard, Info } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
@@ -15,6 +15,7 @@ export function ChatInterface() {
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('voice'); // Default to voice mode
+  const [showHelpTooltip, setShowHelpTooltip] = useState(false);
   const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
 
@@ -82,6 +83,28 @@ export function ChatInterface() {
               />
             )}
           </div>
+        </div>
+
+        {/* Help tooltip */}
+        <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
+          <button
+            onClick={() => setShowHelpTooltip(!showHelpTooltip)}
+            className="bg-black bg-opacity-20 hover:bg-opacity-30 rounded-full p-2 transition-all duration-200"
+          >
+            <Info size={16} className="text-white" />
+          </button>
+          
+          {showHelpTooltip && (
+            <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-90 text-white text-xs p-3 rounded-lg shadow-lg whitespace-nowrap z-50">
+              <div className="text-center">
+                <div className="font-semibold mb-1">Input Mode Toggle</div>
+                <div>Single click: Use current mode</div>
+                <div>Double click: Switch modes</div>
+                <div className="mt-1 text-yellow-300">🎤 Voice → ⌨️ Type</div>
+              </div>
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black bg-opacity-90 rotate-45"></div>
+            </div>
+          )}
         </div>
 
         {/* Interactive button positioned over the lips in the image */}
