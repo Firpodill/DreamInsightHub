@@ -13,8 +13,38 @@
   }
 }
 
+@keyframes micPulseRed {
+  0%, 100% {
+    color: #ef4444;
+    transform: scale(1);
+  }
+  50% {
+    color: #dc2626;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes micPulseGreen {
+  0%, 100% {
+    color: #22c55e;
+    transform: scale(1);
+  }
+  50% {
+    color: #16a34a;
+    transform: scale(1.1);
+  }
+}
+
 .animate-speak-pulse {
   animation: speakPulse 1s ease-in-out infinite;
+}
+
+.animate-mic-red-pulse {
+  animation: micPulseRed 1.5s ease-in-out infinite;
+}
+
+.animate-mic-green-pulse {
+  animation: micPulseGreen 1s ease-in-out infinite;
 }
 
 :root {
