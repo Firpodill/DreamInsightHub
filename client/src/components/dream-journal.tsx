@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Search, Brain, Image as ImageIcon, Calendar } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
+import { VoiceSearch } from '@/components/voice-search';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
 
@@ -126,6 +128,14 @@ export function DreamJournal() {
         />
         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
       </div>
+
+      {/* Voice Search Component */}
+      <VoiceSearch 
+        onDreamSelect={(dream) => {
+          setSelectedDream(dream);
+          setSearchQuery(dream.content.substring(0, 50));
+        }}
+      />
 
       {/* Dream Entries */}
       <div className="space-y-3">
