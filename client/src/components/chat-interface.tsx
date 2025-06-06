@@ -50,87 +50,135 @@ export function ChatInterface() {
           className="relative group transition-all duration-300 hover:scale-105 focus:outline-none"
           disabled={isDecoding}
         >
-          {/* Vector Lips from EPS */}
-          <div className="relative w-80 h-32">
-            <svg viewBox="0 0 8000 3000" className="w-full h-full filter drop-shadow-lg">
+          {/* Clean Professional Lips */}
+          <div className="relative w-80 h-28">
+            <svg viewBox="0 0 320 112" className="w-full h-full filter drop-shadow-lg">
               <defs>
-                {/* Lip gradient from EPS */}
-                <linearGradient id="epsLipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#d52f34" />
-                  <stop offset="30%" stopColor="#c42d32" />
-                  <stop offset="60%" stopColor="#b02a30" />
-                  <stop offset="100%" stopColor="#4d2d27" />
+                {/* Clean red gradient */}
+                <linearGradient id="cleanLipGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ff5757" />
+                  <stop offset="30%" stopColor="#ee5a52" />
+                  <stop offset="70%" stopColor="#c44569" />
+                  <stop offset="100%" stopColor="#8b2635" />
                 </linearGradient>
                 
-                {/* Highlight overlay */}
-                <radialGradient id="epsHighlight" cx="50%" cy="30%" r="60%">
-                  <stop offset="0%" stopColor="#ffffff" opacity="0.6" />
-                  <stop offset="50%" stopColor="#ffffff" opacity="0.2" />
+                {/* Top highlight */}
+                <linearGradient id="topShine" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" opacity="0.8" />
+                  <stop offset="50%" stopColor="#ffffff" opacity="0.3" />
                   <stop offset="100%" stopColor="transparent" />
-                </radialGradient>
-                
-                {/* Shadow definition */}
-                <linearGradient id="epsShadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="70%" stopColor="#4d2d27" opacity="0.4" />
-                  <stop offset="100%" stopColor="#4d2d27" opacity="0.7" />
                 </linearGradient>
+                
+                {/* Bottom shadow */}
+                <linearGradient id="bottomShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="transparent" />
+                  <stop offset="60%" stopColor="#6b1229" opacity="0.3" />
+                  <stop offset="100%" stopColor="#6b1229" opacity="0.6" />
+                </linearGradient>
+
+                {/* Mouth interior */}
+                <radialGradient id="mouthDark" cx="50%" cy="50%" r="70%">
+                  <stop offset="0%" stopColor="#1a0606" />
+                  <stop offset="70%" stopColor="#0d0303" />
+                  <stop offset="100%" stopColor="#000000" />
+                </radialGradient>
               </defs>
               
-              {/* Main lip shape from EPS file - scaled and positioned */}
+              {/* Shadow */}
+              <ellipse cx="160" cy="60" rx="110" ry="18" fill="#000000" opacity="0.25" transform="translate(0, 6)"/>
+              
+              {/* Main lip shape - classic beautiful lips */}
               <path
-                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
-                fill="url(#epsLipGradient)"
-                stroke="#4d2d27"
-                strokeWidth="8"
-                transform="scale(0.8, 0.6) translate(400, -200)"
+                d="M 40 56 Q 65 20, 95 28 Q 125 12, 160 12 Q 195 12, 225 28 Q 255 20, 280 56 Q 270 78, 240 75 Q 210 88, 185 85 Q 172 90, 160 90 Q 148 90, 135 85 Q 110 88, 80 75 Q 50 78, 40 56 Z"
+                fill="url(#cleanLipGrad)"
+                stroke="#8b2635"
+                strokeWidth="1"
               />
               
-              {/* Teeth from EPS */}
+              {/* Top lip highlight */}
               <path
-                d="M 3725,2645 C 3655,2645 3589,2662 3531,2651 C 3445,2636 3339,2614 3266,2662 C 3226,2684 3199,2727 3199,2775 V 2815 H 3951 V 2775 C 3951,2714 3859,2653 3725,2645"
-                fill="#ffffff"
-                transform="scale(0.8, 0.6) translate(400, -200)"
+                d="M 50 52 Q 80 28, 115 35 Q 137 22, 160 22 Q 183 22, 205 35 Q 240 28, 270 52 Q 240 42, 205 38 Q 183 32, 160 32 Q 137 32, 115 38 Q 80 42, 50 52 Z"
+                fill="url(#topShine)"
               />
               
+              {/* Cupid's bow */}
               <path
-                d="M 4538,2645 C 4468,2645 4402,2662 4344,2651 C 4258,2636 4152,2614 4079,2662 C 4039,2684 4012,2727 4012,2775 V 2815 H 4764 V 2775 C 4764,2714 4672,2653 4538,2645"
-                fill="#ffffff"
-                transform="scale(0.8, 0.6) translate(400, -200)"
+                d="M 145 24 Q 152 18, 160 20 Q 168 18, 175 24 Q 168 28, 160 26 Q 152 28, 145 24 Z"
+                fill="#ff8895"
+                opacity="0.9"
               />
               
-              <path
-                d="M 5351,2679 C 5281,2679 5215,2696 5157,2685 C 5071,2670 4965,2648 4892,2696 C 4852,2718 4825,2761 4825,2809 V 2849 H 5577 V 2809 C 5577,2748 5485,2687 5351,2679"
-                fill="#ffffff"
-                transform="scale(0.8, 0.6) translate(400, -200)"
-              />
-              
-              <path
-                d="M 2912,2679 C 2842,2679 2776,2696 2718,2685 C 2632,2670 2526,2648 2453,2696 C 2413,2718 2386,2761 2386,2809 V 2849 H 3138 V 2809 C 3138,2748 3046,2687 2912,2679"
-                fill="#ffffff"
-                transform="scale(0.8, 0.6) translate(400, -200)"
-              />
-              
-              {/* Highlight overlay */}
-              <path
-                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
-                fill="url(#epsHighlight)"
-                transform="scale(0.8, 0.6) translate(400, -200)"
+              {/* Bottom lip highlight */}
+              <ellipse
+                cx="160"
+                cy="70"
+                rx="70"
+                ry="10"
+                fill="url(#topShine)"
+                opacity="0.6"
               />
               
               {/* Shadow overlay */}
               <path
-                d="M 1307,2864 C 1247,2766 1432,2644 1544,2451 C 1741,2108 2099,1740 2812,1749 C 2938,1684 3174,1653 3281,1625 C 3773,1529 4265,1377 4759,1210 C 4909,1182 5069,1181 5201,1211 C 5337,1241 5401,1328 5465,1415 C 5671,1498 5887,1574 6077,1675 C 6267,1776 6440,1928 6548,2122 C 6705,2420 7079,2949 6638,3129 C 6197,3309 5518,3480 5107,3653 C 4633,3848 4135,4013 3622,3998 C 3378,3993 3121,3970 2892,3847 C 2763,3773 2658,3636 2546,3507 C 2349,3249 1470,3135 1307,2864"
-                fill="url(#epsShadow)"
-                transform="scale(0.8, 0.6) translate(400, -200)"
+                d="M 40 56 Q 65 20, 95 28 Q 125 12, 160 12 Q 195 12, 225 28 Q 255 20, 280 56 Q 270 78, 240 75 Q 210 88, 185 85 Q 172 90, 160 90 Q 148 90, 135 85 Q 110 88, 80 75 Q 50 78, 40 56 Z"
+                fill="url(#bottomShadow)"
               />
               
-              {/* Microphone positioned in center */}
-              <circle cx="4000" cy="1500" r="200" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="15"/>
-              <circle cx="4000" cy="1500" r="150" fill="rgba(248,249,250,0.9)"/>
-              <foreignObject x="3900" y="1400" width="200" height="200">
+              {/* Mouth opening */}
+              <ellipse
+                cx="160"
+                cy="56"
+                rx="60"
+                ry="12"
+                fill="url(#mouthDark)"
+              />
+              
+              {/* Subtle teeth */}
+              <ellipse
+                cx="160"
+                cy="52"
+                rx="45"
+                ry="4"
+                fill="#f8f9fa"
+                opacity="0.7"
+              />
+              
+              {/* Glossy highlights */}
+              <ellipse
+                cx="130"
+                cy="40"
+                rx="18"
+                ry="6"
+                fill="#ffffff"
+                opacity="0.7"
+                transform="rotate(-15 130 40)"
+              />
+              
+              <ellipse
+                cx="190"
+                cy="40"
+                rx="18"
+                ry="6"
+                fill="#ffffff"
+                opacity="0.7"
+                transform="rotate(15 190 40)"
+              />
+              
+              <ellipse
+                cx="160"
+                cy="75"
+                rx="25"
+                ry="4"
+                fill="#ffffff"
+                opacity="0.5"
+              />
+              
+              {/* Microphone */}
+              <circle cx="160" cy="56" r="15" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="1"/>
+              <circle cx="160" cy="56" r="11" fill="rgba(248,249,250,0.9)"/>
+              <foreignObject x="151" y="47" width="18" height="18">
                 <div className="flex items-center justify-center w-full h-full">
-                  <Mic className="w-16 h-16 text-gray-600" />
+                  <Mic className="w-3.5 h-3.5 text-gray-600" />
                 </div>
               </foreignObject>
             </svg>
