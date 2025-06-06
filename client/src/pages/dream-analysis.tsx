@@ -3,13 +3,16 @@ import { useLocation, Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb } from 'lucide-react';
-import { useAnalyzeDream } from '@/hooks/use-dreams';
+import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles } from 'lucide-react';
+import { useAnalyzeDream, useGenerateImage } from '@/hooks/use-dreams';
 
 export default function DreamAnalysis() {
   const [location, navigate] = useLocation();
   const [dreamText, setDreamText] = useState('');
+  const [showVisionBoardOption, setShowVisionBoardOption] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const analyzeDream = useAnalyzeDream();
+  const generateImage = useGenerateImage();
 
   useEffect(() => {
     // Get dream text from URL params or localStorage
@@ -25,6 +28,40 @@ export default function DreamAnalysis() {
       analyzeDream.mutate(text);
     }
   }, []);
+
+  // Show vision board option after analysis completes
+  useEffect(() => {
+    if (analyzeDream.data && !analyzeDream.isPending) {
+      setShowVisionBoardOption(true);
+    }
+  }, [analyzeDream.data, analyzeDream.isPending]);
+
+  const handleGenerateVisionBoard = async () => {
+    if (!dreamText || !analyzeDream.data) return;
+
+    try {
+      const symbols = analyzeDream.data.symbols.join(', ');
+      const archetypes = analyzeDream.data.archetypes.join(', ');
+      const prompt = `Dream vision board: ${dreamText.substring(0, 150)}. Artistic collage style with symbols: ${symbols}. Embodying archetypes: ${archetypes}. Mystical, colorful, ethereal composition.`;
+      
+      const result = await generateImage.mutateAsync({ prompt });
+      
+      if (result.imageUrl) {
+        setGeneratedImage(result.imageUrl);
+        
+        // Save to localStorage for potential vision board creation
+        const visionBoardData = {
+          dreamText,
+          analysis: analyzeDream.data,
+          imageUrl: result.imageUrl,
+          createdAt: new Date().toISOString()
+        };
+        localStorage.setItem('generatedVisionBoard', JSON.stringify(visionBoardData));
+      }
+    } catch (error) {
+      console.error('Failed to generate vision board:', error);
+    }
+  };
 
   const analysis = analyzeDream.data;
 
@@ -199,6 +236,70 @@ export default function DreamAnalysis() {
                 </ul>
               </CardContent>
             </Card>
+
+            {/* Vision Board Generation Option */}
+            {showVisionBoardOption && (
+              <Card className="bg-purple-900 border-purple-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Palette className="w-5 h-5 mr-2" />
+                    Create Dream Vision Board
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-purple-200 text-sm mb-4">
+                    Transform your dream analysis into a visual collage with AI-generated imagery
+                  </p>
+                  
+                  {!generatedImage ? (
+                    <Button 
+                      onClick={handleGenerateVisionBoard}
+                      disabled={generateImage.isPending}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      {generateImage.isPending ? (
+                        <>
+                          <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                          Generating Vision Board...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Generate Vision Board
+                        </>
+                      )}
+                    </Button>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="relative">
+                        <img 
+                          src={generatedImage} 
+                          alt="Generated dream vision board"
+                          className="w-full rounded-lg shadow-lg"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => navigate('/vision-board')}
+                          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                        >
+                          <Palette className="w-4 h-4 mr-2" />
+                          Open Vision Board Creator
+                        </Button>
+                        <Button 
+                          onClick={handleGenerateVisionBoard}
+                          disabled={generateImage.isPending}
+                          variant="outline"
+                          className="border-purple-600 text-purple-300 hover:bg-purple-800"
+                        >
+                          <Sparkles className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </>
         )}
 
