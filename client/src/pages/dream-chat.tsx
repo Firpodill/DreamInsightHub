@@ -254,14 +254,14 @@ export default function DreamChat() {
           </TabsList>
           
           <TabsContent value="chat" className="mt-6">
-            <div className="space-y-6">
-              <DailyJungQuote />
-              <ChatInterface />
-            </div>
+            <ChatInterface />
           </TabsContent>
           
           <TabsContent value="journal" className="mt-6">
-            <DreamJournal />
+            <div className="space-y-6">
+              <DailyJungQuote />
+              <DreamJournal />
+            </div>
           </TabsContent>
           
           <TabsContent value="insights" className="mt-6">
