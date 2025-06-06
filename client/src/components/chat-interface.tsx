@@ -104,13 +104,13 @@ export function ChatInterface() {
                 startListening();
               }
             }}
-            className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center"
+            className={`w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center ${isTranscribing ? 'animate-speak-pulse' : ''}`}
             disabled={isDecoding}
           >
             {/* SPEAK text in center of black mouth area */}
             <span className="text-white font-black text-lg tracking-wider drop-shadow-lg px-3 py-1 rounded flex items-center gap-2">
               <Mic size={16} className="text-white" />
-              <span className={isTranscribing ? "animate-speak-pulse" : ""}>SPEAK</span>
+              <span>SPEAK</span>
             </span>
           </button>
         </div>

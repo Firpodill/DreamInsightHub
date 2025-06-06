@@ -8,13 +8,13 @@
     transform: scale(1);
   }
   50% {
-    opacity: 0.7;
-    transform: scale(1.05);
+    opacity: 0.5;
+    transform: scale(1.1);
   }
 }
 
 .animate-speak-pulse {
-  animation: speakPulse 1.5s ease-in-out infinite;
+  animation: speakPulse 1s ease-in-out infinite;
 }
 
 :root {
