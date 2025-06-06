@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 261 70% 54%; /* #6B46C1 - Purple primary */
+  --primary-foreground: 261 100% 99%; /* #FEFCFF */
+  --secondary: 45 93% 47%; /* #F59E0B - Golden secondary */
+  --secondary-foreground: 45 100% 99%;
+  --accent: 262 80% 75%; /* #C084FC - Lavender accent */
+  --accent-foreground: 262 20% 15%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 261 70% 54%;
+  --radius: 0.5rem;
+  
+  /* Custom moonlight theme colors */
+  --midnight: 237 40% 15%; /* #1E1B4B */
+  --lavender: 262 80% 75%; /* #C084FC */
+  --charcoal: 216 19% 27%; /* #374151 */
+}
+
+.dark {
+  --background: 237 40% 5%; /* Dark midnight */
+  --foreground: 261 100% 98%;
+  --muted: 237 20% 15%;
+  --muted-foreground: 237 10% 65%;
+  --popover: 237 40% 8%;
+  --popover-foreground: 261 100% 98%;
+  --card: 237 40% 8%;
+  --card-foreground: 261 100% 98%;
+  --border: 237 20% 20%;
+  --input: 237 20% 20%;
+  --primary: 261 70% 54%; /* Keep primary purple */
+  --primary-foreground: 261 100% 99%;
+  --secondary: 45 93% 47%; /* Keep golden secondary */
+  --secondary-foreground: 45 100% 99%;
+  --accent: 262 80% 75%;
+  --accent-foreground: 262 20% 90%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 261 70% 54%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  /* Mobile optimizations */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Touch-friendly scrolling */
+  .chat-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Custom animations for mobile */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: calc(200px + 100%) 0; }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Voice recording modal background */
+  .voice-recording {
+    background: radial-gradient(circle, rgba(107, 70, 193, 0.1) 0%, rgba(107, 70, 193, 0.05) 70%);
+  }
+
+  /* Improved mobile typography */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions for tab switching */
+  .tab-content {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  /* Enhance focus states for accessibility */
+  .focus-ring:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Mobile-specific button enhancements */
+  .mobile-button {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Progress bar styling */
+  .progress-bar {
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+}
+
+/* PWA specific styles */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: 0 0% 20%;
+    --ring: 261 70% 40%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin {
+    animation: none;
+  }
+}
