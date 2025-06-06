@@ -3,8 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Clock, Moon, Sun, Zap, Eye, Brain, Bell } from 'lucide-react';
+import { Clock, Moon, Sun, Zap, Eye, Brain, Bell, Watch } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FitnessWatchConnector } from './fitness-watch-connector';
+import { SmartSleepScheduler } from './smart-sleep-scheduler';
 
 interface SleepCycle {
   id: string;
@@ -28,6 +30,8 @@ export function SleepCycleTracker() {
   const [sleepHistory, setSleepHistory] = useState<SleepCycle[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [optimalLoggingWindow, setOptimalLoggingWindow] = useState<boolean>(false);
+  const [showFitnessConnector, setShowFitnessConnector] = useState(false);
+  const [connectedDevice, setConnectedDevice] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -187,19 +191,43 @@ export function SleepCycleTracker() {
             <span>Sleep Cycle Tracker</span>
           </CardTitle>
           <CardDescription className="text-gray-400">
-            Track your sleep patterns for optimal dream logging timing
+            Connect your fitness watch or use manual tracking for optimal dream logging timing
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col space-y-4">
-            {!isTracking ? (
+            {/* Fitness Watch Integration Option */}
+            <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <Watch className="w-4 h-4 text-blue-400" />
+                <span className="text-white text-sm">Fitness Watch Integration</span>
+                {connectedDevice && (
+                  <Badge variant="secondary" className="bg-green-600 text-xs">Connected</Badge>
+                )}
+              </div>
               <Button
-                onClick={startSleepTracking}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowFitnessConnector(!showFitnessConnector)}
+                className="border-gray-600 text-white hover:bg-gray-700 text-xs"
               >
-                <Moon className="w-4 h-4 mr-2" />
-                Start Sleep Tracking
+                {connectedDevice ? 'Manage' : 'Connect Watch'}
               </Button>
+            </div>
+
+            {!isTracking ? (
+              <div className="space-y-2">
+                <Button
+                  onClick={startSleepTracking}
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full"
+                >
+                  <Moon className="w-4 h-4 mr-2" />
+                  Start Manual Sleep Tracking
+                </Button>
+                <p className="text-xs text-gray-400 text-center">
+                  Or connect your fitness watch above for automatic tracking
+                </p>
+              </div>
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -336,6 +364,25 @@ export function SleepCycleTracker() {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Fitness Watch Connector */}
+      {showFitnessConnector && (
+        <div className="space-y-6">
+          <Card className="bg-gray-900 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white">Connect Your Fitness Watch</CardTitle>
+              <CardDescription className="text-gray-400">
+                Automatically sync sleep data from your device
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FitnessWatchConnector />
+            </CardContent>
+          </Card>
+          
+          <SmartSleepScheduler />
+        </div>
       )}
 
       {/* Sleep Tips */}
