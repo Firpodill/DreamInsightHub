@@ -49,14 +49,14 @@ export function ChatInterface() {
         </div>
 
         {/* Interactive button positioned over the lips in the image */}
-        <div className="absolute bottom-[20%] left-1/2 transform -translate-x-1/2 w-[55%] h-[20%]">
+        <div className="absolute bottom-[20%] left-[55%] transform -translate-x-1/2 w-[30%] h-[12%]">
           <button
             onClick={() => setIsVoiceRecording(true)}
-            className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center rounded-full"
+            className="w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center"
             disabled={isDecoding}
           >
-            {/* SPEAK text in center of mouth */}
-            <span className="text-white font-black text-xl tracking-wider drop-shadow-lg bg-black bg-opacity-70 px-4 py-1 rounded">
+            {/* SPEAK text in center of black mouth area */}
+            <span className="text-white font-black text-lg tracking-wider drop-shadow-lg bg-black bg-opacity-70 px-3 py-1 rounded">
               SPEAK
             </span>
           </button>
