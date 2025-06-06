@@ -100,7 +100,7 @@ export function ChatInterface() {
                 <div className="font-semibold mb-1">Input Mode Toggle</div>
                 <div>Current mode: <span className="text-yellow-300">{inputMode === 'voice' ? 'Voice (Default)' : 'Type Mode'}</span></div>
                 <div>Single click: Use current mode</div>
-                <div>Double click: Switch modes (Type Mode)</div>
+                <div>Double click: Switch modes <span className="text-yellow-300">(Type Mode)</span></div>
                 <div className="mt-1 text-yellow-300">🎤 Voice → ⌨️ Type</div>
               </div>
               <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black bg-opacity-90 rotate-45"></div>
