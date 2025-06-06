@@ -119,12 +119,12 @@ export function ChatInterface() {
         </div>
 
         {/* Decode Button positioned at bottom */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
           <div className="relative">
             <button
               onClick={handleDecodeClick}
               disabled={!dreamText.trim() || isDecoding}
-              className="w-40 h-40 rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center overflow-hidden"
+              className="w-36 h-36 rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center overflow-hidden"
               style={{
                 background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
                 boxShadow: '4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5)',
@@ -133,7 +133,7 @@ export function ChatInterface() {
               }}
             >
               <div className="flex flex-col items-center justify-center text-center">
-                <Brain size={32} style={{ 
+                <Brain size={28} style={{ 
                   color: '#ffffff',
                   filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
                 }} />
@@ -147,7 +147,7 @@ export function ChatInterface() {
                     top: 0,
                     left: 0,
                     color: '#000000',
-                    fontSize: '16px',
+                    fontSize: '15px',
                     fontWeight: '900',
                     lineHeight: '1.0',
                     letterSpacing: '0.8px',
@@ -157,7 +157,7 @@ export function ChatInterface() {
                   <span style={{
                     position: 'relative',
                     color: '#FFFFFF',
-                    fontSize: '16px',
+                    fontSize: '15px',
                     fontWeight: '900',
                     lineHeight: '1.0',
                     letterSpacing: '0.8px',
