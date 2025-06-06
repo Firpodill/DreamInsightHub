@@ -50,123 +50,124 @@ export function ChatInterface() {
           className="relative group transition-all duration-300 hover:scale-105 focus:outline-none"
           disabled={isDecoding}
         >
-          {/* Lips Container */}
-          <div className="relative w-80 h-32">
-            <svg viewBox="0 0 320 128" className="w-full h-full filter drop-shadow-2xl">
+          {/* Ultra-Realistic Lips Container */}
+          <div className="relative w-80 h-36">
+            <svg viewBox="0 0 320 144" className="w-full h-full filter drop-shadow-2xl">
               <defs>
-                {/* Main lip gradient */}
-                <radialGradient id="lipsMainGradient" cx="50%" cy="30%" r="70%">
-                  <stop offset="0%" stopColor="#ff4757" />
-                  <stop offset="30%" stopColor="#ff3838" />
-                  <stop offset="60%" stopColor="#e55039" />
-                  <stop offset="90%" stopColor="#c44569" />
-                  <stop offset="100%" stopColor="#8b2635" />
+                {/* Realistic lip base gradient */}
+                <radialGradient id="ultraRealisticLip" cx="50%" cy="40%" r="80%">
+                  <stop offset="0%" stopColor="#dc143c" />
+                  <stop offset="25%" stopColor="#b91c3c" />
+                  <stop offset="50%" stopColor="#a0253f" />
+                  <stop offset="75%" stopColor="#8b1538" />
+                  <stop offset="100%" stopColor="#6b1229" />
                 </radialGradient>
                 
-                {/* Top lip highlight gradient */}
-                <linearGradient id="topLipHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ff6b7a" opacity="0.9" />
-                  <stop offset="50%" stopColor="#ff4757" opacity="0.6" />
-                  <stop offset="100%" stopColor="transparent" />
+                {/* Glossy overlay gradient */}
+                <linearGradient id="glossyOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" opacity="0.6" />
+                  <stop offset="15%" stopColor="#ffffff" opacity="0.4" />
+                  <stop offset="30%" stopColor="#ffffff" opacity="0.1" />
+                  <stop offset="70%" stopColor="transparent" />
+                  <stop offset="85%" stopColor="#ffffff" opacity="0.2" />
+                  <stop offset="100%" stopColor="#ffffff" opacity="0.4" />
                 </linearGradient>
                 
-                {/* Bottom lip highlight */}
-                <radialGradient id="bottomLipHighlight" cx="50%" cy="70%" r="60%">
-                  <stop offset="0%" stopColor="#ff6b7a" opacity="0.8" />
-                  <stop offset="70%" stopColor="transparent" />
+                {/* Inner lip gradient */}
+                <radialGradient id="innerLipGradient" cx="50%" cy="50%" r="70%">
+                  <stop offset="0%" stopColor="#8b1538" />
+                  <stop offset="50%" stopColor="#6b1229" />
+                  <stop offset="100%" stopColor="#4a0e1c" />
                 </radialGradient>
                 
-                {/* Inner mouth gradient */}
-                <radialGradient id="mouthGradient" cx="50%" cy="50%" r="70%">
-                  <stop offset="0%" stopColor="#1a1a2e" />
-                  <stop offset="50%" stopColor="#16213e" />
-                  <stop offset="100%" stopColor="#0f0f23" />
+                {/* Mouth cavity gradient */}
+                <radialGradient id="mouthCavity" cx="50%" cy="30%" r="80%">
+                  <stop offset="0%" stopColor="#2d1b1b" />
+                  <stop offset="40%" stopColor="#1a0f0f" />
+                  <stop offset="80%" stopColor="#0f0808" />
+                  <stop offset="100%" stopColor="#000000" />
                 </radialGradient>
                 
-                {/* Soft glow filter */}
-                <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                  <feMerge> 
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
+                {/* Teeth gradient */}
+                <linearGradient id="teethGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="30%" stopColor="#f8f9fa" />
+                  <stop offset="70%" stopColor="#e9ecef" />
+                  <stop offset="100%" stopColor="#dee2e6" />
+                </linearGradient>
+                
+                {/* Texture pattern */}
+                <pattern id="lipTexture" patternUnits="userSpaceOnUse" width="4" height="2">
+                  <rect width="4" height="2" fill="none"/>
+                  <path d="M0,1 Q2,0 4,1" stroke="#ffffff" strokeWidth="0.2" opacity="0.3" fill="none"/>
+                </pattern>
+                
+                {/* Shine effect filter */}
+                <filter id="shine" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+                  <feColorMatrix values="1 1 1 0 0  1 1 1 0 0  1 1 1 0 0  0 0 0 1 0"/>
                 </filter>
               </defs>
               
-              {/* Outer lip shadow */}
+              {/* Drop shadow */}
+              <ellipse cx="160" cy="80" rx="120" ry="25" fill="#000000" opacity="0.3" filter="url(#shine)"/>
+              
+              {/* Main lip shape - more anatomically correct */}
               <path
-                d="M 32 64 Q 56 24, 80 32 Q 120 16, 160 16 Q 200 16, 240 32 Q 264 24, 288 64 Q 264 104, 240 96 Q 200 112, 160 112 Q 120 112, 80 96 Q 56 104, 32 64 Z"
-                fill="#8b2635"
-                opacity="0.4"
-                transform="translate(2, 3)"
-                filter="url(#softGlow)"
+                d="M 40 72 Q 60 35, 85 45 Q 110 25, 160 25 Q 210 25, 235 45 Q 260 35, 280 72 Q 270 95, 245 90 Q 220 110, 190 105 Q 175 112, 160 112 Q 145 112, 130 105 Q 100 110, 75 90 Q 50 95, 40 72 Z"
+                fill="url(#ultraRealisticLip)"
+                stroke="#6b1229"
+                strokeWidth="1"
               />
               
-              {/* Main lip shape */}
+              {/* Inner lip definition */}
               <path
-                d="M 30 64 Q 54 22, 78 30 Q 118 14, 160 14 Q 202 14, 242 30 Q 266 22, 290 64 Q 266 106, 242 98 Q 202 114, 160 114 Q 118 114, 78 98 Q 54 106, 30 64 Z"
-                fill="url(#lipsMainGradient)"
-                stroke="#a0253f"
-                strokeWidth="2"
+                d="M 55 70 Q 75 55, 105 60 Q 130 50, 160 50 Q 190 50, 215 60 Q 245 55, 265 70 Q 245 80, 215 75 Q 190 85, 160 85 Q 130 85, 105 75 Q 75 80, 55 70 Z"
+                fill="url(#innerLipGradient)"
               />
               
-              {/* Top lip definition and highlight */}
+              {/* Mouth opening with realistic proportions */}
+              <ellipse cx="160" cy="72" rx="80" ry="20" fill="url(#mouthCavity)"/>
+              
+              {/* Upper teeth */}
+              <rect x="130" y="58" width="12" height="16" rx="2" fill="url(#teethGradient)" opacity="0.9"/>
+              <rect x="144" y="56" width="14" height="18" rx="2" fill="url(#teethGradient)" opacity="0.95"/>
+              <rect x="160" y="56" width="14" height="18" rx="2" fill="url(#teethGradient)"/>
+              <rect x="176" y="56" width="14" height="18" rx="2" fill="url(#teethGradient)" opacity="0.95"/>
+              <rect x="192" y="58" width="12" height="16" rx="2" fill="url(#teethGradient)" opacity="0.9"/>
+              
+              {/* Lower teeth */}
+              <rect x="135" y="78" width="11" height="14" rx="1" fill="url(#teethGradient)" opacity="0.85"/>
+              <rect x="148" y="76" width="12" height="16" rx="1" fill="url(#teethGradient)" opacity="0.9"/>
+              <rect x="162" y="76" width="12" height="16" rx="1" fill="url(#teethGradient)" opacity="0.95"/>
+              <rect x="176" y="76" width="12" height="16" rx="1" fill="url(#teethGradient)" opacity="0.9"/>
+              <rect x="189" y="78" width="11" height="14" rx="1" fill="url(#teethGradient)" opacity="0.85"/>
+              
+              {/* Glossy highlight overlay */}
               <path
-                d="M 40 56 Q 78 26, 120 32 Q 140 24, 160 24 Q 180 24, 200 32 Q 242 26, 280 56 Q 242 48, 200 44 Q 180 40, 160 40 Q 140 40, 120 44 Q 78 48, 40 56 Z"
-                fill="url(#topLipHighlight)"
+                d="M 40 72 Q 60 35, 85 45 Q 110 25, 160 25 Q 210 25, 235 45 Q 260 35, 280 72 Q 270 95, 245 90 Q 220 110, 190 105 Q 175 112, 160 112 Q 145 112, 130 105 Q 100 110, 75 90 Q 50 95, 40 72 Z"
+                fill="url(#glossyOverlay)"
               />
               
-              {/* Bottom lip highlight */}
-              <ellipse
-                cx="160"
-                cy="85"
-                rx="90"
-                ry="18"
-                fill="url(#bottomLipHighlight)"
-              />
+              {/* Ultra-glossy shine spots */}
+              <ellipse cx="120" cy="55" rx="15" ry="8" fill="#ffffff" opacity="0.8" transform="rotate(-15 120 55)"/>
+              <ellipse cx="200" cy="55" rx="15" ry="8" fill="#ffffff" opacity="0.8" transform="rotate(15 200 55)"/>
+              <ellipse cx="160" cy="95" rx="25" ry="6" fill="#ffffff" opacity="0.6"/>
               
-              {/* Cupid's bow detail */}
+              {/* Subtle texture overlay */}
               <path
-                d="M 140 30 Q 150 26, 160 28 Q 170 26, 180 30 Q 170 34, 160 32 Q 150 34, 140 30 Z"
-                fill="#ff6b7a"
-                opacity="0.7"
-              />
-              
-              {/* Inner mouth opening */}
-              <ellipse
-                cx="160"
-                cy="64"
-                rx="75"
-                ry="18"
-                fill="url(#mouthGradient)"
-              />
-              
-              {/* Inner mouth depth */}
-              <ellipse
-                cx="160"
-                cy="66"
-                rx="65"
-                ry="12"
-                fill="#0a0a18"
-                opacity="0.8"
-              />
-              
-              {/* Teeth highlight */}
-              <ellipse
-                cx="160"
-                cy="58"
-                rx="60"
-                ry="4"
-                fill="#f8f9fa"
+                d="M 40 72 Q 60 35, 85 45 Q 110 25, 160 25 Q 210 25, 235 45 Q 260 35, 280 72 Q 270 95, 245 90 Q 220 110, 190 105 Q 175 112, 160 112 Q 145 112, 130 105 Q 100 110, 75 90 Q 50 95, 40 72 Z"
+                fill="url(#lipTexture)"
                 opacity="0.3"
               />
               
-              {/* Microphone with better styling */}
-              <circle cx="160" cy="64" r="16" fill="rgba(255,255,255,0.95)" stroke="#ddd" strokeWidth="1"/>
-              <circle cx="160" cy="64" r="12" fill="rgba(248,249,250,0.9)"/>
-              <foreignObject x="150" y="54" width="20" height="20">
+              {/* Microphone - positioned over mouth */}
+              <circle cx="160" cy="72" r="18" fill="rgba(255,255,255,0.95)" stroke="#c0c0c0" strokeWidth="2"/>
+              <circle cx="160" cy="72" r="14" fill="rgba(248,249,250,0.9)"/>
+              <circle cx="160" cy="72" r="10" fill="rgba(240,242,245,0.8)"/>
+              <foreignObject x="150" y="62" width="20" height="20">
                 <div className="flex items-center justify-center w-full h-full">
-                  <Mic className="w-4 h-4 text-gray-600" />
+                  <Mic className="w-5 h-5 text-gray-700" />
                 </div>
               </foreignObject>
             </svg>
