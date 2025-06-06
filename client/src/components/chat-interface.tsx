@@ -128,9 +128,9 @@ export function ChatInterface() {
               boxShadow: '4px 4px 0px #ff6b6b'
             }}
           >
-            <div className="flex flex-col items-center justify-center">
-              <Brain size={24} className="text-white mb-1" />
-              <span className="text-center leading-none text-sm font-bold text-white">
+            <div className="flex flex-col items-center justify-center relative z-10">
+              <Brain size={24} className="text-white mb-1" style={{ color: '#ffffff' }} />
+              <span className="text-center leading-none text-sm font-bold text-white" style={{ color: '#ffffff' }}>
                 DECODE<br />DREAM<br />NOW
               </span>
             </div>
