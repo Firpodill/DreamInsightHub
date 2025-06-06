@@ -50,9 +50,10 @@ export function ChatInterface() {
 
   return (
     <div 
-      className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
+      className="min-h-screen relative overflow-hidden bg-cover bg-top bg-no-repeat"
       style={{
-        backgroundImage: `url(${backgroundImage})`
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundPosition: 'center -50px'
       }}
     >
       {/* Interactive overlay */}
