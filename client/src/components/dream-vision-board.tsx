@@ -88,6 +88,7 @@ export function DreamVisionBoard() {
   const [defaultVoiceDialogOpen, setDefaultVoiceDialogOpen] = useState(false);
   const [defaultVoiceText, setDefaultVoiceText] = useState('');
   const [selectedVoiceGender, setSelectedVoiceGender] = useState<'female' | 'male'>('female');
+  const [selectedVoiceOption, setSelectedVoiceOption] = useState<string>('auto');
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
@@ -263,124 +264,178 @@ export function DreamVisionBoard() {
     }
   };
 
-  // Generate default voice audio
-  const generateDefaultVoice = async (text: string, gender: 'female' | 'male') => {
+  // Get available voice options for better quality
+  const getVoiceOptions = () => {
+    const voices = speechSynthesis.getVoices();
+    const femaleVoices = [
+      { name: 'auto', display: 'Auto Select Female', voice: null },
+      ...voices.filter(voice => 
+        voice.lang.startsWith('en') && (
+          voice.name.toLowerCase().includes('samantha') ||
+          voice.name.toLowerCase().includes('karen') ||
+          voice.name.toLowerCase().includes('susan') ||
+          voice.name.toLowerCase().includes('zira') ||
+          voice.name.toLowerCase().includes('victoria') ||
+          voice.name.toLowerCase().includes('hazel') ||
+          voice.name.toLowerCase().includes('allison') ||
+          voice.name.toLowerCase().includes('ava') ||
+          voice.name.toLowerCase().includes('serena')
+        )
+      ).map(voice => ({ name: voice.name, display: voice.name, voice }))
+    ];
+
+    const maleVoices = [
+      { name: 'auto', display: 'Auto Select Male', voice: null },
+      ...voices.filter(voice => 
+        voice.lang.startsWith('en') && (
+          voice.name.toLowerCase().includes('david') ||
+          voice.name.toLowerCase().includes('mark') ||
+          voice.name.toLowerCase().includes('daniel') ||
+          voice.name.toLowerCase().includes('james') ||
+          voice.name.toLowerCase().includes('tom') ||
+          voice.name.toLowerCase().includes('alex') ||
+          voice.name.toLowerCase().includes('aaron') ||
+          voice.name.toLowerCase().includes('nathan') ||
+          voice.name.toLowerCase().includes('ryan')
+        )
+      ).map(voice => ({ name: voice.name, display: voice.name, voice }))
+    ];
+
+    return { femaleVoices, maleVoices };
+  };
+
+  // Generate default voice audio with specific voice selection
+  const generateDefaultVoice = async (text: string, gender: 'female' | 'male', voiceOption: string = 'auto') => {
     setIsGeneratingVoice(true);
     try {
       // Ensure voices are loaded
       const voices = speechSynthesis.getVoices();
       if (voices.length === 0) {
-        // Wait for voices to load
         await new Promise(resolve => {
           speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
         });
       }
 
       const availableVoices = speechSynthesis.getVoices();
-      console.log('Available voices:', availableVoices.map(v => ({ name: v.name, lang: v.lang })));
-      
-      // Use Web Speech API to generate audio with selected voice
       const utterance = new SpeechSynthesisUtterance(text);
       
-      // Better voice filtering logic
       let selectedVoice = null;
       
-      if (gender === 'female') {
-        // Look for female voices in order of preference
-        selectedVoice = availableVoices.find(voice => 
-          voice.lang.startsWith('en') && (
-            voice.name.toLowerCase().includes('female') ||
-            voice.name.toLowerCase().includes('woman') ||
-            voice.name.toLowerCase().includes('samantha') ||
-            voice.name.toLowerCase().includes('karen') ||
-            voice.name.toLowerCase().includes('susan') ||
-            voice.name.toLowerCase().includes('zira') ||
-            voice.name.toLowerCase().includes('alex') ||
-            voice.name.toLowerCase().includes('victoria') ||
-            voice.name.toLowerCase().includes('hazel')
-          )
-        );
-        
-        // If no specific female voice found, use higher pitch with any voice
-        if (!selectedVoice) {
-          selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en'));
+      if (voiceOption !== 'auto') {
+        // Use specific selected voice
+        selectedVoice = availableVoices.find(voice => voice.name === voiceOption);
+      }
+      
+      if (!selectedVoice) {
+        // Auto-select best voice for gender
+        if (gender === 'female') {
+          const femalePreferences = [
+            'Samantha', 'Karen', 'Susan', 'Zira', 'Victoria', 'Hazel', 'Allison', 'Ava', 'Serena'
+          ];
+          for (const preference of femalePreferences) {
+            selectedVoice = availableVoices.find(voice => 
+              voice.lang.startsWith('en') && voice.name.toLowerCase().includes(preference.toLowerCase())
+            );
+            if (selectedVoice) break;
+          }
+        } else {
+          const malePreferences = [
+            'David', 'Mark', 'Daniel', 'James', 'Tom', 'Alex', 'Aaron', 'Nathan', 'Ryan'
+          ];
+          for (const preference of malePreferences) {
+            selectedVoice = availableVoices.find(voice => 
+              voice.lang.startsWith('en') && voice.name.toLowerCase().includes(preference.toLowerCase())
+            );
+            if (selectedVoice) break;
+          }
         }
-        
-        utterance.pitch = 1.2; // Higher pitch for female
-        utterance.rate = 0.9;
-      } else {
-        // Look for male voices
-        selectedVoice = availableVoices.find(voice => 
-          voice.lang.startsWith('en') && (
-            voice.name.toLowerCase().includes('male') ||
-            voice.name.toLowerCase().includes('man') ||
-            voice.name.toLowerCase().includes('david') ||
-            voice.name.toLowerCase().includes('mark') ||
-            voice.name.toLowerCase().includes('daniel') ||
-            voice.name.toLowerCase().includes('james') ||
-            voice.name.toLowerCase().includes('tom') ||
-            voice.name.toLowerCase().includes('fred')
-          )
-        );
-        
-        // If no specific male voice found, use lower pitch with any voice
-        if (!selectedVoice) {
-          selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en'));
-        }
-        
-        utterance.pitch = 0.8; // Lower pitch for male
-        utterance.rate = 0.85;
+      }
+      
+      // Fallback to any English voice
+      if (!selectedVoice) {
+        selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en'));
       }
 
       if (selectedVoice) {
         utterance.voice = selectedVoice;
-        console.log(`Selected voice: ${selectedVoice.name} for ${gender}`);
       }
 
-      utterance.volume = 0.9;
+      // Optimize voice parameters for natural sound
+      utterance.rate = gender === 'female' ? 0.85 : 0.8;
+      utterance.pitch = gender === 'female' ? 1.15 : 0.85;
+      utterance.volume = 0.95;
       
-      // Simple approach - just play the voice and save text description
+      // Record audio using MediaRecorder
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const destination = audioContext.createMediaStreamDestination();
+      const mediaRecorder = new MediaRecorder(destination.stream, { mimeType: 'audio/webm' });
+      const audioChunks: Blob[] = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Audio = reader.result as string;
+          if (currentBoard) {
+            const updatedBoard = {
+              ...currentBoard,
+              audioRecording: base64Audio,
+              audioDescription: text,
+              isVoiceCloned: false,
+              updatedAt: new Date()
+            };
+            setCurrentBoard(updatedBoard);
+            const updatedBoards = boards.map(board => 
+              board.id === currentBoard.id ? updatedBoard : board
+            );
+            saveBoards(updatedBoards);
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+      };
+
+      mediaRecorder.start();
+      
       utterance.onstart = () => {
-        console.log('Speech started');
+        console.log(`Speech started with voice: ${selectedVoice?.name || 'default'}`);
       };
       
       utterance.onend = () => {
-        console.log('Speech ended');
-        if (currentBoard) {
-          const updatedBoard = {
-            ...currentBoard,
-            audioDescription: `${gender.charAt(0).toUpperCase() + gender.slice(1)} voice: "${text}"`,
-            isVoiceCloned: false,
-            updatedAt: new Date()
-          };
-          setCurrentBoard(updatedBoard);
-          const updatedBoards = boards.map(board => 
-            board.id === currentBoard.id ? updatedBoard : board
-          );
-          saveBoards(updatedBoards);
-        }
+        setTimeout(() => {
+          mediaRecorder.stop();
+          audioContext.close();
+        }, 500);
+        
         setIsGeneratingVoice(false);
         setDefaultVoiceDialogOpen(false);
         setDefaultVoiceText('');
-        alert(`${gender.charAt(0).toUpperCase() + gender.slice(1)} voice generated successfully!`);
+        alert(`Voice generated successfully with ${selectedVoice?.name || 'default voice'}!`);
       };
 
       utterance.onerror = (event) => {
         console.error('Speech synthesis error:', event);
-        alert('Voice generation failed. Please try again.');
+        mediaRecorder.stop();
+        audioContext.close();
         setIsGeneratingVoice(false);
         setDefaultVoiceDialogOpen(false);
         setDefaultVoiceText('');
+        alert('Voice generation failed. Please try again.');
       };
 
       speechSynthesis.speak(utterance);
 
     } catch (error) {
       console.error('Default voice generation failed:', error);
-      alert('Voice generation failed. Please try recording manually instead.');
       setIsGeneratingVoice(false);
       setDefaultVoiceDialogOpen(false);
       setDefaultVoiceText('');
+      alert('Voice generation failed. Please try recording manually instead.');
     }
   };
 
@@ -404,7 +459,7 @@ export function DreamVisionBoard() {
     alert('Vision board saved successfully!');
   };
 
-  // Export vision board as image
+  // Export vision board as image or video
   const handleExport = async () => {
     if (!currentBoard) return;
     
@@ -426,28 +481,152 @@ export function DreamVisionBoard() {
       
       // Add title
       ctx.fillStyle = '#000000';
-      ctx.font = '24px Arial';
-      ctx.fillText(currentBoard.title, 20, 40);
+      ctx.font = 'bold 32px Arial';
+      ctx.fillText(currentBoard.title, 40, 60);
       
-      // Convert to blob and download
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          alert('Failed to create image');
-          return;
+      // Add description
+      ctx.fillStyle = '#333333';
+      ctx.font = '18px Arial';
+      const words = currentBoard.description.split(' ');
+      let line = '';
+      let y = 100;
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > 1120 && i > 0) {
+          ctx.fillText(line, 40, y);
+          line = words[i] + ' ';
+          y += 25;
+        } else {
+          line = testLine;
         }
+      }
+      ctx.fillText(line, 40, y);
+      
+      // Render vision board items
+      currentBoard.items.forEach(item => {
+        ctx.save();
+        ctx.translate(item.position.x + item.size.width/2, item.position.y + item.size.height/2);
+        ctx.rotate(item.rotation * Math.PI / 180);
+        
+        if (item.type === 'text') {
+          ctx.fillStyle = item.style?.color || '#000000';
+          ctx.font = `${item.style?.fontSize || 16}px Arial`;
+          ctx.textAlign = 'center';
+          ctx.fillText(item.content, 0, 0);
+        } else if (item.type === 'symbol') {
+          ctx.fillStyle = item.style?.color || '#000000';
+          ctx.font = `${item.style?.fontSize || 24}px Arial`;
+          ctx.textAlign = 'center';
+          ctx.fillText(item.content, 0, 0);
+        }
+        
+        ctx.restore();
+      });
+      
+      if (currentBoard.audioRecording) {
+        // Create video with audio
+        await createVideoWithAudio(canvas, currentBoard);
+      } else {
+        // Export as image only
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            alert('Failed to create image');
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+      }
+      
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Export failed. Please try again.');
+    }
+  };
+
+  // Create video file combining image and audio
+  const createVideoWithAudio = async (canvas: HTMLCanvasElement, board: VisionBoard) => {
+    try {
+      // Create video from canvas
+      const stream = canvas.captureStream(1); // 1 FPS for static image
+      const videoTrack = stream.getVideoTracks()[0];
+      
+      // Create audio from the recorded audio
+      let audioTrack = null;
+      if (board.audioRecording) {
+        const audioElement = new Audio(board.audioRecording);
+        const audioContext = new AudioContext();
+        const source = audioContext.createMediaElementSource(audioElement);
+        const destination = audioContext.createMediaStreamDestination();
+        source.connect(destination);
+        audioTrack = destination.stream.getAudioTracks()[0];
+      }
+      
+      // Combine video and audio streams
+      const combinedStream = new MediaStream();
+      combinedStream.addTrack(videoTrack);
+      if (audioTrack) {
+        combinedStream.addTrack(audioTrack);
+      }
+      
+      // Record the combined stream
+      const mediaRecorder = new MediaRecorder(combinedStream, {
+        mimeType: 'video/webm;codecs=vp9,opus'
+      });
+      
+      const chunks: Blob[] = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = () => {
+        const videoBlob = new Blob(chunks, { type: 'video/mp4' });
+        const url = URL.createObjectURL(videoBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.mp4`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+      
+      mediaRecorder.start();
+      
+      // Record for the duration of the audio (minimum 3 seconds)
+      const duration = audioTrack ? 10000 : 3000; // 10 seconds or 3 seconds
+      setTimeout(() => {
+        mediaRecorder.stop();
+        videoTrack.stop();
+        if (audioTrack) audioTrack.stop();
+      }, duration);
+      
+    } catch (error) {
+      console.error('Video creation failed:', error);
+      alert('Video creation failed. Exporting as image instead.');
+      
+      // Fallback to image export
+      canvas.toBlob((blob) => {
+        if (!blob) return;
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.png`;
+        a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.png`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       });
-      
-    } catch (error) {
-      console.error('Export failed:', error);
-      alert('Export failed. Please try again.');
     }
   };
 
@@ -456,14 +635,14 @@ export function DreamVisionBoard() {
     setShareDialogOpen(true);
   };
 
-  // Send share via email/text with audio attachment
+  // Send share via email/text with media attachment
   const sendShare = async (method: 'email' | 'sms') => {
     if (!currentBoard || !shareEmail.trim()) return;
     
     let shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}`;
     
     if (currentBoard.audioRecording) {
-      shareText += `\n\n🎵 This vision board includes a personal audio message! Download the audio file to listen.`;
+      shareText += `\n\n🎬 This vision board includes audio! A video file (.mp4) will be downloaded for sharing.`;
     }
     
     shareText += `\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
@@ -472,26 +651,48 @@ export function DreamVisionBoard() {
       const subject = `Dream Vision Board: ${currentBoard.title}`;
       let mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
       
-      // If there's audio, create a downloadable file
+      // Create and download video file for sharing
       if (currentBoard.audioRecording) {
         try {
-          const audioBlob = await fetch(currentBoard.audioRecording).then(r => r.blob());
-          const audioFile = new File([audioBlob], `${currentBoard.title}_audio.wav`, { type: 'audio/wav' });
-          
-          // Create a temporary download link for the audio
-          const audioUrl = URL.createObjectURL(audioFile);
-          const downloadLink = document.createElement('a');
-          downloadLink.href = audioUrl;
-          downloadLink.download = `${currentBoard.title.replace(/\s+/g, '_')}_audio.wav`;
-          downloadLink.style.display = 'none';
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
-          URL.revokeObjectURL(audioUrl);
-          
-          alert('Audio file downloaded! Attach it to your email.');
+          // Create video file for sharing
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            canvas.width = 1200;
+            canvas.height = 800;
+            
+            // Render vision board to canvas
+            ctx.fillStyle = currentBoard.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 32px Arial';
+            ctx.fillText(currentBoard.title, 40, 60);
+            
+            ctx.fillStyle = '#333333';
+            ctx.font = '18px Arial';
+            const words = currentBoard.description.split(' ');
+            let line = '';
+            let y = 100;
+            for (let i = 0; i < words.length; i++) {
+              const testLine = line + words[i] + ' ';
+              const metrics = ctx.measureText(testLine);
+              if (metrics.width > 1120 && i > 0) {
+                ctx.fillText(line, 40, y);
+                line = words[i] + ' ';
+                y += 25;
+              } else {
+                line = testLine;
+              }
+            }
+            ctx.fillText(line, 40, y);
+            
+            await createVideoWithAudio(canvas, currentBoard);
+            alert('Video file downloaded! Attach it to your email or message.');
+          }
         } catch (error) {
-          console.error('Error creating audio file:', error);
+          console.error('Error creating video file:', error);
+          alert('Could not create video. Sharing text only.');
         }
       }
       
@@ -975,9 +1176,30 @@ export function DreamVisionBoard() {
                 rows={4}
               />
             </div>
+            <div>
+              <label className="text-sm font-medium">Voice Selection</label>
+              <select
+                value={selectedVoiceOption}
+                onChange={(e) => setSelectedVoiceOption(e.target.value)}
+                className="w-full mt-2 p-2 border border-gray-300 rounded-md"
+              >
+                {selectedVoiceGender === 'female' ? 
+                  getVoiceOptions().femaleVoices.map(voice => (
+                    <option key={voice.name} value={voice.name}>
+                      {voice.display}
+                    </option>
+                  )) :
+                  getVoiceOptions().maleVoices.map(voice => (
+                    <option key={voice.name} value={voice.name}>
+                      {voice.display}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
             <div className="flex gap-2">
               <Button 
-                onClick={() => generateDefaultVoice(defaultVoiceText, selectedVoiceGender)}
+                onClick={() => generateDefaultVoice(defaultVoiceText, selectedVoiceGender, selectedVoiceOption)}
                 disabled={!defaultVoiceText.trim() || isGeneratingVoice}
                 className="flex-1"
               >
