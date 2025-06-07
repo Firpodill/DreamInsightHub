@@ -91,12 +91,13 @@ export function DreamVisionBoard() {
   const [defaultVoiceText, setDefaultVoiceText] = useState('');
   const [selectedVoiceGender, setSelectedVoiceGender] = useState<'female' | 'male'>('female');
   const [selectedVoiceOption, setSelectedVoiceOption] = useState<string>('auto');
+  const [voicePreferencesOpen, setVoicePreferencesOpen] = useState(false);
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
   const { speak, stop, isPlaying } = useNaturalVoice();
 
-  // Load boards from localStorage and auto-select specific board if requested
+  // Load boards and voice preferences from localStorage
   useEffect(() => {
     const savedBoards = localStorage.getItem('dreamVisionBoards');
     if (savedBoards) {
@@ -117,6 +118,18 @@ export function DreamVisionBoard() {
         localStorage.removeItem('currentVisionBoardId');
       }
     }
+
+    // Load voice preferences
+    const savedVoicePrefs = localStorage.getItem('voicePreferences');
+    if (savedVoicePrefs) {
+      const prefs = JSON.parse(savedVoicePrefs);
+      setSelectedVoiceGender(prefs.gender || 'female');
+      setSelectedVoiceOption(prefs.voice || 'auto');
+    }
+
+    // Check voice cloning status
+    const hasVoiceClone = localStorage.getItem('userHasVoiceClone') === 'true';
+    setUserHasVoiceClone(hasVoiceClone);
   }, []);
 
   // Save boards to localStorage
@@ -131,6 +144,14 @@ export function DreamVisionBoard() {
     if (currentBoard?.id === boardId) {
       setCurrentBoard(null);
     }
+  };
+
+  // Save voice preferences
+  const saveVoicePreferences = (gender: 'female' | 'male', voice: string) => {
+    const preferences = { gender, voice };
+    localStorage.setItem('voicePreferences', JSON.stringify(preferences));
+    setSelectedVoiceGender(gender);
+    setSelectedVoiceOption(voice);
   };
 
   // Voice playback for dream text using natural voice
@@ -1304,6 +1325,15 @@ ${dream.content}`;
                 )}
               </>
             )}
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setVoicePreferencesOpen(true)}
+              className="text-gray-600 hover:text-gray-800"
+              title="Voice Settings"
+            >
+              ⚙️
+            </Button>
           </div>
           
           <Button variant="outline" size="sm" onClick={handleSave}>
@@ -1507,6 +1537,90 @@ ${dream.content}`;
             <p className="text-xs text-gray-500">
               AI voice cloning creates high-quality, personalized audio using advanced machine learning.
             </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Voice Preferences Dialog */}
+      <Dialog open={voicePreferencesOpen} onOpenChange={setVoicePreferencesOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Voice Preferences</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div>
+              <label className="text-sm font-medium mb-3 block">Preferred Gender</label>
+              <div className="flex gap-3">
+                <Button
+                  variant={selectedVoiceGender === 'female' ? 'default' : 'outline'}
+                  onClick={() => setSelectedVoiceGender('female')}
+                  className="flex-1"
+                >
+                  Female Voice
+                </Button>
+                <Button
+                  variant={selectedVoiceGender === 'male' ? 'default' : 'outline'}
+                  onClick={() => setSelectedVoiceGender('male')}
+                  className="flex-1"
+                >
+                  Male Voice
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-3 block">
+                {selectedVoiceGender === 'female' ? 'Female' : 'Male'} Voice Options
+              </label>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {(() => {
+                  const { femaleVoices, maleVoices } = getVoiceOptions();
+                  const voices = selectedVoiceGender === 'female' ? femaleVoices : maleVoices;
+                  
+                  return voices.map((voiceOption) => (
+                    <Button
+                      key={voiceOption.name}
+                      variant={selectedVoiceOption === voiceOption.name ? 'default' : 'outline'}
+                      onClick={() => setSelectedVoiceOption(voiceOption.name)}
+                      className="w-full justify-start text-left h-auto p-3"
+                    >
+                      <div>
+                        <div className="font-medium">{voiceOption.display}</div>
+                        {voiceOption.voice && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {voiceOption.voice.lang} • {voiceOption.voice.localService ? 'System' : 'Online'}
+                          </div>
+                        )}
+                      </div>
+                    </Button>
+                  ));
+                })()}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  // Test the selected voice
+                  const testText = "This is how your selected voice will sound when generating audio for vision boards.";
+                  generateDefaultVoice(testText, selectedVoiceGender, selectedVoiceOption);
+                }}
+                className="flex-1"
+              >
+                <Volume2 size={16} className="mr-2" />
+                Test Voice
+              </Button>
+              <Button
+                onClick={() => {
+                  saveVoicePreferences(selectedVoiceGender, selectedVoiceOption);
+                  setVoicePreferencesOpen(false);
+                }}
+                className="flex-1"
+              >
+                Save Preferences
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
