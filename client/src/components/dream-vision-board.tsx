@@ -22,7 +22,11 @@ import {
   Volume2,
   Mail,
   MessageSquare,
-  Copy
+  Copy,
+  Mic,
+  MicOff,
+  Play,
+  Pause
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
@@ -52,6 +56,9 @@ interface VisionBoard {
   description: string;
   items: VisionBoardItem[];
   background: string;
+  audioRecording?: string; // Base64 encoded audio
+  audioDescription?: string; // User's description of the audio
+  isVoiceCloned?: boolean; // Whether audio was generated using voice cloning
   createdAt: Date;
   updatedAt: Date;
 }
@@ -69,6 +76,15 @@ export function DreamVisionBoard() {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState('');
   const [shareMessage, setShareMessage] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  const [audioPlayback, setAudioPlayback] = useState<HTMLAudioElement | null>(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [voiceCloneDialogOpen, setVoiceCloneDialogOpen] = useState(false);
+  const [voiceCloneText, setVoiceCloneText] = useState('');
+  const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
+  const [userHasVoiceClone, setUserHasVoiceClone] = useState(false);
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
@@ -107,6 +123,140 @@ export function DreamVisionBoard() {
       stop();
     } else {
       speak(dreamText);
+    }
+  };
+
+  // Audio recording functions
+  const startAudioRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          setAudioChunks(prev => [...prev, event.data]);
+        }
+      };
+      
+      recorder.onstop = () => {
+        stream.getTracks().forEach(track => track.stop());
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Audio = reader.result as string;
+          if (currentBoard) {
+            const updatedBoard = {
+              ...currentBoard,
+              audioRecording: base64Audio,
+              updatedAt: new Date()
+            };
+            setCurrentBoard(updatedBoard);
+            const updatedBoards = boards.map(board => 
+              board.id === currentBoard.id ? updatedBoard : board
+            );
+            saveBoards(updatedBoards);
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+        setAudioChunks([]);
+      };
+      
+      setMediaRecorder(recorder);
+      recorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting audio recording:', error);
+      alert('Unable to access microphone. Please check your permissions.');
+    }
+  };
+
+  const stopAudioRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      setMediaRecorder(null);
+    }
+  };
+
+  const playAudioRecording = () => {
+    if (!currentBoard?.audioRecording) return;
+    
+    if (isPlayingAudio && audioPlayback) {
+      audioPlayback.pause();
+      setIsPlayingAudio(false);
+      return;
+    }
+    
+    const audio = new Audio(currentBoard.audioRecording);
+    audio.onended = () => setIsPlayingAudio(false);
+    audio.play();
+    setAudioPlayback(audio);
+    setIsPlayingAudio(true);
+  };
+
+  const deleteAudioRecording = () => {
+    if (currentBoard) {
+      const updatedBoard = {
+        ...currentBoard,
+        audioRecording: undefined,
+        audioDescription: undefined,
+        updatedAt: new Date()
+      };
+      setCurrentBoard(updatedBoard);
+      const updatedBoards = boards.map(board => 
+        board.id === currentBoard.id ? updatedBoard : board
+      );
+      saveBoards(updatedBoards);
+    }
+    if (audioPlayback) {
+      audioPlayback.pause();
+      setIsPlayingAudio(false);
+    }
+  };
+
+  // Voice cloning functions
+  const generateVoiceClone = async (text: string) => {
+    setIsGeneratingVoice(true);
+    try {
+      // Simulate API call to voice cloning service
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // In a real implementation, this would call an AI voice cloning API
+      const mockVoiceCloneAudio = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvnMfCzmQXt+XhAcJHYP';
+      
+      if (currentBoard) {
+        const updatedBoard = {
+          ...currentBoard,
+          audioRecording: mockVoiceCloneAudio,
+          audioDescription: text,
+          isVoiceCloned: true,
+          updatedAt: new Date()
+        };
+        setCurrentBoard(updatedBoard);
+        const updatedBoards = boards.map(board => 
+          board.id === currentBoard.id ? updatedBoard : board
+        );
+        saveBoards(updatedBoards);
+      }
+      
+      alert('Voice clone generated successfully!');
+    } catch (error) {
+      console.error('Voice cloning failed:', error);
+      alert('Voice cloning failed. Please try again.');
+    } finally {
+      setIsGeneratingVoice(false);
+      setVoiceCloneDialogOpen(false);
+      setVoiceCloneText('');
+    }
+  };
+
+  const purchaseVoiceCloning = () => {
+    // Simulate purchasing voice cloning feature
+    const confirmed = confirm('Purchase Voice Cloning feature for $9.99/month?\n\nThis premium feature allows you to clone your voice for personalized audio messages on your vision boards.');
+    if (confirmed) {
+      localStorage.setItem('userHasVoiceClone', 'true');
+      setUserHasVoiceClone(true);
+      alert('Voice Cloning feature activated! You can now create personalized audio messages.');
     }
   };
 
@@ -182,15 +332,45 @@ export function DreamVisionBoard() {
     setShareDialogOpen(true);
   };
 
-  // Send share via email/text
-  const sendShare = (method: 'email' | 'sms') => {
+  // Send share via email/text with audio attachment
+  const sendShare = async (method: 'email' | 'sms') => {
     if (!currentBoard || !shareEmail.trim()) return;
     
-    const shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    let shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}`;
+    
+    if (currentBoard.audioRecording) {
+      shareText += `\n\n🎵 This vision board includes a personal audio message! Download the audio file to listen.`;
+    }
+    
+    shareText += `\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
     
     if (method === 'email') {
       const subject = `Dream Vision Board: ${currentBoard.title}`;
-      const mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      let mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      
+      // If there's audio, create a downloadable file
+      if (currentBoard.audioRecording) {
+        try {
+          const audioBlob = await fetch(currentBoard.audioRecording).then(r => r.blob());
+          const audioFile = new File([audioBlob], `${currentBoard.title}_audio.wav`, { type: 'audio/wav' });
+          
+          // Create a temporary download link for the audio
+          const audioUrl = URL.createObjectURL(audioFile);
+          const downloadLink = document.createElement('a');
+          downloadLink.href = audioUrl;
+          downloadLink.download = `${currentBoard.title.replace(/\s+/g, '_')}_audio.wav`;
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          URL.revokeObjectURL(audioUrl);
+          
+          alert('Audio file downloaded! Attach it to your email.');
+        } catch (error) {
+          console.error('Error creating audio file:', error);
+        }
+      }
+      
       window.open(mailtoUrl);
     } else {
       const smsUrl = `sms:${shareEmail}?body=${encodeURIComponent(shareText)}`;
