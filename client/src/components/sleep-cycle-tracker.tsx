@@ -162,26 +162,19 @@ export function SleepCycleTracker() {
   return (
     <div className="space-y-6">
       {/* Optimal Logging Alert */}
-      <AnimatePresence>
-        {optimalLoggingWindow && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="p-4 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg border border-yellow-500"
-          >
-            <div className="flex items-center space-x-3">
-              <Bell className="w-6 h-6 text-white animate-pulse" />
-              <div>
-                <h4 className="text-white font-bold">Optimal Dream Logging Time!</h4>
-                <p className="text-yellow-100 text-sm">
-                  Your dream recall is at its peak. Log your dreams now for best results.
-                </p>
-              </div>
+      {optimalLoggingWindow && (
+        <div className="p-4 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg border border-yellow-500">
+          <div className="flex items-center space-x-3">
+            <Bell className="w-6 h-6 text-white animate-pulse" />
+            <div>
+              <h4 className="text-white font-bold">Optimal Dream Logging Time!</h4>
+              <p className="text-yellow-100 text-sm">
+                Your dream recall is at its peak. Log your dreams now for best results.
+              </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
 
       {/* Sleep Tracking Controls */}
       <Card className="bg-gray-900 border-gray-700">

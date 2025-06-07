@@ -422,21 +422,15 @@ export function DreamAudioEnhancement() {
                     </Badge>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
       {/* Audio Player */}
-      <AnimatePresence>
-        {currentTrack && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-600/50">
+      {currentTrack && (
+        <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-purple-600/50">
               <CardHeader>
                 <CardTitle className="text-white">Now Playing</CardTitle>
               </CardHeader>
@@ -528,10 +522,8 @@ export function DreamAudioEnhancement() {
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </Card>
+      )}
 
       {/* Information */}
       <Card className="bg-gray-900 border-gray-700">
