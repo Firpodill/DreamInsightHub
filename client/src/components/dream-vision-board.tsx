@@ -704,61 +704,112 @@ export function DreamVisionBoard() {
     setExportOptionsOpen(true);
   };
 
-  // Enhanced video creation with proper audio duration handling
+  // Enhanced video creation with better error handling and fallbacks
   const createVideoWithAudio = async (canvas: HTMLCanvasElement, board: VisionBoard) => {
     try {
       if (!board.audioRecording) {
         // No audio available, just export as image
-        canvas.toBlob((blob) => {
-          if (!blob) return;
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.png`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        });
+        exportAsImage();
         return;
       }
 
-      // Create audio element to get actual duration
-      const audioElement = new Audio(board.audioRecording);
-      
-      await new Promise((resolve, reject) => {
-        audioElement.onloadedmetadata = resolve;
-        audioElement.onerror = reject;
-        audioElement.load();
+      // Show progress indicator
+      toast({
+        title: "Creating Video...",
+        description: "Combining image and audio, this may take a moment",
       });
 
-      const audioDuration = Math.max(audioElement.duration * 1000, 3000); // Minimum 3 seconds
+      // Create audio element and validate
+      const audioElement = new Audio();
+      audioElement.preload = 'metadata';
+      audioElement.src = board.audioRecording;
       
+      // Wait for audio metadata to load with timeout
+      const audioLoadPromise = new Promise<number>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Audio loading timeout'));
+        }, 10000);
+
+        audioElement.onloadedmetadata = () => {
+          clearTimeout(timeout);
+          resolve(audioElement.duration || 5); // Default 5 seconds if duration unknown
+        };
+        
+        audioElement.onerror = () => {
+          clearTimeout(timeout);
+          reject(new Error('Audio loading failed'));
+        };
+      });
+
+      let audioDuration: number;
+      try {
+        audioDuration = await audioLoadPromise;
+        audioDuration = Math.max(audioDuration * 1000, 3000); // Minimum 3 seconds, convert to ms
+      } catch (audioError) {
+        console.warn('Audio loading failed, creating image + separate audio files:', audioError);
+        // Fallback: export image and audio separately
+        await exportAsImage();
+        await exportAsAudio();
+        toast({
+          title: "Export Complete",
+          description: "Image and audio exported as separate files",
+        });
+        return;
+      }
+      
+      // Check MediaRecorder support
+      if (!MediaRecorder.isTypeSupported('video/webm') && !MediaRecorder.isTypeSupported('video/mp4')) {
+        throw new Error('Video recording not supported in this browser');
+      }
+
       // Create video stream from canvas
-      const stream = canvas.captureStream(30); // Higher frame rate for smoother video
+      const stream = canvas.captureStream(1); // Low frame rate for static image
       const videoTrack = stream.getVideoTracks()[0];
       
-      // Create audio context and stream
-      const audioContext = new AudioContext();
-      const source = audioContext.createMediaElementSource(audioElement);
-      const destination = audioContext.createMediaStreamDestination();
-      source.connect(destination);
-      const audioTrack = destination.stream.getAudioTracks()[0];
+      if (!videoTrack) {
+        throw new Error('Failed to create video track from canvas');
+      }
+
+      // Try to create audio stream
+      let audioTrack: MediaStreamTrack | null = null;
+      let audioContext: AudioContext | null = null;
       
-      // Combine streams
-      const combinedStream = new MediaStream([videoTrack, audioTrack]);
+      try {
+        // @ts-ignore - WebKit compatibility
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        await audioContext.resume(); // Ensure context is running
+        
+        const source = audioContext.createMediaElementSource(audioElement);
+        const destination = audioContext.createMediaStreamDestination();
+        source.connect(destination);
+        
+        audioTrack = destination.stream.getAudioTracks()[0];
+      } catch (audioContextError) {
+        console.warn('Audio context creation failed:', audioContextError);
+        // Continue without audio track - will create video with image only
+      }
       
-      // Use MP4 codec for better compatibility and smaller file size
-      const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=h264,aac') 
-        ? 'video/mp4;codecs=h264,aac'
-        : MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
-        ? 'video/webm;codecs=vp9,opus'
-        : 'video/webm';
+      // Create combined stream
+      const tracks = [videoTrack];
+      if (audioTrack) {
+        tracks.push(audioTrack);
+      }
+      const combinedStream = new MediaStream(tracks);
+      
+      // Choose best available mime type
+      let mimeType = 'video/webm';
+      if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
+        mimeType = 'video/webm;codecs=vp9,opus';
+      } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')) {
+        mimeType = 'video/webm;codecs=vp8,opus';
+      } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+        mimeType = 'video/mp4';
+      }
       
       const mediaRecorder = new MediaRecorder(combinedStream, {
         mimeType,
-        videoBitsPerSecond: 1000000, // 1 Mbps for good quality with small size
-        audioBitsPerSecond: 128000   // 128 kbps for good audio quality
+        videoBitsPerSecond: 500000, // Lower bitrate for better compatibility
+        audioBitsPerSecond: 64000   // Lower audio bitrate
       });
       
       const chunks: Blob[] = [];
@@ -769,48 +820,101 @@ export function DreamVisionBoard() {
         }
       };
       
-      mediaRecorder.onstop = () => {
-        const videoBlob = new Blob(chunks, { type: 'video/mp4' });
-        const url = URL.createObjectURL(videoBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${board.title.replace(/\s+/g, '_')}_complete_vision.mp4`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      const recordingPromise = new Promise<void>((resolve, reject) => {
+        const recordingTimeout = setTimeout(() => {
+          mediaRecorder.stop();
+          reject(new Error('Recording timeout'));
+        }, audioDuration + 5000); // Extra buffer
         
-        // Cleanup
-        videoTrack.stop();
+        mediaRecorder.onstop = () => {
+          clearTimeout(recordingTimeout);
+          
+          try {
+            const fileExtension = mimeType.includes('mp4') ? 'mp4' : 'webm';
+            const videoBlob = new Blob(chunks, { type: mimeType });
+            
+            if (videoBlob.size === 0) {
+              throw new Error('Empty video file created');
+            }
+            
+            const url = URL.createObjectURL(videoBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${board.title.replace(/\s+/g, '_')}_complete_vision.${fileExtension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            toast({
+              title: "Video Export Complete!",
+              description: `Downloaded as ${fileExtension.toUpperCase()} file`,
+            });
+            
+            resolve();
+          } catch (downloadError) {
+            reject(downloadError);
+          }
+        };
+        
+        mediaRecorder.onerror = (event) => {
+          clearTimeout(recordingTimeout);
+          reject(new Error(`MediaRecorder error: ${event}`));
+        };
+      });
+      
+      // Start recording
+      mediaRecorder.start(1000); // Collect data every second
+      
+      // Play audio if we have an audio track
+      if (audioTrack) {
+        try {
+          await audioElement.play();
+        } catch (playError) {
+          console.warn('Audio playback failed during recording:', playError);
+        }
+      }
+      
+      // Wait for recording to complete
+      await recordingPromise;
+      
+      // Cleanup
+      videoTrack.stop();
+      if (audioTrack) {
         audioTrack.stop();
-        audioContext.close();
-      };
-      
-      // Start recording and play audio
-      mediaRecorder.start();
-      audioElement.play();
-      
-      // Stop recording when audio ends
-      setTimeout(() => {
-        mediaRecorder.stop();
-      }, audioDuration + 500); // Add small buffer
+      }
+      if (audioContext) {
+        await audioContext.close();
+      }
       
     } catch (error) {
       console.error('Video creation failed:', error);
-      alert('Video creation failed. Exporting as image instead.');
       
-      // Fallback to image export
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      toast({
+        title: "Video Creation Failed",
+        description: "Exporting as separate image and audio files instead",
+        variant: "destructive",
       });
+      
+      // Fallback to separate exports
+      try {
+        await exportAsImage();
+        if (board.audioRecording) {
+          await exportAsAudio();
+        }
+        
+        toast({
+          title: "Fallback Export Complete",
+          description: "Image and audio files downloaded separately",
+        });
+      } catch (fallbackError) {
+        console.error('Fallback export failed:', fallbackError);
+        toast({
+          title: "Export Failed",
+          description: "Unable to export vision board. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

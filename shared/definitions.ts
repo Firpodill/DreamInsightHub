@@ -333,10 +333,6 @@ export const symbolDefinitions: Record<string, Definition> = {
     definition: 'Face covering representing disguise, hidden identity, and false personas.',
     jungianMeaning: 'Symbolizes the persona, the false self, or the need to hide authentic aspects of personality.'
   },
-  'crown': {
-    definition: 'Royal headwear representing authority, achievement, spiritual attainment, and recognition.',
-    jungianMeaning: 'Symbolizes the achievement of psychological sovereignty and the integration of the royal or divine aspect of Self.'
-  },
   'angel': {
     definition: 'Divine messenger representing guidance, protection, and connection to the spiritual realm.',
     jungianMeaning: 'Symbolizes the Self in its transcendent aspect and messages from the deeper layers of the unconscious.'
