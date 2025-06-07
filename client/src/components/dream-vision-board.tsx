@@ -85,6 +85,9 @@ export function DreamVisionBoard() {
   const [voiceCloneText, setVoiceCloneText] = useState('');
   const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
   const [userHasVoiceClone, setUserHasVoiceClone] = useState(false);
+  const [defaultVoiceDialogOpen, setDefaultVoiceDialogOpen] = useState(false);
+  const [defaultVoiceText, setDefaultVoiceText] = useState('');
+  const [selectedVoiceGender, setSelectedVoiceGender] = useState<'female' | 'male'>('female');
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
@@ -257,6 +260,121 @@ export function DreamVisionBoard() {
       localStorage.setItem('userHasVoiceClone', 'true');
       setUserHasVoiceClone(true);
       alert('Voice Cloning feature activated! You can now create personalized audio messages.');
+    }
+  };
+
+  // Generate default voice audio
+  const generateDefaultVoice = async (text: string, gender: 'female' | 'male') => {
+    setIsGeneratingVoice(true);
+    try {
+      // Use Web Speech API to generate audio with selected voice
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = speechSynthesis.getVoices();
+      
+      // Filter voices by gender preference
+      let preferredVoices = voices.filter(voice => {
+        const voiceName = voice.name.toLowerCase();
+        if (gender === 'female') {
+          return voice.lang.startsWith('en') && (
+            voiceName.includes('female') || 
+            voiceName.includes('woman') ||
+            voiceName.includes('samantha') ||
+            voiceName.includes('karen') ||
+            voiceName.includes('susan') ||
+            voiceName.includes('zira')
+          );
+        } else {
+          return voice.lang.startsWith('en') && (
+            voiceName.includes('male') || 
+            voiceName.includes('man') ||
+            voiceName.includes('david') ||
+            voiceName.includes('mark') ||
+            voiceName.includes('daniel')
+          );
+        }
+      });
+
+      // Fallback to any English voice if no gender-specific voice found
+      if (preferredVoices.length === 0) {
+        preferredVoices = voices.filter(voice => voice.lang.startsWith('en'));
+      }
+
+      if (preferredVoices.length > 0) {
+        utterance.voice = preferredVoices[0];
+      }
+
+      utterance.rate = 0.85;
+      utterance.pitch = gender === 'female' ? 1.1 : 0.9;
+      utterance.volume = 0.9;
+
+      // Record the speech synthesis output
+      const audioContext = new AudioContext();
+      const destination = audioContext.createMediaStreamDestination();
+      const mediaRecorder = new MediaRecorder(destination.stream);
+      const audioChunks: Blob[] = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Audio = reader.result as string;
+          if (currentBoard) {
+            const updatedBoard = {
+              ...currentBoard,
+              audioRecording: base64Audio,
+              audioDescription: text,
+              isVoiceCloned: false,
+              updatedAt: new Date()
+            };
+            setCurrentBoard(updatedBoard);
+            const updatedBoards = boards.map(board => 
+              board.id === currentBoard.id ? updatedBoard : board
+            );
+            saveBoards(updatedBoards);
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+      };
+
+      mediaRecorder.start();
+      
+      utterance.onend = () => {
+        setTimeout(() => {
+          mediaRecorder.stop();
+          audioContext.close();
+        }, 100);
+      };
+
+      speechSynthesis.speak(utterance);
+      
+      // Fallback for browsers that don't support audio recording from speech synthesis
+      setTimeout(() => {
+        if (currentBoard) {
+          const updatedBoard = {
+            ...currentBoard,
+            audioDescription: text,
+            isVoiceCloned: false,
+            updatedAt: new Date()
+          };
+          setCurrentBoard(updatedBoard);
+          const updatedBoards = boards.map(board => 
+            board.id === currentBoard.id ? updatedBoard : board
+          );
+          saveBoards(updatedBoards);
+        }
+      }, 3000);
+
+    } catch (error) {
+      console.error('Default voice generation failed:', error);
+      alert('Voice generation failed. Please try recording manually instead.');
+    } finally {
+      setIsGeneratingVoice(false);
+      setDefaultVoiceDialogOpen(false);
+      setDefaultVoiceText('');
     }
   };
 
@@ -680,6 +798,73 @@ export function DreamVisionBoard() {
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Audio Recording Controls */}
+          <div className="flex items-center gap-1 mr-2">
+            {currentBoard?.audioRecording ? (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={playAudioRecording}
+                  className={currentBoard.isVoiceCloned ? "bg-purple-50 border-purple-200" : ""}
+                >
+                  {isPlayingAudio ? <Pause size={14} className="mr-1" /> : <Play size={14} className="mr-1" />}
+                  {currentBoard.isVoiceCloned ? "AI Voice" : "Audio"}
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={deleteAudioRecording}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <Trash2 size={14} />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={isRecording ? stopAudioRecording : startAudioRecording}
+                  className={isRecording ? "bg-red-50 border-red-200" : ""}
+                >
+                  {isRecording ? <MicOff size={14} className="mr-1" /> : <Mic size={14} className="mr-1" />}
+                  {isRecording ? "Stop" : "Record"}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setDefaultVoiceDialogOpen(true)}
+                  className="bg-blue-50 border-blue-200 text-blue-700"
+                >
+                  <Volume2 size={14} className="mr-1" />
+                  Default Voice
+                </Button>
+                {userHasVoiceClone ? (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setVoiceCloneDialogOpen(true)}
+                    className="bg-purple-50 border-purple-200 text-purple-700"
+                  >
+                    <Volume2 size={14} className="mr-1" />
+                    AI Voice
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={purchaseVoiceCloning}
+                    className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200 text-purple-700"
+                  >
+                    <Volume2 size={14} className="mr-1" />
+                    Upgrade
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
+          
           <Button variant="outline" size="sm" onClick={handleSave}>
             <Save size={16} className="mr-1" />
             Save
@@ -745,6 +930,106 @@ export function DreamVisionBoard() {
                 Copy
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Default Voice Dialog */}
+      <Dialog open={defaultVoiceDialogOpen} onOpenChange={setDefaultVoiceDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Generate Default Voice Audio</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Voice Gender</label>
+              <div className="flex gap-2 mt-2">
+                <Button
+                  variant={selectedVoiceGender === 'female' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedVoiceGender('female')}
+                >
+                  Female Voice
+                </Button>
+                <Button
+                  variant={selectedVoiceGender === 'male' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedVoiceGender('male')}
+                >
+                  Male Voice
+                </Button>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Text to Speak</label>
+              <Textarea
+                value={defaultVoiceText}
+                onChange={(e) => setDefaultVoiceText(e.target.value)}
+                placeholder="Enter the text you want the voice to speak..."
+                rows={4}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => generateDefaultVoice(defaultVoiceText, selectedVoiceGender)}
+                disabled={!defaultVoiceText.trim() || isGeneratingVoice}
+                className="flex-1"
+              >
+                {isGeneratingVoice ? 'Generating...' : 'Generate Voice'}
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => setDefaultVoiceDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500">
+              Free default voices use your browser's built-in text-to-speech engine. Quality may vary by device.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Voice Cloning Dialog */}
+      <Dialog open={voiceCloneDialogOpen} onOpenChange={setVoiceCloneDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>AI Voice Cloning (Premium)</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+              <p className="text-sm text-purple-700">
+                Using your personalized AI voice clone to generate natural-sounding audio.
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Text to Speak</label>
+              <Textarea
+                value={voiceCloneText}
+                onChange={(e) => setVoiceCloneText(e.target.value)}
+                placeholder="Enter the text you want your AI voice to speak..."
+                rows={4}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => generateVoiceClone(voiceCloneText)}
+                disabled={!voiceCloneText.trim() || isGeneratingVoice}
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
+              >
+                {isGeneratingVoice ? 'Generating AI Voice...' : 'Generate AI Voice'}
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => setVoiceCloneDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500">
+              AI voice cloning creates high-quality, personalized audio using advanced machine learning.
+            </p>
           </div>
         </DialogContent>
       </Dialog>
