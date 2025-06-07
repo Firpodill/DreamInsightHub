@@ -187,6 +187,22 @@
     overscroll-behavior: contain;
   }
 
+  /* Hide scrollbars for chat input */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom text containment for speech bubble */
+  .text-bubble-container {
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 90%);
+  }
+
   /* Custom animations for mobile */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
