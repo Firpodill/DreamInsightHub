@@ -82,14 +82,14 @@ export function ChatInterface() {
             </div>
             
             {inputMode === 'voice' && isTranscribing ? (
-              <div className="w-full h-full flex flex-col justify-end speech-bubble-text">
-                <div className="voice-transcript-container text-gray-900 text-base leading-relaxed font-medium text-center overflow-y-auto scrollbar-hide flex-1 flex flex-col justify-end">
-                  <div className="break-words px-2 min-h-0">
+              <div className="w-full h-full flex flex-col speech-bubble-text relative">
+                <div className="voice-transcript-container text-gray-900 text-base leading-relaxed font-medium text-center overflow-y-auto scrollbar-hide flex-1 flex items-center justify-center px-2">
+                  <div className="break-words">
                     {currentTranscript || "Listening..."}
                   </div>
-                  <div className="mt-2 text-sm text-gray-600 px-2 flex-shrink-0">
-                    🎤 Recording... Click SPEAK again to stop
-                  </div>
+                </div>
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center">
+                  🎤 Recording... Click SPEAK again to stop
                 </div>
               </div>
             ) : (
