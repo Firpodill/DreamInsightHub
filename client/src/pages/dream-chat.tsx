@@ -32,8 +32,7 @@ export default function DreamChat() {
   }, []);
 
   const formatDay = (date: Date) => {
-    const day = date.getDate();
-    return day < 10 ? `${day}_` : day.toString();
+    return date.getDate().toString();
   };
 
   const formatDayName = (date: Date) => {
@@ -133,6 +132,10 @@ export default function DreamChat() {
                 <div className="text-xs font-bold text-white leading-none absolute inset-0 flex items-center justify-center">
                   {formatDay(currentDate)}
                 </div>
+                {/* Small black dot below the number 6 only */}
+                {formatDay(currentDate) === '6' && (
+                  <div className="w-0.5 h-0.5 rounded-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 bg-black"></div>
+                )}
                 <div className="w-1 h-1 rounded-full absolute top-0.5 left-0.5" style={{
                   background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
                   boxShadow: '0 0 2px rgba(255, 255, 255, 0.8)'
