@@ -98,6 +98,9 @@ export function DreamVisionBoard() {
   const [voicePitch, setVoicePitch] = useState(1.0);
   const [premiumVoiceDialogOpen, setPremiumVoiceDialogOpen] = useState(false);
   const [hasPremiumVoices, setHasPremiumVoices] = useState(false);
+  const [photoUploadDialogOpen, setPhotoUploadDialogOpen] = useState(false);
+  const [selectedDreamForPhoto, setSelectedDreamForPhoto] = useState<Dream | null>(null);
+  const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
 
   const { data: dreams = [] } = useDreams();
   const { toast } = useToast();
@@ -986,20 +989,44 @@ export function DreamVisionBoard() {
   const generateImageFromDream = async (dream: Dream) => {
     if (!currentBoard) return;
 
+    setSelectedDreamForPhoto(dream);
+    setPhotoUploadDialogOpen(true);
+  };
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedPhoto(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const generateVisionWithPhoto = async () => {
+    if (!selectedDreamForPhoto || !currentBoard) return;
+
     try {
-      const prompt = `Dream visualization: ${dream.content.substring(0, 200)}. Surreal, artistic, dreamlike quality.`;
+      let prompt = `Dream visualization: ${selectedDreamForPhoto.content.substring(0, 200)}. Surreal, artistic, dreamlike quality.`;
+      
+      if (uploadedPhoto) {
+        prompt += ` Incorporate visual elements and themes from the user's personal photo to create a cohesive dream-reality blend.`;
+      }
+
       setGenerationPrompt(prompt);
       
       const result = await generateImage.mutateAsync({
         prompt: prompt,
-        dreamId: dream.id
+        dreamId: selectedDreamForPhoto.id
       });
 
       if (result.imageUrl) {
-        const newItem: VisionBoardItem = {
+        // Add the AI-generated dream visualization
+        const aiImageItem: VisionBoardItem = {
           id: Date.now().toString(),
           type: 'image',
-          content: `Dream: ${dream.title || 'Untitled'}`,
+          content: `Dream: ${selectedDreamForPhoto.title || 'Untitled'}`,
           imageUrl: result.imageUrl,
           position: { x: Math.random() * 250, y: Math.random() * 150 },
           size: { width: 300, height: 300 },
@@ -1007,10 +1034,26 @@ export function DreamVisionBoard() {
           zIndex: currentBoard.items.length + 1
         };
         
-        addItemToBoard(newItem);
+        addItemToBoard(aiImageItem);
+
+        // Add the user's uploaded photo if provided
+        if (uploadedPhoto) {
+          const userPhotoItem: VisionBoardItem = {
+            id: (Date.now() + 1).toString(),
+            type: 'image',
+            content: 'Personal Photo',
+            imageUrl: uploadedPhoto,
+            position: { x: Math.random() * 250, y: Math.random() * 150 },
+            size: { width: 250, height: 250 },
+            rotation: 0,
+            zIndex: currentBoard.items.length + 2
+          };
+          
+          addItemToBoard(userPhotoItem);
+        }
         
         // Auto-generate comprehensive audio narration combining dream and vision board
-        const fullNarrationText = createFullNarrationText(dream, currentBoard);
+        const fullNarrationText = createFullNarrationText(selectedDreamForPhoto, currentBoard);
         setDefaultVoiceText(fullNarrationText);
         setDefaultVoiceDialogOpen(true);
       }
