@@ -1,28 +1,22 @@
-import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Book, Search } from 'lucide-react';
+// Comprehensive definitions for archetypes and symbols used in dream analysis
+// Based on Carl Jung's analytical psychology and Joseph Campbell's comparative mythology
 
-interface SymbolDefinitionModalProps {
-  open: boolean;
-  onClose: () => void;
-  symbol: string;
-  type: 'archetype' | 'symbol';
+export interface Definition {
+  definition: string;
+  jungianMeaning: string;
+  campbellMeaning?: string;
 }
 
-const archetypeDefinitions: Record<string, { definition: string; jungianMeaning: string }> = {
+export const archetypeDefinitions: Record<string, Definition> = {
   'Hero': {
     definition: 'The protagonist who embarks on a transformative journey, facing challenges and overcoming obstacles.',
-    jungianMeaning: 'Represents the ego\'s journey toward individuation and self-realization through trials and growth.'
+    jungianMeaning: 'Represents the ego\'s journey toward individuation and self-realization through trials and growth.',
+    campbellMeaning: 'The universal figure who follows the monomyth pattern: departure from ordinary world, initiation through trials, and return with wisdom to benefit others.'
   },
   'Shadow': {
     definition: 'The hidden, repressed, or denied aspects of the personality that the conscious mind rejects.',
-    jungianMeaning: 'Contains both negative traits and undeveloped positive potential that must be integrated for wholeness.'
+    jungianMeaning: 'Contains both negative traits and undeveloped positive potential that must be integrated for wholeness.',
+    campbellMeaning: 'The dark force or antagonist that represents the hero\'s fears, inner demons, and the trials that must be faced to achieve transformation.'
   },
   'Anima': {
     definition: 'The feminine aspect within the male psyche, representing emotion, intuition, and the unconscious.',
@@ -38,19 +32,23 @@ const archetypeDefinitions: Record<string, { definition: string; jungianMeaning:
   },
   'Wise Old Man': {
     definition: 'The archetype of wisdom, knowledge, and spiritual guidance, often appearing as a mentor figure.',
-    jungianMeaning: 'Represents the accumulated wisdom of humanity and guidance toward higher understanding.'
+    jungianMeaning: 'Represents the accumulated wisdom of humanity and guidance toward higher understanding.',
+    campbellMeaning: 'The supernatural aid or mentor who provides the hero with magical gifts, wisdom, or guidance necessary for the quest.'
   },
   'Wise Old Woman': {
     definition: 'The feminine embodiment of wisdom, intuitive knowledge, and nurturing guidance.',
-    jungianMeaning: 'Offers deep intuitive wisdom and connection to the collective feminine unconscious.'
+    jungianMeaning: 'Offers deep intuitive wisdom and connection to the collective feminine unconscious.',
+    campbellMeaning: 'The wise woman or crone who represents ancient wisdom, often appearing as the goddess in her wisdom aspect to guide the hero.'
   },
   'Great Mother': {
     definition: 'The archetypal mother figure representing nurturing, protection, fertility, and unconditional love.',
-    jungianMeaning: 'Embodies both the nourishing and devouring aspects of the maternal principle.'
+    jungianMeaning: 'Embodies both the nourishing and devouring aspects of the maternal principle.',
+    campbellMeaning: 'The goddess figure who represents the source of life, the womb of creation, and the protective force that both nurtures and potentially devours her children.'
   },
   'Trickster': {
     definition: 'The playful, chaotic force that disrupts order and brings about transformation through humor and cunning.',
-    jungianMeaning: 'Facilitates psychological change by breaking down rigid patterns and introducing new perspectives.'
+    jungianMeaning: 'Facilitates psychological change by breaking down rigid patterns and introducing new perspectives.',
+    campbellMeaning: 'The shapeshifter who breaks rules and boundaries, often serving as catalyst for change and bringing sacred knowledge through transgression.'
   },
   'Child': {
     definition: 'The archetype representing innocence, spontaneity, new beginnings, and untapped potential.',
@@ -111,10 +109,18 @@ const archetypeDefinitions: Record<string, { definition: string; jungianMeaning:
   'Rebel': {
     definition: 'The archetype of revolution, change, and the desire to overturn established order and conventions.',
     jungianMeaning: 'Represents the transformative force that challenges outdated patterns and facilitates renewal.'
+  },
+  'Orphan': {
+    definition: 'The archetype of abandonment, survival, and the search for belonging and identity.',
+    jungianMeaning: 'Represents the wounded aspect of the psyche that must find its own way to healing and integration.'
+  },
+  'Destroyer': {
+    definition: 'The archetype of dissolution, endings, and the necessary destruction that precedes renewal.',
+    jungianMeaning: 'Embodies the transformative power that breaks down outworn structures to allow new growth.'
   }
 };
 
-const symbolDefinitions: Record<string, { definition: string; jungianMeaning: string }> = {
+export const symbolDefinitions: Record<string, Definition> = {
   'water': {
     definition: 'The universal symbol of life, purification, renewal, and the flow of emotions.',
     jungianMeaning: 'Represents the unconscious mind, emotional depths, and the cleansing process of psychological transformation.'
@@ -254,77 +260,76 @@ const symbolDefinitions: Record<string, { definition: string; jungianMeaning: st
   'clock': {
     definition: 'A timepiece representing time awareness, deadlines, and the passage of life.',
     jungianMeaning: 'Symbolizes consciousness of mortality, the pressure of time, and the need for timely psychological development.'
+  },
+  'labyrinth': {
+    definition: 'A complex maze representing the spiritual journey, confusion, and the path to the center of self.',
+    jungianMeaning: 'Symbolizes the individuation process and the winding path toward self-discovery and wholeness.'
+  },
+  'angel': {
+    definition: 'A divine messenger representing guidance, protection, and connection to the spiritual realm.',
+    jungianMeaning: 'Symbolizes the Self in its transcendent aspect and messages from the deeper layers of the unconscious.'
+  },
+  'child': {
+    definition: 'A young person representing innocence, potential, new beginnings, and the future self.',
+    jungianMeaning: 'Symbolizes the divine child archetype, renewal, and the emerging possibilities within the psyche.'
+  },
+  'blood': {
+    definition: 'The life force flowing through the body, representing vitality, sacrifice, and family connections.',
+    jungianMeaning: 'Symbolizes the life force, ancestral connections, and the price of transformation or growth.'
+  },
+  'stairs': {
+    definition: 'Steps leading up or down, representing ascent, descent, and transitions between levels.',
+    jungianMeaning: 'Symbolizes movement between conscious and unconscious levels, or progress in psychological development.'
+  },
+  'road': {
+    definition: 'A path for travel representing life\'s journey, choices, and the direction of personal development.',
+    jungianMeaning: 'Symbolizes the life path, destiny, and the conscious choices that shape psychological development.'
+  },
+  'circle': {
+    definition: 'A round shape representing wholeness, completion, cycles, and the eternal.',
+    jungianMeaning: 'Symbolizes the Self, psychological wholeness, and the mandala pattern of individuation.'
+  },
+  'cross': {
+    definition: 'An intersection of vertical and horizontal lines representing sacrifice, suffering, and spiritual transformation.',
+    jungianMeaning: 'Symbolizes the tension of opposites and the suffering necessary for psychological transformation.'
+  },
+  'diamond': {
+    definition: 'A precious crystal representing perfection, clarity, indestructibility, and spiritual illumination.',
+    jungianMeaning: 'Symbolizes the perfected Self, the incorruptible essence, and the goal of psychological refinement.'
   }
 };
 
-export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDefinitionModalProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+// Function to get definition for any term, searching both archetypes and symbols
+export function getDefinition(term: string): Definition | null {
+  const normalizedTerm = term.toLowerCase().trim();
   
-  const definitions = type === 'archetype' ? archetypeDefinitions : symbolDefinitions;
-  const currentDefinition = definitions[symbol.toLowerCase()] || definitions[symbol];
+  // Check exact matches first
+  let definition = archetypeDefinitions[term] || symbolDefinitions[term];
+  if (definition) return definition;
   
-  const filteredDefinitions = Object.entries(definitions).filter(([key, value]) =>
-    key.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    value.definition.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Check case-insensitive matches
+  for (const [key, value] of Object.entries(archetypeDefinitions)) {
+    if (key.toLowerCase() === normalizedTerm) return value;
+  }
+  
+  for (const [key, value] of Object.entries(symbolDefinitions)) {
+    if (key.toLowerCase() === normalizedTerm) return value;
+  }
+  
+  // Check partial matches for compound terms
+  for (const [key, value] of Object.entries(symbolDefinitions)) {
+    if (normalizedTerm.includes(key.toLowerCase()) || key.toLowerCase().includes(normalizedTerm)) {
+      return value;
+    }
+  }
+  
+  return null;
+}
 
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-gray-900 border-gray-700 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center text-xl">
-            <Book className="w-6 h-6 mr-2 text-purple-400" />
-            {type === 'archetype' ? 'Archetype' : 'Symbol'} Encyclopedia
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-6">
-          {currentDefinition && (
-            <div className="p-4 bg-purple-900/30 rounded-lg border border-purple-600/30">
-              <h3 className="text-lg font-semibold text-purple-300 mb-3 capitalize">
-                {symbol}
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <h4 className="font-medium text-gray-300 mb-1">Definition:</h4>
-                  <p className="text-gray-400 text-sm">{currentDefinition.definition}</p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-300 mb-1">Jungian Significance:</h4>
-                  <p className="text-gray-400 text-sm">{currentDefinition.jungianMeaning}</p>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder={`Search ${type}s...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none"
-              />
-            </div>
-            
-            <div className="space-y-3 max-h-60 overflow-y-auto">
-              {filteredDefinitions.map(([key, definition]) => (
-                <div key={key} className="p-3 bg-gray-800 rounded-lg border border-gray-600">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="text-blue-400 border-blue-400 capitalize">
-                      {key}
-                    </Badge>
-                  </div>
-                  <p className="text-gray-400 text-xs mb-2">{definition.definition}</p>
-                  <p className="text-gray-500 text-xs italic">{definition.jungianMeaning}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+// Function to get all available terms for search
+export function getAllTerms(): string[] {
+  return [
+    ...Object.keys(archetypeDefinitions),
+    ...Object.keys(symbolDefinitions)
+  ].sort();
 }
