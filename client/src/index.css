@@ -229,16 +229,24 @@
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   }
 
-  /* Recording status fade animation */
-  @keyframes recording-fade {
-    0% { opacity: 0; transform: translateY(10px); }
-    20% { opacity: 1; transform: translateY(0); }
-    80% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-10px); }
+  /* Recording status pulse animation */
+  @keyframes recording-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
   }
 
-  .recording-status {
-    animation: recording-fade 3s ease-in-out;
+  /* Recording status fade out animation */
+  @keyframes recording-fade-out {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+  }
+
+  .recording-status-pulse {
+    animation: recording-pulse 2s ease-in-out infinite;
+  }
+
+  .recording-status-fade {
+    animation: recording-fade-out 0.8s ease-out forwards;
   }
   
   @keyframes shimmer {

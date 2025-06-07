@@ -16,6 +16,7 @@ export function ChatInterface() {
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [inputMode, setInputMode] = useState<'text' | 'voice'>('voice'); // Default to voice mode
   const [showHelpTooltip, setShowHelpTooltip] = useState(false);
+  const [statusFading, setStatusFading] = useState(false);
   const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
 
@@ -37,8 +38,16 @@ export function ChatInterface() {
   useEffect(() => {
     if (isTranscribing && transcript) {
       setCurrentTranscript(transcript);
+      // Trigger fade out when user starts speaking
+      if (transcript.trim() && !statusFading) {
+        setStatusFading(true);
+      }
     }
-  }, [transcript, isTranscribing]);
+    // Reset status fading when not transcribing
+    if (!isTranscribing) {
+      setStatusFading(false);
+    }
+  }, [transcript, isTranscribing, statusFading]);
 
   // Auto-scroll voice transcript container to bottom when new text is added
   useEffect(() => {
@@ -88,33 +97,46 @@ export function ChatInterface() {
                     {currentTranscript || "Listening..."}
                   </div>
                 </div>
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center recording-status">
+                <div className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
                   🎤 Recording... Click SPEAK again to stop
                 </div>
               </div>
             ) : (
-              <Textarea
-                value={dreamText}
-                onChange={(e) => setDreamText(e.target.value)}
-                placeholder={inputMode === 'text' ? "Type your dream here..." : ""}
-                className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center speech-bubble-text scrollbar-hide"
-                style={{
-                  wordWrap: 'break-word',
-                  overflowWrap: 'break-word',
-                  hyphens: 'auto',
-                  overflowY: 'auto',
-                  paddingLeft: '8px',
-                  paddingRight: '8px',
-                  scrollBehavior: 'smooth'
-                }}
-                disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
-                readOnly={inputMode === 'voice' && !isTranscribing}
-                onInput={(e) => {
-                  // Auto-scroll to bottom as user types
-                  const textarea = e.target as HTMLTextAreaElement;
-                  textarea.scrollTop = textarea.scrollHeight;
-                }}
-              />
+              <div className="w-full h-full flex flex-col speech-bubble-text relative">
+                <Textarea
+                  value={dreamText}
+                  onChange={(e) => {
+                    setDreamText(e.target.value);
+                    // Trigger fade out when user starts typing
+                    if (e.target.value.trim() && !statusFading) {
+                      setStatusFading(true);
+                    }
+                  }}
+                  placeholder={inputMode === 'text' ? "Type your dream here..." : ""}
+                  className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center scrollbar-hide"
+                  style={{
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                    hyphens: 'auto',
+                    overflowY: 'auto',
+                    paddingLeft: '8px',
+                    paddingRight: '8px',
+                    scrollBehavior: 'smooth'
+                  }}
+                  disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
+                  readOnly={inputMode === 'voice' && !isTranscribing}
+                  onInput={(e) => {
+                    // Auto-scroll to bottom as user types
+                    const textarea = e.target as HTMLTextAreaElement;
+                    textarea.scrollTop = textarea.scrollHeight;
+                  }}
+                />
+                {inputMode === 'text' && !dreamText.trim() && (
+                  <div className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
+                    ⌨️ Start typing your dream...
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
