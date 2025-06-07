@@ -27,7 +27,9 @@ import {
   MicOff,
   Play,
   Pause,
-  Crown
+  Crown,
+  Upload,
+  Camera
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
@@ -1057,8 +1059,23 @@ export function DreamVisionBoard() {
         setDefaultVoiceText(fullNarrationText);
         setDefaultVoiceDialogOpen(true);
       }
+
+      // Reset state and close dialog
+      setPhotoUploadDialogOpen(false);
+      setSelectedDreamForPhoto(null);
+      setUploadedPhoto(null);
+      
+      toast({
+        title: "Vision Board Updated!",
+        description: uploadedPhoto ? "Added AI vision and your personal photo" : "Added AI-generated vision",
+      });
     } catch (error) {
       console.error('Failed to generate image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate vision. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -2166,6 +2183,93 @@ ${dream.content}`;
                 Upgrade Now
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Photo Upload Dialog */}
+      <Dialog open={photoUploadDialogOpen} onOpenChange={setPhotoUploadDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="w-5 h-5 text-blue-600" />
+              Add Personal Photo
+            </DialogTitle>
+            <DialogDescription>
+              Upload a personal photo to include with your AI-generated dream visualization.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {selectedDreamForPhoto && (
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-1">Dream:</h4>
+                <p className="text-sm text-blue-800">
+                  {selectedDreamForPhoto.title || "Untitled Dream"}
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <label className="block">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">Click to upload a photo</p>
+                  <p className="text-xs text-gray-500 mt-1">JPG, PNG, or GIF (max 10MB)</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                  />
+                </div>
+              </label>
+
+              {uploadedPhoto && (
+                <div className="border rounded-lg p-3">
+                  <img 
+                    src={uploadedPhoto} 
+                    alt="Uploaded photo" 
+                    className="w-full h-32 object-cover rounded"
+                  />
+                  <p className="text-sm text-gray-600 mt-2">Photo uploaded successfully!</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setPhotoUploadDialogOpen(false);
+                  setSelectedDreamForPhoto(null);
+                  setUploadedPhoto(null);
+                }}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={generateVisionWithPhoto}
+                disabled={generateImage.isPending}
+                className="flex-1"
+              >
+                {generateImage.isPending ? (
+                  "Generating..."
+                ) : (
+                  <>
+                    <Sparkles size={16} className="mr-2" />
+                    {uploadedPhoto ? "Create with Photo" : "Create AI Vision"}
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {!uploadedPhoto && (
+              <p className="text-xs text-gray-500 text-center">
+                Skip photo upload to generate AI visualization only
+              </p>
+            )}
           </div>
         </DialogContent>
       </Dialog>
