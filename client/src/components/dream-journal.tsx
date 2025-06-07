@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
+import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -14,9 +15,9 @@ export function DreamJournal() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visionBoards, setVisionBoards] = useState<any[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
+  const { speak, stop, isPlaying } = useNaturalVoice();
 
   const dreams = searchQuery.trim() ? searchResults : allDreams;
 
@@ -26,24 +27,13 @@ export function DreamJournal() {
     setVisionBoards(boards);
   }, []);
 
-  // Voice playback for dream text
+  // Voice playback for dream text using natural voice
   const playDreamText = (dreamText: string) => {
     if (isPlaying) {
-      speechSynthesis.cancel();
-      setIsPlaying(false);
-      return;
+      stop();
+    } else {
+      speak(dreamText);
     }
-
-    const utterance = new SpeechSynthesisUtterance(dreamText);
-    utterance.rate = 0.8;
-    utterance.pitch = 1;
-    utterance.volume = 0.8;
-    
-    utterance.onstart = () => setIsPlaying(true);
-    utterance.onend = () => setIsPlaying(false);
-    utterance.onerror = () => setIsPlaying(false);
-
-    speechSynthesis.speak(utterance);
   };
 
   const formatDate = (dateString: string) => {

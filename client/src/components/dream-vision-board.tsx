@@ -25,6 +25,7 @@ import {
   Copy
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
+import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import type { Dream } from '@shared/schema';
 
 interface VisionBoardItem {
@@ -65,13 +66,13 @@ export function DreamVisionBoard() {
   const [newBoardTitle, setNewBoardTitle] = useState('');
   const [newBoardDescription, setNewBoardDescription] = useState('');
   const [generationPrompt, setGenerationPrompt] = useState('');
-  const [isPlaying, setIsPlaying] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState('');
   const [shareMessage, setShareMessage] = useState('');
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
+  const { speak, stop, isPlaying } = useNaturalVoice();
 
   // Load boards from localStorage
   useEffect(() => {
@@ -100,24 +101,13 @@ export function DreamVisionBoard() {
     }
   };
 
-  // Voice playback for dream text
+  // Voice playback for dream text using natural voice
   const playDreamText = (dreamText: string) => {
     if (isPlaying) {
-      speechSynthesis.cancel();
-      setIsPlaying(false);
-      return;
+      stop();
+    } else {
+      speak(dreamText);
     }
-
-    const utterance = new SpeechSynthesisUtterance(dreamText);
-    utterance.rate = 0.8;
-    utterance.pitch = 1;
-    utterance.volume = 0.8;
-    
-    utterance.onstart = () => setIsPlaying(true);
-    utterance.onend = () => setIsPlaying(false);
-    utterance.onerror = () => setIsPlaying(false);
-
-    speechSynthesis.speak(utterance);
   };
 
   // Save vision board
