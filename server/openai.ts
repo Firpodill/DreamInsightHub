@@ -58,7 +58,7 @@ Respond with valid JSON in this exact format:
   "shadowWork": "Insights about shadow elements and integration opportunities",
   "individuationStage": "Assessment of where this dream fits in the individuation journey",
   "emotionalTone": "Emotional quality and psychological mood of the dream",
-  "recommendations": ["actionable", "suggestions", "for", "working", "with", "dream", "insights"]
+  "recommendations": "A cohesive paragraph with actionable suggestions for working with dream insights, using proper punctuation and complete sentences."
 }`
         },
         {
@@ -84,7 +84,7 @@ Respond with valid JSON in this exact format:
       shadowWork: result.shadowWork || 'Shadow work insights to be explored',
       individuationStage: result.individuationStage || 'Stage assessment in progress',
       emotionalTone: result.emotionalTone || 'Emotional tone being evaluated',
-      recommendations: Array.isArray(result.recommendations) ? result.recommendations : []
+      recommendations: result.recommendations || 'Recommendations for integrating dream insights are being processed.'
     };
   } catch (error) {
     console.error('Dream analysis error:', error);

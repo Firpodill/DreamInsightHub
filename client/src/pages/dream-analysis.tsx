@@ -5,12 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles } from 'lucide-react';
 import { useAnalyzeDream, useGenerateImage } from '@/hooks/use-dreams';
+import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 
 export default function DreamAnalysis() {
   const [location, navigate] = useLocation();
   const [dreamText, setDreamText] = useState('');
   const [showVisionBoardOption, setShowVisionBoardOption] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [modalType, setModalType] = useState<'archetype' | 'symbol'>('symbol');
   const analyzeDream = useAnalyzeDream();
   const generateImage = useGenerateImage();
 
@@ -227,7 +231,7 @@ export default function DreamAnalysis() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  {(analysis.recommendations || []).join(' ')}
+                  {analysis.recommendations}
                 </p>
               </CardContent>
             </Card>
@@ -275,11 +279,35 @@ export default function DreamAnalysis() {
                       </div>
                       <div className="flex gap-2">
                         <Button 
-                          onClick={() => navigate('/vision-board')}
-                          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                          onClick={() => {
+                            // Save to vision board collection
+                            const visionBoards = JSON.parse(localStorage.getItem('visionBoards') || '[]');
+                            const newVisionBoard = {
+                              id: Date.now().toString(),
+                              title: `Dream Vision - ${new Date().toLocaleDateString()}`,
+                              description: dreamText.substring(0, 100) + '...',
+                              items: [{
+                                id: '1',
+                                type: 'image',
+                                content: 'Generated Vision',
+                                imageUrl: generatedImage,
+                                position: { x: 50, y: 50 },
+                                size: { width: 300, height: 300 },
+                                rotation: 0,
+                                zIndex: 1
+                              }],
+                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                              createdAt: new Date(),
+                              updatedAt: new Date()
+                            };
+                            visionBoards.push(newVisionBoard);
+                            localStorage.setItem('visionBoards', JSON.stringify(visionBoards));
+                            navigate('/vision-board');
+                          }}
+                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                         >
                           <Palette className="w-4 h-4 mr-2" />
-                          Open Vision Board Creator
+                          Save to Vision Board
                         </Button>
                         <Button 
                           onClick={handleGenerateVisionBoard}
