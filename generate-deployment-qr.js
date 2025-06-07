@@ -6,7 +6,7 @@ async function generateDeploymentQR() {
     // Get the Replit domain URL for the deployed app
     const replOwner = process.env.REPL_OWNER || 'francescaletter';
     const replSlug = process.env.REPL_SLUG || 'workspace';
-    const deploymentUrl = `https://${replSlug}--${replOwner}.replit.app`;
+    const deploymentUrl = `https://${replSlug}.${replOwner}.repl.co`;
     
     console.log('Generating QR code for:', deploymentUrl);
     
