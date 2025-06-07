@@ -300,6 +300,151 @@ export const symbolDefinitions: Record<string, Definition> = {
   'diamond': {
     definition: 'A precious crystal representing perfection, clarity, indestructibility, and spiritual illumination.',
     jungianMeaning: 'Symbolizes the perfected Self, the incorruptible essence, and the goal of psychological refinement.'
+  },
+  'school': {
+    definition: 'An educational institution representing learning, growth, testing, and social development.',
+    jungianMeaning: 'Symbolizes life lessons, personal development challenges, and the process of psychological maturation.'
+  },
+  'teacher': {
+    definition: 'An educator figure representing guidance, knowledge transmission, and authority.',
+    jungianMeaning: 'Represents the wise aspect of the psyche that guides learning and psychological development.'
+  },
+  'classroom': {
+    definition: 'A learning space representing structured education, social interaction, and skill development.',
+    jungianMeaning: 'Symbolizes the controlled environment where conscious learning and social integration occur.'
+  },
+  'exam': {
+    definition: 'A test or evaluation representing judgment, assessment, and proving one\'s abilities.',
+    jungianMeaning: 'Symbolizes life trials, self-evaluation, and the testing of psychological readiness for growth.'
+  },
+  'test': {
+    definition: 'A trial or examination representing challenges, evaluation, and proving worthiness.',
+    jungianMeaning: 'Represents psychological trials that must be passed for individuation and personal development.'
+  },
+  'car': {
+    definition: 'A vehicle representing personal control, direction in life, and the ability to navigate circumstances.',
+    jungianMeaning: 'Symbolizes the ego\'s capacity to direct life course and control personal destiny.'
+  },
+  'driving': {
+    definition: 'The act of controlling a vehicle representing personal agency, direction, and life management.',
+    jungianMeaning: 'Symbolizes conscious control over life direction and the ability to navigate psychological terrain.'
+  },
+  'accident': {
+    definition: 'An unexpected harmful event representing loss of control, trauma, and unintended consequences.',
+    jungianMeaning: 'Symbolizes psychological collision, loss of ego control, and unexpected disruption to life path.'
+  },
+  'hospital': {
+    definition: 'A medical facility representing healing, recovery, vulnerability, and professional care.',
+    jungianMeaning: 'Symbolizes the need for psychological healing and the therapeutic process of recovery.'
+  },
+  'doctor': {
+    definition: 'A medical professional representing healing, diagnosis, authority, and expert care.',
+    jungianMeaning: 'Represents the healing aspect of the psyche and the wise diagnostician of psychological ailments.'
+  },
+  'medicine': {
+    definition: 'Therapeutic substances representing healing, cure, transformation, and restoration of health.',
+    jungianMeaning: 'Symbolizes the healing power within the psyche and the medicine needed for psychological wholeness.'
+  },
+  'family': {
+    definition: 'Related individuals representing belonging, origins, support, and foundational relationships.',
+    jungianMeaning: 'Symbolizes the personal unconscious, inherited patterns, and the foundation of psychological development.'
+  },
+  'parents': {
+    definition: 'Mother and father figures representing authority, origins, protection, and primary relationships.',
+    jungianMeaning: 'Represent the internalized parental complexes and the foundational psychological structures.'
+  },
+  'sibling': {
+    definition: 'Brothers or sisters representing rivalry, comparison, shared origins, and peer relationships.',
+    jungianMeaning: 'Symbolizes different aspects of the self and the integration of various personality facets.'
+  },
+  'baby': {
+    definition: 'A newborn representing new beginnings, innocence, potential, and vulnerability.',
+    jungianMeaning: 'Symbolizes the emerging self, new psychological potential, and the need for nurturing growth.',
+    campbellMeaning: 'The divine child representing new hope, potential, and the promise of renewal.'
+  },
+  'pregnancy': {
+    definition: 'The state of carrying new life representing creativity, potential, and forthcoming transformation.',
+    jungianMeaning: 'Symbolizes the gestation of new psychological content and the creative potential within the psyche.'
+  },
+  'wedding': {
+    definition: 'A marriage ceremony representing union, commitment, celebration, and new life phase.',
+    jungianMeaning: 'Symbolizes the sacred marriage of opposites within the psyche and psychological integration.'
+  },
+  'funeral': {
+    definition: 'A death ceremony representing endings, mourning, transition, and honoring what was.',
+    jungianMeaning: 'Symbolizes the death of old psychological patterns and the ritual of letting go for transformation.'
+  },
+  'ghost': {
+    definition: 'A spirit of the dead representing the past, unfinished business, and memories that linger.',
+    jungianMeaning: 'Symbolizes unintegrated aspects of the psyche and psychological content that needs resolution.'
+  },
+  'monster': {
+    definition: 'A frightening creature representing fears, threats, and overwhelming negative forces.',
+    jungianMeaning: 'Symbolizes the shadow in its most threatening form and the fears that must be faced for growth.'
+  },
+  'alien': {
+    definition: 'A foreign being representing the unknown, otherness, and unfamiliar aspects of existence.',
+    jungianMeaning: 'Symbolizes aspects of the psyche that are foreign to consciousness and need integration.'
+  },
+  'robot': {
+    definition: 'A mechanical being representing automation, lack of emotion, and programmed behavior.',
+    jungianMeaning: 'Symbolizes mechanized aspects of personality and the loss of human spontaneity.'
+  },
+  'computer': {
+    definition: 'An electronic device representing logic, information processing, and technological capability.',
+    jungianMeaning: 'Symbolizes the rational mind, data processing, and the technological aspects of modern consciousness.'
+  },
+  'phone': {
+    definition: 'A communication device representing connection, messages, and distant contact.',
+    jungianMeaning: 'Symbolizes communication between conscious and unconscious, or connection with distant aspects of self.'
+  },
+  'airplane': {
+    definition: 'A flying vehicle representing elevation, escape, rapid movement, and transcendence of limitations.',
+    jungianMeaning: 'Symbolizes spiritual ascent, the desire to rise above earthly concerns, and rapid psychological movement.'
+  },
+  'train': {
+    definition: 'A rail vehicle representing predetermined path, collective journey, and structured progress.',
+    jungianMeaning: 'Symbolizes life\'s predetermined course, collective unconscious movement, and structured development.'
+  },
+  'ship': {
+    definition: 'A water vessel representing journey across emotional waters, exploration, and navigation of the unconscious.',
+    jungianMeaning: 'Symbolizes the ego\'s vessel for navigating the unconscious waters and emotional depths.'
+  },
+  'island': {
+    definition: 'Land surrounded by water representing isolation, self-sufficiency, and separation from the collective.',
+    jungianMeaning: 'Symbolizes psychological isolation, the individuated self, and separation from collective consciousness.'
+  },
+  'desert': {
+    definition: 'An arid landscape representing barrenness, isolation, spiritual testing, and purification.',
+    jungianMeaning: 'Symbolizes spiritual aridity, the testing of faith, and the purification process of individuation.'
+  },
+  'volcano': {
+    definition: 'An explosive mountain representing suppressed energy, sudden eruption, and transformative destruction.',
+    jungianMeaning: 'Symbolizes repressed psychological energy that threatens to erupt and transform the conscious landscape.'
+  },
+  'earthquake': {
+    definition: 'Ground shaking representing fundamental instability, upheaval, and structural collapse.',
+    jungianMeaning: 'Symbolizes fundamental psychological upheaval and the shaking of basic assumptions about reality.'
+  },
+  'tornado': {
+    definition: 'A rotating windstorm representing chaos, destruction, and uncontrollable natural forces.',
+    jungianMeaning: 'Symbolizes psychological chaos, emotional turmoil, and the destructive power of uncontrolled feelings.'
+  },
+  'lightning': {
+    definition: 'Electrical discharge representing sudden illumination, divine power, and instantaneous change.',
+    jungianMeaning: 'Symbolizes sudden psychological insight, divine inspiration, and the flash of consciousness.'
+  },
+  'rainbow': {
+    definition: 'A colorful arc representing hope, promise, beauty, and the bridge between earth and sky.',
+    jungianMeaning: 'Symbolizes the bridge between conscious and unconscious, hope after psychological storms.'
+  },
+  'star': {
+    definition: 'A celestial light representing guidance, wishes, destiny, and distant illumination.',
+    jungianMeaning: 'Symbolizes the guiding light of the Self and the distant goal of psychological wholeness.'
+  },
+  'planet': {
+    definition: 'A celestial body representing vastness, cosmic perspective, and otherworldly dimensions.',
+    jungianMeaning: 'Symbolizes expanded consciousness, cosmic awareness, and the larger perspective on existence.'
   }
 };
 
@@ -325,6 +470,134 @@ export function getDefinition(term: string): Definition | null {
     if (normalizedTerm.includes(key.toLowerCase()) || key.toLowerCase().includes(normalizedTerm)) {
       return value;
     }
+  }
+  
+  // Check archetype partial matches
+  for (const [key, value] of Object.entries(archetypeDefinitions)) {
+    if (normalizedTerm.includes(key.toLowerCase()) || key.toLowerCase().includes(normalizedTerm)) {
+      return value;
+    }
+  }
+  
+  // Fuzzy matching for common variations and synonyms
+  const synonymMap: Record<string, string> = {
+    'cars': 'car',
+    'automobile': 'car',
+    'vehicle': 'car',
+    'driving': 'car',
+    'animals': 'animal',
+    'pets': 'animal',
+    'creature': 'animal',
+    'creatures': 'animal',
+    'hospitals': 'hospital',
+    'medical': 'doctor',
+    'physician': 'doctor',
+    'nurse': 'doctor',
+    'schools': 'school',
+    'education': 'school',
+    'learning': 'school',
+    'studying': 'school',
+    'tests': 'test',
+    'testing': 'test',
+    'examination': 'exam',
+    'examinations': 'exam',
+    'families': 'family',
+    'relatives': 'family',
+    'parent': 'parents',
+    'siblings': 'sibling',
+    'brother': 'sibling',
+    'sister': 'sibling',
+    'babies': 'baby',
+    'infant': 'baby',
+    'newborn': 'baby',
+    'weddings': 'wedding',
+    'marriage': 'wedding',
+    'funerals': 'funeral',
+    'burial': 'funeral',
+    'ghosts': 'ghost',
+    'spirit': 'ghost',
+    'spirits': 'ghost',
+    'monsters': 'monster',
+    'beast': 'monster',
+    'demon': 'monster',
+    'aliens': 'alien',
+    'extraterrestrial': 'alien',
+    'robots': 'robot',
+    'machine': 'robot',
+    'computers': 'computer',
+    'technology': 'computer',
+    'phones': 'phone',
+    'telephone': 'phone',
+    'airplanes': 'airplane',
+    'aircraft': 'airplane',
+    'plane': 'airplane',
+    'trains': 'train',
+    'railway': 'train',
+    'ships': 'ship',
+    'boat': 'ship',
+    'vessel': 'ship',
+    'islands': 'island',
+    'deserts': 'desert',
+    'volcanoes': 'volcano',
+    'earthquakes': 'earthquake',
+    'tornadoes': 'tornado',
+    'storms': 'storm',
+    'tempest': 'storm',
+    'stars': 'star',
+    'planets': 'planet',
+    'celestial': 'star',
+    'home': 'house',
+    'dwelling': 'house',
+    'building': 'house',
+    'doors': 'door',
+    'entrance': 'door',
+    'exit': 'door',
+    'keys': 'key',
+    'mountains': 'mountain',
+    'hills': 'mountain',
+    'peak': 'mountain',
+    'trees': 'tree',
+    'forest': 'tree',
+    'woods': 'forest',
+    'snakes': 'snake',
+    'serpent': 'snake',
+    'birds': 'bird',
+    'flying': 'flight',
+    'cats': 'cat',
+    'feline': 'cat',
+    'dogs': 'dog',
+    'canine': 'dog',
+    'mirrors': 'mirror',
+    'reflection': 'mirror',
+    'journeys': 'journey',
+    'travel': 'journey',
+    'trip': 'journey',
+    'rivers': 'river',
+    'stream': 'river',
+    'oceans': 'ocean',
+    'sea': 'ocean',
+    'gardens': 'garden',
+    'park': 'garden',
+    'treasures': 'treasure',
+    'gold': 'treasure',
+    'wealth': 'treasure',
+    'swords': 'sword',
+    'blade': 'sword',
+    'weapon': 'sword',
+    'crowns': 'crown',
+    'throne': 'crown',
+    'caves': 'cave',
+    'cavern': 'cave',
+    'masks': 'mask',
+    'disguise': 'mask',
+    'clocks': 'clock',
+    'time': 'clock',
+    'watch': 'clock'
+  };
+  
+  // Check synonym map
+  if (synonymMap[normalizedTerm]) {
+    return getDefinition(synonymMap[normalizedTerm]);
   }
   
   return null;
