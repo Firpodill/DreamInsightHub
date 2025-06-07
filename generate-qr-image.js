@@ -1,7 +1,13 @@
 import QRCode from 'qrcode';
 import fs from 'fs';
 
-const appUrl = 'https://b6e2195d-9d45-47f1-97d6-70f86c4eff86.replit.app';
+// Try different URL formats for Replit
+const replId = process.env.REPL_ID || 'b6e2195d-9d45-47f1-97d6-70f86c4eff86';
+const replOwner = process.env.REPL_OWNER || 'francescaletter';
+const replSlug = process.env.REPL_SLUG || 'workspace';
+
+// Use the most reliable Replit URL format
+const appUrl = `https://${replId}-5000.${replOwner}.replit.app`;
 
 // Generate QR code as PNG image
 QRCode.toFile('dream-decoder-qr.png', appUrl, {
