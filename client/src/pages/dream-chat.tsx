@@ -125,23 +125,20 @@ export default function DreamChat() {
               background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
               border: '2px solid #1f2937'
             }}>
-              <div className="w-6 h-6 rounded-full relative flex items-center justify-center" style={{
+              <div className="w-6 h-6 rounded-full relative flex items-center justify-center animate-eyeball-spin" style={{
                 background: 'radial-gradient(circle at 30% 30%, #3b82f6, #1e40af, #0f172a)',
                 border: '1px solid #1e40af'
               }}>
-                <div className="text-xs font-bold text-white leading-none absolute inset-0 flex items-center justify-center">
-                  <div className="relative">
-                    {formatDay(currentDate)}
-                    {/* Small black dot directly below the number 6 only */}
-                    {formatDay(currentDate) === '6' && (
-                      <div className="w-0.5 h-0.5 rounded-full absolute top-full left-1/2 transform -translate-x-1/2 mt-0.5 bg-black"></div>
-                    )}
-                  </div>
-                </div>
-                <div className="w-1 h-1 rounded-full absolute top-0.5 left-0.5" style={{
+                <div className="w-1 h-1 rounded-full absolute top-0.5 left-0.5 animate-eyeball-spin" style={{
                   background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
                   boxShadow: '0 0 2px rgba(255, 255, 255, 0.8)'
                 }}></div>
+              </div>
+              {/* Static day number overlay */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="text-xs font-bold text-white leading-none">
+                  {formatDay(currentDate)}
+                </div>
               </div>
             </div>
             <div className="flex flex-col">
