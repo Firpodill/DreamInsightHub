@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  .mobile-text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
 @keyframes pulse-glow {
   0%, 100% {
     opacity: 1;

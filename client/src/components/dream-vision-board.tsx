@@ -1572,7 +1572,26 @@ ${dream.content}`;
     updateItem(selectedItem.id, { position: newPosition });
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !selectedItem) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const container = e.currentTarget.getBoundingClientRect();
+    const newPosition = {
+      x: touch.clientX - container.left - dragOffset.x,
+      y: touch.clientY - container.top - dragOffset.y
+    };
+
+    updateItem(selectedItem.id, { position: newPosition });
+  };
+
   const handleMouseUp = () => {
+    setIsDragging(false);
+    setSelectedItem(null);
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
     setSelectedItem(null);
   };
@@ -2404,10 +2423,12 @@ ${dream.content}`;
 
         {/* Canvas */}
         <div 
-          className="flex-1 relative overflow-hidden"
+          className="flex-1 relative overflow-hidden touch-none"
           style={{ background: currentBoard.background }}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {currentBoard.items.map((item) => (
             <div
@@ -2424,6 +2445,7 @@ ${dream.content}`;
                 zIndex: item.zIndex
               }}
               onMouseDown={(e) => handleMouseDown(e, item)}
+              onTouchStart={(e) => handleTouchStart(e, item)}
             >
               {item.type === 'image' && item.imageUrl && (
                 <img

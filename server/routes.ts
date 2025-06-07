@@ -92,7 +92,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Dream analysis error:', error);
-      res.status(500).json({ error: "Failed to analyze dream", details: error.message });
+      res.status(500).json({ error: "Failed to analyze dream", details: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
@@ -113,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Image generation error:', error);
-      res.status(500).json({ error: "Failed to generate image", details: error.message });
+      res.status(500).json({ error: "Failed to generate image", details: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
@@ -131,11 +131,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         summary: dream.title,
         symbols: dream.symbols || [],
         archetypes: dream.archetypes || [],
+        predominantSymbol: {
+          name: dream.symbols?.[0] || 'Unknown',
+          meaning: 'Symbol from dream content',
+          jungianSignificance: 'Represents aspects of the unconscious'
+        },
         jungianInterpretation: dream.analysis || '',
         shadowWork: '',
         individuationStage: '',
         emotionalTone: '',
-        recommendations: []
+        recommendations: ''
       };
 
       const image = await generateDreamVisualization(dream.content, analysis);
@@ -159,7 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error('Image generation error:', error);
-      res.status(500).json({ error: "Failed to generate dream image", details: error.message });
+      res.status(500).json({ error: "Failed to generate dream image", details: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
