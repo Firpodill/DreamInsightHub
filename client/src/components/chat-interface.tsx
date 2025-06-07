@@ -63,19 +63,19 @@ export function ChatInterface() {
         {/* Text area positioned over the speech bubble in the image */}
         <div className="absolute top-[12%] left-[5%] w-[40%] h-[35%]">
           <div className="w-full h-full flex items-center justify-center p-6 relative overflow-hidden text-bubble-container">
-            {/* Soft fade overlay for better text containment */}
+            {/* Enhanced fade overlay for smooth text containment */}
             <div className="absolute inset-0 pointer-events-none z-10">
-              <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white/40 via-white/10 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/40 via-white/10 to-transparent"></div>
-              <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-white/40 via-white/10 to-transparent"></div>
-              <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white/40 via-white/10 to-transparent"></div>
+              <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white via-white/60 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white via-white/70 to-transparent"></div>
+              <div className="absolute top-0 bottom-0 left-0 w-12 bg-gradient-to-r from-white via-white/60 to-transparent"></div>
+              <div className="absolute top-0 bottom-0 right-0 w-12 bg-gradient-to-l from-white via-white/60 to-transparent"></div>
             </div>
             
             {inputMode === 'voice' && isTranscribing ? (
-              <div className="w-full h-full flex items-center justify-center overflow-hidden">
-                <div className="text-gray-900 text-base leading-relaxed font-medium text-center max-w-full max-h-full overflow-hidden">
-                  <div className="break-words">{currentTranscript || "Listening..."}</div>
-                  <div className="mt-2 text-sm text-gray-600">
+              <div className="w-full h-full flex items-center justify-center speech-bubble-text">
+                <div className="text-gray-900 text-base leading-relaxed font-medium text-center max-w-full max-h-full overflow-y-auto scrollbar-hide">
+                  <div className="break-words px-2">{currentTranscript || "Listening..."}</div>
+                  <div className="mt-2 text-sm text-gray-600 px-2">
                     🎤 Recording... Click SPEAK again to stop
                   </div>
                 </div>
@@ -85,11 +85,14 @@ export function ChatInterface() {
                 value={dreamText}
                 onChange={(e) => setDreamText(e.target.value)}
                 placeholder={inputMode === 'text' ? "Type your dream here..." : ""}
-                className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center overflow-hidden scrollbar-hide"
+                className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center speech-bubble-text scrollbar-hide"
                 style={{
                   wordWrap: 'break-word',
                   overflowWrap: 'break-word',
-                  hyphens: 'auto'
+                  hyphens: 'auto',
+                  overflowY: 'auto',
+                  paddingLeft: '8px',
+                  paddingRight: '8px'
                 }}
                 disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
                 readOnly={inputMode === 'voice' && !isTranscribing}

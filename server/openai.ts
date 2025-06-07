@@ -88,7 +88,7 @@ Respond with valid JSON in this exact format:
     };
   } catch (error) {
     console.error('Dream analysis error:', error);
-    throw new Error(`Failed to analyze dream: ${error.message}`);
+    throw new Error(`Failed to analyze dream: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -111,10 +111,10 @@ Mood: Contemplative, mysterious, and psychologically profound.`;
       quality: "standard",
     });
 
-    return { url: response.data[0].url || '' };
+    return { url: response.data?.[0]?.url || '' };
   } catch (error) {
     console.error('Image generation error:', error);
-    throw new Error(`Failed to generate dream visualization: ${error.message}`);
+    throw new Error(`Failed to generate dream visualization: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -163,6 +163,6 @@ export async function transcribeAudio(audioBuffer: Buffer): Promise<{ text: stri
     throw new Error('Audio transcription requires file upload - implement with temporary file storage');
   } catch (error) {
     console.error('Audio transcription error:', error);
-    throw new Error(`Failed to transcribe audio: ${error.message}`);
+    throw new Error(`Failed to transcribe audio: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
