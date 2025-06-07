@@ -325,7 +325,7 @@ export default function DreamChat() {
             </TabsTrigger>
             <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Palette className="w-3 h-3 mr-1" />
-              Vision
+              Visions
             </TabsTrigger>
           </TabsList>
           
