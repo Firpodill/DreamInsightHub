@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Palette, 
@@ -26,10 +26,12 @@ import {
   Mic,
   MicOff,
   Play,
-  Pause
+  Pause,
+  Crown
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
+import { useToast } from '@/hooks/use-toast';
 import type { Dream } from '@shared/schema';
 
 interface VisionBoardItem {
@@ -98,6 +100,7 @@ export function DreamVisionBoard() {
   const [hasPremiumVoices, setHasPremiumVoices] = useState(false);
 
   const { data: dreams = [] } = useDreams();
+  const { toast } = useToast();
   const generateImage = useGenerateImage();
   const { speak, stop, isPlaying } = useNaturalVoice();
 
@@ -2066,6 +2069,63 @@ ${dream.content}`;
           ))}
         </div>
       </div>
+
+      {/* Premium Voice Upgrade Dialog */}
+      <Dialog open={premiumVoiceDialogOpen} onOpenChange={setPremiumVoiceDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Crown className="w-5 h-5 text-purple-600" />
+              Upgrade to Premium Voices
+            </DialogTitle>
+            <DialogDescription>
+              Unlock professional-quality AI voices with natural intonation and emotional depth.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <h4 className="font-medium text-purple-900 mb-2">Premium Voice Features:</h4>
+              <ul className="text-sm text-purple-800 space-y-1">
+                <li>• High-quality neural voices</li>
+                <li>• Enhanced emotional expression</li>
+                <li>• Custom voice cloning capability</li>
+                <li>• Priority voice processing</li>
+                <li>• Multiple accent options</li>
+              </ul>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">$9.99/month</div>
+              <div className="text-sm text-gray-500">Cancel anytime</div>
+            </div>
+            
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setPremiumVoiceDialogOpen(false)}
+                className="flex-1"
+              >
+                Maybe Later
+              </Button>
+              <Button
+                onClick={() => {
+                  // Simulate upgrade process
+                  setHasPremiumVoices(true);
+                  setPremiumVoiceDialogOpen(false);
+                  toast({
+                    title: "Premium Voices Activated!",
+                    description: "You now have access to professional-quality voices.",
+                  });
+                }}
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
+              >
+                Upgrade Now
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
