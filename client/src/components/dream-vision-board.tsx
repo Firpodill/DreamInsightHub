@@ -1233,7 +1233,18 @@ ${dream.content}`;
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => setVoiceCloneDialogOpen(true)}
+                    onClick={() => {
+                      // Auto-populate AI voice with comprehensive narration
+                      const associatedDream = dreams.find(dream => 
+                        currentBoard?.items.some(item => 
+                          item.content.includes(dream.title || '') || 
+                          item.content.includes('Dream:')
+                        )
+                      );
+                      const fullText = createFullNarrationText(associatedDream, currentBoard);
+                      setVoiceCloneText(fullText || currentBoard?.description || '');
+                      setVoiceCloneDialogOpen(true);
+                    }}
                     className="bg-purple-50 border-purple-200 text-purple-700"
                   >
                     <Volume2 size={14} className="mr-1" />
