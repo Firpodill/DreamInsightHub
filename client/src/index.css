@@ -218,6 +218,16 @@
   .animate-reverse-spin {
     animation: reverse-spin 3s linear infinite;
   }
+
+  /* Speech bubble text container styling */
+  .speech-bubble-text {
+    mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 85%);
+  }
+
+  .text-bubble-container {
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  }
   
   @keyframes shimmer {
     0% { background-position: -200px 0; }
