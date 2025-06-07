@@ -3,9 +3,10 @@ import { useLocation, Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles } from 'lucide-react';
+import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles, Archive } from 'lucide-react';
 import { useAnalyzeDream, useGenerateImage } from '@/hooks/use-dreams';
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
+import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 
 export default function DreamAnalysis() {
   const [location, navigate] = useLocation();

@@ -382,10 +382,8 @@ export function DreamAudioEnhancement() {
           {/* Track List */}
           <div className="grid grid-cols-1 gap-3">
             {filteredTracks.map((track) => (
-              <motion.div
+              <div
                 key={track.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
                 className={`p-4 rounded-lg border cursor-pointer transition-all ${
                   currentTrack?.id === track.id
                     ? 'bg-red-600/20 border-red-500'
