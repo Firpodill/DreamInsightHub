@@ -92,6 +92,10 @@ export function DreamVisionBoard() {
   const [selectedVoiceGender, setSelectedVoiceGender] = useState<'female' | 'male'>('female');
   const [selectedVoiceOption, setSelectedVoiceOption] = useState<string>('auto');
   const [voicePreferencesOpen, setVoicePreferencesOpen] = useState(false);
+  const [voiceSpeed, setVoiceSpeed] = useState(1.0);
+  const [voicePitch, setVoicePitch] = useState(1.0);
+  const [premiumVoiceDialogOpen, setPremiumVoiceDialogOpen] = useState(false);
+  const [hasPremiumVoices, setHasPremiumVoices] = useState(false);
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
@@ -125,11 +129,15 @@ export function DreamVisionBoard() {
       const prefs = JSON.parse(savedVoicePrefs);
       setSelectedVoiceGender(prefs.gender || 'female');
       setSelectedVoiceOption(prefs.voice || 'auto');
+      setVoiceSpeed(prefs.speed || 1.0);
+      setVoicePitch(prefs.pitch || 1.0);
     }
 
-    // Check voice cloning status
+    // Check voice cloning and premium status
     const hasVoiceClone = localStorage.getItem('userHasVoiceClone') === 'true';
+    const hasPremium = localStorage.getItem('userHasPremiumVoices') === 'true';
     setUserHasVoiceClone(hasVoiceClone);
+    setHasPremiumVoices(hasPremium);
   }, []);
 
   // Save boards to localStorage
@@ -146,12 +154,19 @@ export function DreamVisionBoard() {
     }
   };
 
-  // Save voice preferences
-  const saveVoicePreferences = (gender: 'female' | 'male', voice: string) => {
-    const preferences = { gender, voice };
+  // Save voice preferences with speed and pitch
+  const saveVoicePreferences = (gender: 'female' | 'male', voice: string, speed?: number, pitch?: number) => {
+    const preferences = { 
+      gender, 
+      voice, 
+      speed: speed !== undefined ? speed : voiceSpeed,
+      pitch: pitch !== undefined ? pitch : voicePitch
+    };
     localStorage.setItem('voicePreferences', JSON.stringify(preferences));
     setSelectedVoiceGender(gender);
     setSelectedVoiceOption(voice);
+    if (speed !== undefined) setVoiceSpeed(speed);
+    if (pitch !== undefined) setVoicePitch(pitch);
   };
 
   // Voice playback for dream text using natural voice
@@ -297,9 +312,28 @@ export function DreamVisionBoard() {
     }
   };
 
-  // Get available voice options for better quality
+  // Enhanced voice options with premium choices
   const getVoiceOptions = () => {
     const voices = speechSynthesis.getVoices();
+    
+    // Premium voice options (simulated API voices for upgrade)
+    const premiumFemaleVoices = [
+      { name: 'premium-aria', display: 'Aria (Premium)', voice: null, isPremium: true, description: 'Natural, warm female voice' },
+      { name: 'premium-sophia', display: 'Sophia (Premium)', voice: null, isPremium: true, description: 'Professional, clear female voice' },
+      { name: 'premium-emily', display: 'Emily (Premium)', voice: null, isPremium: true, description: 'Expressive, engaging female voice' },
+      { name: 'premium-isabella', display: 'Isabella (Premium)', voice: null, isPremium: true, description: 'Elegant, sophisticated female voice' },
+      { name: 'premium-maya', display: 'Maya (Premium)', voice: null, isPremium: true, description: 'Youthful, energetic female voice' },
+    ];
+
+    const premiumMaleVoices = [
+      { name: 'premium-ethan', display: 'Ethan (Premium)', voice: null, isPremium: true, description: 'Deep, authoritative male voice' },
+      { name: 'premium-noah', display: 'Noah (Premium)', voice: null, isPremium: true, description: 'Smooth, professional male voice' },
+      { name: 'premium-lucas', display: 'Lucas (Premium)', voice: null, isPremium: true, description: 'Friendly, approachable male voice' },
+      { name: 'premium-alexander', display: 'Alexander (Premium)', voice: null, isPremium: true, description: 'Rich, commanding male voice' },
+      { name: 'premium-william', display: 'William (Premium)', voice: null, isPremium: true, description: 'Calm, reassuring male voice' },
+    ];
+
+    // Standard system voices with enhanced selection
     const femaleVoices = [
       { name: 'auto', display: 'Auto Select Female', voice: null },
       ...voices.filter(voice => 
@@ -312,9 +346,16 @@ export function DreamVisionBoard() {
           voice.name.toLowerCase().includes('hazel') ||
           voice.name.toLowerCase().includes('allison') ||
           voice.name.toLowerCase().includes('ava') ||
-          voice.name.toLowerCase().includes('serena')
+          voice.name.toLowerCase().includes('serena') ||
+          voice.name.toLowerCase().includes('kate') ||
+          voice.name.toLowerCase().includes('claire') ||
+          voice.name.toLowerCase().includes('fiona') ||
+          voice.name.toLowerCase().includes('moira') ||
+          voice.name.toLowerCase().includes('tessa') ||
+          voice.name.toLowerCase().includes('veena')
         )
-      ).map(voice => ({ name: voice.name, display: voice.name, voice }))
+      ).map(voice => ({ name: voice.name, display: voice.name, voice })),
+      ...(hasPremiumVoices ? premiumFemaleVoices : [])
     ];
 
     const maleVoices = [
@@ -329,9 +370,16 @@ export function DreamVisionBoard() {
           voice.name.toLowerCase().includes('alex') ||
           voice.name.toLowerCase().includes('aaron') ||
           voice.name.toLowerCase().includes('nathan') ||
-          voice.name.toLowerCase().includes('ryan')
+          voice.name.toLowerCase().includes('ryan') ||
+          voice.name.toLowerCase().includes('oliver') ||
+          voice.name.toLowerCase().includes('fred') ||
+          voice.name.toLowerCase().includes('lee') ||
+          voice.name.toLowerCase().includes('ralph') ||
+          voice.name.toLowerCase().includes('diego') ||
+          voice.name.toLowerCase().includes('jorge')
         )
-      ).map(voice => ({ name: voice.name, display: voice.name, voice }))
+      ).map(voice => ({ name: voice.name, display: voice.name, voice })),
+      ...(hasPremiumVoices ? premiumMaleVoices : [])
     ];
 
     return { femaleVoices, maleVoices };
@@ -394,8 +442,8 @@ export function DreamVisionBoard() {
       }
 
       // Optimize voice parameters for natural sound
-      utterance.rate = gender === 'female' ? 0.85 : 0.8;
-      utterance.pitch = gender === 'female' ? 1.15 : 0.85;
+      utterance.rate = voiceSpeed;
+      utterance.pitch = voicePitch;
       utterance.volume = 0.95;
       
       // Record audio using MediaRecorder
@@ -1581,11 +1629,27 @@ ${dream.content}`;
                     <Button
                       key={voiceOption.name}
                       variant={selectedVoiceOption === voiceOption.name ? 'default' : 'outline'}
-                      onClick={() => setSelectedVoiceOption(voiceOption.name)}
-                      className="w-full justify-start text-left h-auto p-3"
+                      onClick={() => {
+                        if (voiceOption.isPremium && !hasPremiumVoices) {
+                          setPremiumVoiceDialogOpen(true);
+                        } else {
+                          setSelectedVoiceOption(voiceOption.name);
+                        }
+                      }}
+                      className={`w-full justify-start text-left h-auto p-3 ${
+                        voiceOption.isPremium ? 'border-purple-200 bg-purple-50' : ''
+                      }`}
                     >
-                      <div>
-                        <div className="font-medium">{voiceOption.display}</div>
+                      <div className="flex-1">
+                        <div className="font-medium flex items-center gap-2">
+                          {voiceOption.display}
+                          {voiceOption.isPremium && (
+                            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Premium</span>
+                          )}
+                        </div>
+                        {voiceOption.description && (
+                          <div className="text-xs text-gray-500 mt-1">{voiceOption.description}</div>
+                        )}
                         {voiceOption.voice && (
                           <div className="text-xs text-gray-500 mt-1">
                             {voiceOption.voice.lang} • {voiceOption.voice.localService ? 'System' : 'Online'}
@@ -1595,6 +1659,48 @@ ${dream.content}`;
                     </Button>
                   ));
                 })()}
+              </div>
+            </div>
+
+            {/* Voice Speed Control */}
+            <div>
+              <label className="text-sm font-medium mb-3 block">
+                Speech Speed: {voiceSpeed.toFixed(1)}x
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="2.0"
+                step="0.1"
+                value={voiceSpeed}
+                onChange={(e) => setVoiceSpeed(parseFloat(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>Slow (0.5x)</span>
+                <span>Normal (1.0x)</span>
+                <span>Fast (2.0x)</span>
+              </div>
+            </div>
+
+            {/* Voice Pitch Control */}
+            <div>
+              <label className="text-sm font-medium mb-3 block">
+                Voice Pitch: {voicePitch.toFixed(1)}
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="2.0"
+                step="0.1"
+                value={voicePitch}
+                onChange={(e) => setVoicePitch(parseFloat(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>Lower</span>
+                <span>Normal</span>
+                <span>Higher</span>
               </div>
             </div>
 
@@ -1613,7 +1719,7 @@ ${dream.content}`;
               </Button>
               <Button
                 onClick={() => {
-                  saveVoicePreferences(selectedVoiceGender, selectedVoiceOption);
+                  saveVoicePreferences(selectedVoiceGender, selectedVoiceOption, voiceSpeed, voicePitch);
                   setVoicePreferencesOpen(false);
                 }}
                 className="flex-1"
