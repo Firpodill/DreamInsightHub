@@ -304,7 +304,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Serve the shareable QR code page
   app.get("/qr", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "qr-share.html"));
+    res.sendFile(path.join(process.cwd(), "qr-visual.html"));
   });
 
   const httpServer = createServer(app);

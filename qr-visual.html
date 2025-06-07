@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dream Decoder QR Code</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .qr-container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        #qrcode {
+            margin: 20px 0;
+        }
+        .url {
+            font-family: monospace;
+            color: #2d3748;
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        .instructions {
+            color: #718096;
+            font-size: 14px;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h1>🌙 Dream Decoder</h1>
+        <p class="subtitle">AI-Powered Dream Analysis</p>
+        <div id="qrcode"></div>
+        <div class="url">https://b6e2195d-9d45-47f1-97d6-70f86c4eff86.replit.app</div>
+        <div class="instructions">
+            Point your phone camera at the QR code above to access the dream analysis app
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        QRCode.toCanvas(document.getElementById('qrcode'), 'https://b6e2195d-9d45-47f1-97d6-70f86c4eff86.replit.app', {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        });
+    </script>
+</body>
+</html>
