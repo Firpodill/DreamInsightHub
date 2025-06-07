@@ -23,6 +23,88 @@ export default function DreamChat() {
   const [location, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState('chat');
 
+  // Vision Tab Component
+  function VisionTab({ navigate }: { navigate: (path: string) => void }) {
+    const [savedBoards, setSavedBoards] = useState<any[]>([]);
+
+    useEffect(() => {
+      const boards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
+      setSavedBoards(boards);
+    }, []);
+
+    return (
+      <div className="space-y-4">
+        <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+          <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+          <h3 className="text-xl font-bold mb-2 text-center">Dream Vision Board Creator</h3>
+          <p className="text-gray-400 mb-4 text-center">
+            Create visual collages of your dreams with AI-generated imagery
+          </p>
+          <Button 
+            onClick={() => navigate('/vision-board')}
+            className="w-full bg-red-600 hover:bg-red-700 text-white"
+          >
+            Create New Vision Board
+          </Button>
+        </div>
+
+        {savedBoards.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-lg font-semibold text-white">Your Vision Boards</h4>
+            {savedBoards.slice(0, 3).map((board) => (
+              <div key={board.id} className="p-4 bg-gray-800 rounded-lg border border-gray-600">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h5 className="font-medium text-white">{board.title}</h5>
+                    <p className="text-sm text-gray-400 mt-1">{board.description}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {new Date(board.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {board.items?.[0]?.imageUrl && (
+                    <img 
+                      src={board.items[0].imageUrl} 
+                      alt="Vision board preview"
+                      className="w-16 h-16 object-cover rounded-lg ml-3"
+                    />
+                  )}
+                </div>
+                <Button 
+                  onClick={() => navigate('/vision-board')}
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-3 border-purple-600 text-purple-300 hover:bg-purple-800"
+                >
+                  Edit Vision Board
+                </Button>
+              </div>
+            ))}
+            {savedBoards.length > 3 && (
+              <Button 
+                onClick={() => navigate('/vision-board')}
+                variant="ghost"
+                className="w-full text-purple-400 hover:text-purple-300"
+              >
+                View All Vision Boards ({savedBoards.length})
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Check for URL parameter to set initial tab
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    if (tabParam && ['chat', 'journal', 'sleep', 'insights', 'vision'].includes(tabParam)) {
+      setActiveTab(tabParam);
+      // Clear the URL parameter after setting the tab
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDate(new Date());
@@ -322,21 +404,7 @@ export default function DreamChat() {
 
           
           <TabsContent value="vision" className="mt-6">
-            <div className="text-center space-y-4">
-              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
-                <h3 className="text-xl font-bold mb-2">Dream Vision Board Creator</h3>
-                <p className="text-gray-400 mb-4">
-                  Create visual collages of your dreams with AI-generated imagery
-                </p>
-                <Button 
-                  onClick={() => navigate('/vision-board')}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Create Vision Board
-                </Button>
-              </div>
-            </div>
+            <VisionTab navigate={navigate} />
           </TabsContent>
         </Tabs>
       </div>

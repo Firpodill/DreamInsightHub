@@ -299,7 +299,7 @@ export default function DreamAnalysis() {
                         <Button 
                           onClick={() => {
                             // Save to vision board collection
-                            const visionBoards = JSON.parse(localStorage.getItem('visionBoards') || '[]');
+                            const visionBoards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
                             const newVisionBoard = {
                               id: Date.now().toString(),
                               title: `Dream Vision - ${new Date().toLocaleDateString()}`,
@@ -319,8 +319,9 @@ export default function DreamAnalysis() {
                               updatedAt: new Date()
                             };
                             visionBoards.push(newVisionBoard);
-                            localStorage.setItem('visionBoards', JSON.stringify(visionBoards));
-                            navigate('/vision-board');
+                            localStorage.setItem('dreamVisionBoards', JSON.stringify(visionBoards));
+                            // Navigate back to main app with vision tab activated
+                            navigate('/?tab=vision');
                           }}
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                         >
