@@ -374,7 +374,7 @@ export function DreamJournal() {
         </div>
       )}
 
-      {/* Dream Entries List */}
+      {/* Dream Entries and Vision Boards List */}
       {viewMode === 'list' && (
         <div className="space-y-3">
           {isLoading ? (
@@ -382,12 +382,12 @@ export function DreamJournal() {
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               <p className="text-gray-500 mt-2">Loading dreams...</p>
             </div>
-          ) : filteredDreams.length === 0 ? (
+          ) : filteredDreams.length === 0 && filteredVisionBoards.length === 0 ? (
             <div className="text-center py-8">
               {selectedDate ? (
                 <div>
                   <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No dreams recorded on this date</p>
+                  <p className="text-gray-500">No dreams or vision boards recorded on this date</p>
                   <p className="text-sm text-gray-400 mt-1">Try selecting a different date from the calendar</p>
                 </div>
               ) : searchQuery.trim() ? (
@@ -405,19 +405,28 @@ export function DreamJournal() {
               )}
             </div>
           ) : (
-            filteredDreams.map(renderDreamEntry)
+            <>
+              {/* Vision Boards */}
+              {filteredVisionBoards.map(renderVisionBoardEntry)}
+              {/* Dreams */}
+              {filteredDreams.map(renderDreamEntry)}
+            </>
           )}
         </div>
       )}
 
       {/* Quick Stats */}
-      {dreams.length > 0 && (
+      {(dreams.length > 0 || visionBoards.length > 0) && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mt-6">
           <h3 className="font-medium text-gray-800 mb-3">Journal Stats</h3>
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-4 gap-4 text-center">
             <div>
               <div className="text-lg font-semibold text-primary">{allDreams.length}</div>
-              <div className="text-xs text-gray-500">Total Dreams</div>
+              <div className="text-xs text-gray-500">Dreams</div>
+            </div>
+            <div>
+              <div className="text-lg font-semibold text-purple-600">{visionBoards.length}</div>
+              <div className="text-xs text-gray-500">Vision Boards</div>
             </div>
             <div>
               <div className="text-lg font-semibold text-primary">

@@ -84,6 +84,14 @@ export function DreamVisionBoard() {
     localStorage.setItem('dreamVisionBoards', JSON.stringify(updatedBoards));
   };
 
+  const deleteBoard = (boardId: string) => {
+    const updatedBoards = boards.filter(board => board.id !== boardId);
+    saveBoards(updatedBoards);
+    if (currentBoard?.id === boardId) {
+      setCurrentBoard(null);
+    }
+  };
+
   const createNewBoard = () => {
     if (!newBoardTitle.trim()) return;
 
@@ -304,12 +312,19 @@ export function DreamVisionBoard() {
             {boards.map((board) => (
               <Card 
                 key={board.id} 
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => setCurrentBoard(board)}
+                className="relative cursor-pointer hover:shadow-lg transition-shadow group"
               >
-                <CardContent className="p-4">
+                <CardContent className="p-4" onClick={() => setCurrentBoard(board)}>
                   <div className="aspect-video bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg mb-3 flex items-center justify-center">
-                    <Grid className="w-8 h-8 text-white opacity-50" />
+                    {board.items?.[0]?.imageUrl ? (
+                      <img 
+                        src={board.items[0].imageUrl} 
+                        alt="Board preview"
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    ) : (
+                      <Grid className="w-8 h-8 text-white opacity-50" />
+                    )}
                   </div>
                   <h3 className="font-semibold">{board.title}</h3>
                   <p className="text-sm text-gray-600 mt-1">{board.description}</p>
@@ -322,6 +337,17 @@ export function DreamVisionBoard() {
                     </span>
                   </div>
                 </CardContent>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteBoard(board.id);
+                  }}
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 h-8 w-8"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               </Card>
             ))}
           </div>
