@@ -4,8 +4,9 @@ import fs from 'fs';
 async function generateDeploymentQR() {
   try {
     // Get the Replit domain URL for the deployed app
-    const replId = process.env.REPL_ID || 'dreamspeak-app';
-    const deploymentUrl = `https://${replId}.replit.app`;
+    const replOwner = process.env.REPL_OWNER || 'francescaletter';
+    const replSlug = process.env.REPL_SLUG || 'workspace';
+    const deploymentUrl = `https://${replSlug}--${replOwner}.replit.app`;
     
     console.log('Generating QR code for:', deploymentUrl);
     
