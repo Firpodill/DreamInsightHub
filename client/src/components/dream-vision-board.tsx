@@ -335,7 +335,7 @@ export function DreamVisionBoard() {
 
     // Standard system voices with enhanced selection
     const femaleVoices = [
-      { name: 'auto', display: 'Auto Select Female', voice: null },
+      { name: 'auto', display: 'Auto Select Female', voice: null, isPremium: false, description: undefined },
       ...voices.filter(voice => 
         voice.lang.startsWith('en') && (
           voice.name.toLowerCase().includes('samantha') ||
@@ -354,12 +354,12 @@ export function DreamVisionBoard() {
           voice.name.toLowerCase().includes('tessa') ||
           voice.name.toLowerCase().includes('veena')
         )
-      ).map(voice => ({ name: voice.name, display: voice.name, voice })),
+      ).map(voice => ({ name: voice.name, display: voice.name, voice, isPremium: false, description: undefined })),
       ...(hasPremiumVoices ? premiumFemaleVoices : [])
     ];
 
     const maleVoices = [
-      { name: 'auto', display: 'Auto Select Male', voice: null },
+      { name: 'auto', display: 'Auto Select Male', voice: null, isPremium: false, description: undefined },
       ...voices.filter(voice => 
         voice.lang.startsWith('en') && (
           voice.name.toLowerCase().includes('david') ||
@@ -378,7 +378,7 @@ export function DreamVisionBoard() {
           voice.name.toLowerCase().includes('diego') ||
           voice.name.toLowerCase().includes('jorge')
         )
-      ).map(voice => ({ name: voice.name, display: voice.name, voice })),
+      ).map(voice => ({ name: voice.name, display: voice.name, voice, isPremium: false, description: undefined })),
       ...(hasPremiumVoices ? premiumMaleVoices : [])
     ];
 
@@ -1630,25 +1630,25 @@ ${dream.content}`;
                       key={voiceOption.name}
                       variant={selectedVoiceOption === voiceOption.name ? 'default' : 'outline'}
                       onClick={() => {
-                        if (voiceOption.isPremium && !hasPremiumVoices) {
+                        if ((voiceOption as any).isPremium && !hasPremiumVoices) {
                           setPremiumVoiceDialogOpen(true);
                         } else {
                           setSelectedVoiceOption(voiceOption.name);
                         }
                       }}
                       className={`w-full justify-start text-left h-auto p-3 ${
-                        voiceOption.isPremium ? 'border-purple-200 bg-purple-50' : ''
+                        (voiceOption as any).isPremium ? 'border-purple-200 bg-purple-50' : ''
                       }`}
                     >
                       <div className="flex-1">
                         <div className="font-medium flex items-center gap-2">
                           {voiceOption.display}
-                          {voiceOption.isPremium && (
+                          {(voiceOption as any).isPremium && (
                             <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Premium</span>
                           )}
                         </div>
-                        {voiceOption.description && (
-                          <div className="text-xs text-gray-500 mt-1">{voiceOption.description}</div>
+                        {(voiceOption as any).description && (
+                          <div className="text-xs text-gray-500 mt-1">{(voiceOption as any).description}</div>
                         )}
                         {voiceOption.voice && (
                           <div className="text-xs text-gray-500 mt-1">
