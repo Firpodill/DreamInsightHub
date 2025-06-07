@@ -32,7 +32,8 @@ export default function DreamChat() {
   }, []);
 
   const formatDay = (date: Date) => {
-    return date.getDate().toString();
+    const day = date.getDate();
+    return day < 10 ? `${day}_` : day.toString();
   };
 
   const formatDayName = (date: Date) => {
