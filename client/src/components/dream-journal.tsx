@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,10 +13,17 @@ export function DreamJournal() {
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('calendar');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [visionBoards, setVisionBoards] = useState<any[]>([]);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
 
   const dreams = searchQuery.trim() ? searchResults : allDreams;
+
+  // Load vision boards
+  useEffect(() => {
+    const boards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
+    setVisionBoards(boards);
+  }, []);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -43,8 +50,18 @@ export function DreamJournal() {
     });
   };
 
+  const getVisionBoardsByDate = (date: Date) => {
+    const dateString = date.toISOString().split('T')[0];
+    return visionBoards.filter(board => {
+      const boardDate = new Date(board.createdAt).toISOString().split('T')[0];
+      return boardDate === dateString;
+    });
+  };
+
   const getDreamCountForDate = (date: Date) => {
-    return getDreamsByDate(date).length;
+    const dreams = getDreamsByDate(date);
+    const boards = getVisionBoardsByDate(date);
+    return dreams.length + boards.length;
   };
 
   const getMonthName = (monthIndex: number) => {
@@ -129,10 +146,60 @@ export function DreamJournal() {
     );
   };
 
-  // Filter dreams by selected date if in calendar mode
+  // Filter dreams and vision boards by selected date if in calendar mode
   const filteredDreams = selectedDate && viewMode === 'list' 
     ? getDreamsByDate(selectedDate)
     : dreams;
+
+  const filteredVisionBoards = selectedDate && viewMode === 'list'
+    ? getVisionBoardsByDate(selectedDate)
+    : [];
+
+  // Create render function for vision boards
+  const renderVisionBoardEntry = (board: any) => (
+    <Card key={`vision-${board.id}`} className="overflow-hidden border border-purple-200 hover:shadow-md transition-shadow bg-gradient-to-br from-purple-50 to-pink-50">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1">
+            <div className="flex items-center mb-1">
+              <ImageIcon className="w-4 h-4 text-purple-600 mr-2" />
+              <h3 className="font-medium text-gray-800 line-clamp-1">{board.title}</h3>
+            </div>
+            <p className="text-xs text-gray-500 flex items-center mt-1">
+              <Calendar className="w-3 h-3 mr-1" />
+              {formatDate(board.createdAt)}
+            </p>
+          </div>
+          {board.items?.[0]?.imageUrl && (
+            <img 
+              src={board.items[0].imageUrl} 
+              alt="Vision board preview"
+              className="w-16 h-16 object-cover rounded-lg ml-3 border border-purple-200"
+            />
+          )}
+        </div>
+        
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          {board.description}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <span className="flex items-center">
+              <ImageIcon className="w-3 h-3 mr-1" />
+              Vision Board
+            </span>
+            <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700">
+              {board.items?.length || 0} items
+            </Badge>
+          </div>
+          <Button variant="ghost" size="sm" className="text-purple-600 text-sm font-medium h-auto p-0">
+            View Board
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   const getArchetypeColor = (archetype: string) => {
     const colors = {

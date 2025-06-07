@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock, Trash2 } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
@@ -42,6 +42,12 @@ export default function DreamChat() {
     const boards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
     setSavedBoards(boards);
   }, [activeTab]); // Reload when switching to vision tab
+
+  const deleteVisionBoard = (boardId: string) => {
+    const updatedBoards = savedBoards.filter(board => board.id !== boardId);
+    setSavedBoards(updatedBoards);
+    localStorage.setItem('dreamVisionBoards', JSON.stringify(updatedBoards));
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -377,6 +383,14 @@ export default function DreamChat() {
                             className="w-16 h-16 object-cover rounded-lg ml-3"
                           />
                         )}
+                        <Button
+                          onClick={() => deleteVisionBoard(board.id)}
+                          variant="ghost"
+                          size="sm"
+                          className="ml-2 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                       <Button 
                         onClick={() => navigate('/vision-board')}
