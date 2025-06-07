@@ -4,13 +4,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock, Trash2 } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock, Trash2, Archive } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
 import { SleepCycleTracker } from '@/components/sleep-cycle-tracker';
 import { DreamNotificationSystem } from '@/components/dream-notification-system';
+import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 
 
 export default function DreamChat() {
@@ -306,7 +307,7 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
+          <TabsList className="grid w-full grid-cols-6 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <MessageCircle className="w-3 h-3 mr-1" />
               Chat
@@ -326,6 +327,10 @@ export default function DreamChat() {
             <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Palette className="w-3 h-3 mr-1" />
               Visions
+            </TabsTrigger>
+            <TabsTrigger value="memory" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Archive className="w-3 h-3 mr-1" />
+              Memory
             </TabsTrigger>
           </TabsList>
           
@@ -413,6 +418,24 @@ export default function DreamChat() {
                   )}
                 </div>
               )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="memory" className="mt-6">
+            <div className="space-y-4">
+              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
+                <Archive className="w-12 h-12 mx-auto mb-4 text-purple-400" />
+                <h3 className="text-xl font-bold mb-2 text-center">Dream Memory Capsules</h3>
+                <p className="text-gray-400 mb-4 text-center">
+                  Preserve and organize your dreams into meaningful collections
+                </p>
+                <Button 
+                  onClick={() => navigate('/memory-capsule')}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Open Memory Capsule System
+                </Button>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

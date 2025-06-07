@@ -593,15 +593,24 @@ export function DreamMemoryCapsule() {
                           </p>
                           <div className="flex items-center justify-between text-xs text-gray-400">
                             <span>{formatDate(new Date(dream.createdAt))}</span>
-                            {dream.analysis && Array.isArray(dream.analysis.archetypes) && (
-                              <div className="flex space-x-2">
-                                {dream.analysis.archetypes.slice(0, 3).map((archetype: string) => (
-                                  <Badge key={archetype} variant="outline" className="text-xs">
-                                    {archetype}
-                                  </Badge>
-                                ))}
-                              </div>
-                            )}
+                            {dream.analysis && (() => {
+                              try {
+                                const parsedAnalysis = typeof dream.analysis === 'string' 
+                                  ? JSON.parse(dream.analysis) 
+                                  : dream.analysis;
+                                return Array.isArray(parsedAnalysis.archetypes) && (
+                                  <div className="flex space-x-2">
+                                    {parsedAnalysis.archetypes.slice(0, 3).map((archetype: string) => (
+                                      <Badge key={archetype} variant="outline" className="text-xs">
+                                        {archetype}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                );
+                              } catch {
+                                return null;
+                              }
+                            })()}
                           </div>
                         </CardContent>
                       </Card>
