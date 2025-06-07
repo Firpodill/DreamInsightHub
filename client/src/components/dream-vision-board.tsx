@@ -29,7 +29,12 @@ import {
   Pause,
   Crown,
   Upload,
-  Camera
+  Camera,
+  Layout,
+  Layers3,
+  Palette as PaletteIcon,
+  Check,
+  X
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
@@ -103,6 +108,11 @@ export function DreamVisionBoard() {
   const [photoUploadDialogOpen, setPhotoUploadDialogOpen] = useState(false);
   const [selectedDreamForPhoto, setSelectedDreamForPhoto] = useState<Dream | null>(null);
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
+  const [collageCreatorOpen, setCollageCreatorOpen] = useState(false);
+  const [selectedDreamsForCollage, setSelectedDreamsForCollage] = useState<Dream[]>([]);
+  const [collagePhotos, setCollagePhotos] = useState<string[]>([]);
+  const [collageTemplate, setCollageTemplate] = useState<string>('grid');
+  const [collageTheme, setCollageTheme] = useState<string>('dreamy');
 
   const { data: dreams = [] } = useDreams();
   const { toast } = useToast();
@@ -1079,6 +1089,180 @@ export function DreamVisionBoard() {
     }
   };
 
+  // Collage Creator Functions
+  const handleMultiplePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const newPhoto = e.target?.result as string;
+        setCollagePhotos(prev => [...prev, newPhoto]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const toggleDreamSelection = (dream: Dream) => {
+    setSelectedDreamsForCollage(prev => {
+      const isSelected = prev.some(d => d.id === dream.id);
+      if (isSelected) {
+        return prev.filter(d => d.id !== dream.id);
+      } else {
+        return [...prev, dream];
+      }
+    });
+  };
+
+  const createDreamCollage = async () => {
+    if (!currentBoard || selectedDreamsForCollage.length === 0) return;
+
+    try {
+      // Generate AI images for selected dreams
+      const collageImages: VisionBoardItem[] = [];
+      
+      for (let i = 0; i < selectedDreamsForCollage.length; i++) {
+        const dream = selectedDreamsForCollage[i];
+        let prompt = `Dream collage element ${i + 1}: ${dream.content.substring(0, 150)}. Style: ${collageTheme} aesthetic, suitable for collage composition.`;
+        
+        if (collagePhotos.length > 0) {
+          prompt += ` Harmonize with personal photography elements to create cohesive visual narrative.`;
+        }
+
+        const result = await generateImage.mutateAsync({
+          prompt: prompt,
+          dreamId: dream.id
+        });
+
+        if (result.imageUrl) {
+          const position = getCollagePosition(i, selectedDreamsForCollage.length, collageTemplate);
+          const aiImageItem: VisionBoardItem = {
+            id: `collage-ai-${Date.now()}-${i}`,
+            type: 'image',
+            content: `Dream: ${dream.title || 'Untitled'}`,
+            imageUrl: result.imageUrl,
+            position: position,
+            size: getCollageSize(collageTemplate),
+            rotation: 0,
+            zIndex: i + 1
+          };
+          collageImages.push(aiImageItem);
+        }
+      }
+
+      // Add user photos to collage
+      collagePhotos.forEach((photo, index) => {
+        const position = getCollagePosition(
+          selectedDreamsForCollage.length + index,
+          selectedDreamsForCollage.length + collagePhotos.length,
+          collageTemplate
+        );
+        
+        const photoItem: VisionBoardItem = {
+          id: `collage-photo-${Date.now()}-${index}`,
+          type: 'image',
+          content: `Personal Photo ${index + 1}`,
+          imageUrl: photo,
+          position: position,
+          size: getCollageSize(collageTemplate),
+          rotation: 0,
+          zIndex: selectedDreamsForCollage.length + index + 1
+        };
+        collageImages.push(photoItem);
+      });
+
+      // Add all collage items to board
+      collageImages.forEach(item => addItemToBoard(item));
+
+      // Add collage title
+      const titleItem: VisionBoardItem = {
+        id: `collage-title-${Date.now()}`,
+        type: 'text',
+        content: `Dream Collage: ${selectedDreamsForCollage.map(d => d.title || 'Untitled').join(' + ')}`,
+        position: { x: 50, y: 20 },
+        size: { width: 400, height: 40 },
+        rotation: 0,
+        zIndex: 100,
+        style: {
+          fontSize: 24,
+          fontWeight: 'bold',
+          color: '#4c1d95',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: 8
+        }
+      };
+      addItemToBoard(titleItem);
+
+      // Reset collage creator state
+      setCollageCreatorOpen(false);
+      setSelectedDreamsForCollage([]);
+      setCollagePhotos([]);
+      
+      toast({
+        title: "Dream Collage Created!",
+        description: `Combined ${selectedDreamsForCollage.length} dreams with ${collagePhotos.length} photos`,
+      });
+    } catch (error) {
+      console.error('Error creating collage:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create collage. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getCollagePosition = (index: number, total: number, template: string) => {
+    const canvasWidth = 600;
+    const canvasHeight = 400;
+    
+    switch (template) {
+      case 'grid':
+        const cols = Math.ceil(Math.sqrt(total));
+        const rows = Math.ceil(total / cols);
+        const cellWidth = canvasWidth / cols;
+        const cellHeight = canvasHeight / rows;
+        const col = index % cols;
+        const row = Math.floor(index / cols);
+        return {
+          x: col * cellWidth + 10,
+          y: row * cellHeight + 60
+        };
+      
+      case 'mosaic':
+        const angle = (index / total) * 2 * Math.PI;
+        const radius = Math.min(canvasWidth, canvasHeight) * 0.3;
+        return {
+          x: canvasWidth / 2 + Math.cos(angle) * radius - 100,
+          y: canvasHeight / 2 + Math.sin(angle) * radius - 40
+        };
+      
+      case 'cascade':
+        return {
+          x: 50 + (index * 30),
+          y: 80 + (index * 40)
+        };
+      
+      default:
+        return {
+          x: Math.random() * (canvasWidth - 200),
+          y: Math.random() * (canvasHeight - 150) + 60
+        };
+    }
+  };
+
+  const getCollageSize = (template: string) => {
+    switch (template) {
+      case 'grid':
+        return { width: 180, height: 180 };
+      case 'mosaic':
+        return { width: 150, height: 150 };
+      case 'cascade':
+        return { width: 200, height: 160 };
+      default:
+        return { width: 180, height: 180 };
+    }
+  };
+
   // Create comprehensive narration text combining dream content and vision board
   const createFullNarrationText = (dream?: Dream, board?: VisionBoard): string => {
     let narration = '';
@@ -1444,6 +1628,16 @@ ${dream.content}`;
               title="Voice Settings"
             >
               ⚙️
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setCollageCreatorOpen(true)}
+              className="text-blue-600 hover:text-blue-800"
+              title="Create Dream Collage"
+              disabled={dreams.length < 2}
+            >
+              <Layers3 size={16} />
             </Button>
           </div>
           
@@ -2268,6 +2462,196 @@ ${dream.content}`;
             {!uploadedPhoto && (
               <p className="text-xs text-gray-500 text-center">
                 Skip photo upload to generate AI visualization only
+              </p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dream Collage Creator Dialog */}
+      <Dialog open={collageCreatorOpen} onOpenChange={setCollageCreatorOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Layers3 className="w-5 h-5 text-blue-600" />
+              Interactive Dream Photo Collage Creator
+            </DialogTitle>
+            <DialogDescription>
+              Combine multiple dreams with personal photos to create an artistic collage visualization.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Dream Selection */}
+            <div>
+              <h4 className="font-medium mb-3">Select Dreams to Include ({selectedDreamsForCollage.length} selected)</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto border rounded-lg p-3">
+                {dreams.map((dream) => (
+                  <div
+                    key={dream.id}
+                    className={`p-3 border rounded-lg cursor-pointer transition-colors ${
+                      selectedDreamsForCollage.some(d => d.id === dream.id)
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    onClick={() => toggleDreamSelection(dream)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h5 className="font-medium text-sm">{dream.title || 'Untitled Dream'}</h5>
+                        <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                          {dream.content.substring(0, 100)}...
+                        </p>
+                      </div>
+                      {selectedDreamsForCollage.some(d => d.id === dream.id) && (
+                        <Check className="w-4 h-4 text-blue-600 ml-2 flex-shrink-0" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Photo Upload */}
+            <div>
+              <h4 className="font-medium mb-3">Upload Personal Photos ({collagePhotos.length} added)</h4>
+              <div className="space-y-3">
+                <label className="block">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                    <Upload className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600">Click to upload multiple photos</p>
+                    <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple files</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleMultiplePhotoUpload}
+                      className="hidden"
+                    />
+                  </div>
+                </label>
+
+                {collagePhotos.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2">
+                    {collagePhotos.map((photo, index) => (
+                      <div key={index} className="relative">
+                        <img 
+                          src={photo} 
+                          alt={`Collage photo ${index + 1}`}
+                          className="w-full h-16 object-cover rounded border"
+                        />
+                        <button
+                          onClick={() => setCollagePhotos(prev => prev.filter((_, i) => i !== index))}
+                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Layout Templates */}
+            <div>
+              <h4 className="font-medium mb-3">Collage Layout</h4>
+              <div className="grid grid-cols-4 gap-3">
+                {[
+                  { id: 'grid', name: 'Grid', icon: '⊞', description: 'Organized grid layout' },
+                  { id: 'mosaic', name: 'Mosaic', icon: '❋', description: 'Circular mosaic pattern' },
+                  { id: 'cascade', name: 'Cascade', icon: '≋', description: 'Overlapping cascade' },
+                  { id: 'organic', name: 'Organic', icon: '❈', description: 'Random organic placement' }
+                ].map((template) => (
+                  <Button
+                    key={template.id}
+                    variant={collageTemplate === template.id ? 'default' : 'outline'}
+                    onClick={() => setCollageTemplate(template.id)}
+                    className="h-auto p-3 flex flex-col items-center gap-2"
+                  >
+                    <span className="text-2xl">{template.icon}</span>
+                    <div className="text-center">
+                      <div className="font-medium text-sm">{template.name}</div>
+                      <div className="text-xs text-gray-500">{template.description}</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Visual Themes */}
+            <div>
+              <h4 className="font-medium mb-3">Visual Theme</h4>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { id: 'dreamy', name: 'Dreamy', color: 'bg-purple-100 text-purple-800', description: 'Soft, ethereal atmosphere' },
+                  { id: 'vibrant', name: 'Vibrant', color: 'bg-orange-100 text-orange-800', description: 'Bold, energetic colors' },
+                  { id: 'mystical', name: 'Mystical', color: 'bg-indigo-100 text-indigo-800', description: 'Dark, mysterious mood' },
+                  { id: 'natural', name: 'Natural', color: 'bg-green-100 text-green-800', description: 'Earthy, organic tones' },
+                  { id: 'cosmic', name: 'Cosmic', color: 'bg-blue-100 text-blue-800', description: 'Space-like, vast feeling' },
+                  { id: 'abstract', name: 'Abstract', color: 'bg-pink-100 text-pink-800', description: 'Artistic, conceptual style' }
+                ].map((theme) => (
+                  <Button
+                    key={theme.id}
+                    variant={collageTheme === theme.id ? 'default' : 'outline'}
+                    onClick={() => setCollageTheme(theme.id)}
+                    className="h-auto p-3 justify-start"
+                  >
+                    <div>
+                      <div className={`inline-block px-2 py-1 rounded text-xs ${theme.color} mb-1`}>
+                        {theme.name}
+                      </div>
+                      <div className="text-xs text-gray-500">{theme.description}</div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Summary */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-medium mb-2">Collage Summary</h4>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p>• {selectedDreamsForCollage.length} dreams selected</p>
+                <p>• {collagePhotos.length} personal photos added</p>
+                <p>• Layout: {collageTemplate.charAt(0).toUpperCase() + collageTemplate.slice(1)}</p>
+                <p>• Theme: {collageTheme.charAt(0).toUpperCase() + collageTheme.slice(1)}</p>
+                <p>• Total elements: {selectedDreamsForCollage.length + collagePhotos.length + 1} (including title)</p>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setCollageCreatorOpen(false);
+                  setSelectedDreamsForCollage([]);
+                  setCollagePhotos([]);
+                }}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={createDreamCollage}
+                disabled={generateImage.isPending || selectedDreamsForCollage.length === 0 || !currentBoard}
+                className="flex-1"
+              >
+                {generateImage.isPending ? (
+                  "Creating Collage..."
+                ) : (
+                  <>
+                    <PaletteIcon size={16} className="mr-2" />
+                    Create Dream Collage
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {selectedDreamsForCollage.length === 0 && (
+              <p className="text-sm text-gray-500 text-center">
+                Select at least one dream to create a collage
               </p>
             )}
           </div>
