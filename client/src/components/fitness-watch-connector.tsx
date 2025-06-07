@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Smartphone, Watch, Wifi, WifiOff, Activity, Heart, Moon, CheckCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion to reduce bundle size
 
 interface FitnessDevice {
   id: string;
@@ -368,10 +368,8 @@ export function FitnessWatchConnector() {
             {/* Available Devices */}
             <div className="grid grid-cols-1 gap-3">
               {devices.map((device) => (
-                <motion.div
+                <div
                   key={device.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
                   className={`p-3 rounded-lg border ${
                     device.connected 
                       ? 'bg-green-900/20 border-green-600' 
@@ -452,7 +450,7 @@ export function FitnessWatchConnector() {
                       </Badge>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
