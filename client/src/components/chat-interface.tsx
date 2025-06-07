@@ -91,20 +91,20 @@ export function ChatInterface() {
             </div>
             
             {inputMode === 'voice' && isTranscribing ? (
-              <div className="w-full h-full flex flex-col speech-bubble-text relative">
-                <div className="voice-transcript-container text-gray-900 text-base leading-relaxed font-medium text-center overflow-y-auto scrollbar-hide flex-1 flex items-center justify-center px-2">
+              <div className="w-full h-full flex flex-col relative">
+                <div className="voice-transcript-container speech-bubble-text text-gray-900 text-base leading-relaxed font-medium text-center overflow-y-auto scrollbar-hide flex-1 flex items-center justify-center px-2">
                   <div className="break-words">
                     {currentTranscript || "Listening..."}
                   </div>
                 </div>
                 {!currentTranscript && (
-                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-900 px-2 text-center bg-white/80 rounded-lg py-1 ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 20 }}>
+                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-900 px-3 py-2 text-center bg-white border border-gray-200 rounded-lg shadow-sm ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 30 }}>
                     🎤 Recording... Click SPEAK again to stop
                   </div>
                 )}
               </div>
             ) : (
-              <div className="w-full h-full flex flex-col speech-bubble-text relative">
+              <div className="w-full h-full flex flex-col relative">
                 <Textarea
                   value={dreamText}
                   onChange={(e) => {
@@ -115,7 +115,7 @@ export function ChatInterface() {
                     }
                   }}
                   placeholder={inputMode === 'text' ? "Type your dream here..." : ""}
-                  className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center scrollbar-hide"
+                  className="w-full h-full bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-500 text-base leading-relaxed font-medium text-center speech-bubble-text scrollbar-hide"
                   style={{
                     wordWrap: 'break-word',
                     overflowWrap: 'break-word',
@@ -134,7 +134,7 @@ export function ChatInterface() {
                   }}
                 />
                 {inputMode === 'text' && !dreamText.trim() && (
-                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-900 px-2 text-center bg-white/80 rounded-lg py-1 ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 20 }}>
+                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-900 px-3 py-2 text-center bg-white border border-gray-200 rounded-lg shadow-sm ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 30 }}>
                     ⌨️ Start typing your dream...
                   </div>
                 )}
