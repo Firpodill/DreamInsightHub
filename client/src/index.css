@@ -208,6 +208,16 @@
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
   }
+
+  /* Reverse spin animation to counter-rotate text */
+  @keyframes reverse-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .animate-reverse-spin {
+    animation: reverse-spin 2s linear infinite;
+  }
   
   @keyframes shimmer {
     0% { background-position: -200px 0; }

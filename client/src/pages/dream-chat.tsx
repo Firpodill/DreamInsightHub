@@ -134,8 +134,8 @@ export default function DreamChat() {
                   boxShadow: '0 0 2px rgba(255, 255, 255, 0.8)'
                 }}></div>
               </div>
-              {/* Static day number overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              {/* Static day number overlay - counter-rotates to stay still */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-reverse-spin">
                 <div className="text-xs font-bold text-white leading-none">
                   {formatDay(currentDate)}
                 </div>
