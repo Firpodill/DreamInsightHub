@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
+import { useLocation } from 'wouter';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -18,6 +19,7 @@ export function DreamJournal() {
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
   const { speak, stop, isPlaying } = useNaturalVoice();
+  const [, setLocation] = useLocation();
 
   const dreams = searchQuery.trim() ? searchResults : allDreams;
 
@@ -204,8 +206,16 @@ export function DreamJournal() {
               {board.items?.length || 0} items
             </Badge>
           </div>
-          <Button variant="ghost" size="sm" className="text-purple-600 text-sm font-medium h-auto p-0">
-            View Board
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-purple-600 text-sm font-medium h-auto p-0"
+            onClick={() => {
+              localStorage.setItem('currentVisionBoardId', board.id);
+              setLocation('/vision-board');
+            }}
+          >
+            View Details
           </Button>
         </div>
       </CardContent>

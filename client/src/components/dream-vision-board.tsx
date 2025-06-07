@@ -96,7 +96,7 @@ export function DreamVisionBoard() {
   const generateImage = useGenerateImage();
   const { speak, stop, isPlaying } = useNaturalVoice();
 
-  // Load boards from localStorage
+  // Load boards from localStorage and auto-select specific board if requested
   useEffect(() => {
     const savedBoards = localStorage.getItem('dreamVisionBoards');
     if (savedBoards) {
@@ -106,6 +106,16 @@ export function DreamVisionBoard() {
         updatedAt: new Date(board.updatedAt)
       }));
       setBoards(parsedBoards);
+      
+      // Check if user navigated to a specific board from calendar
+      const requestedBoardId = localStorage.getItem('currentVisionBoardId');
+      if (requestedBoardId) {
+        const requestedBoard = parsedBoards.find((board: any) => board.id === requestedBoardId);
+        if (requestedBoard) {
+          setCurrentBoard(requestedBoard);
+        }
+        localStorage.removeItem('currentVisionBoardId');
+      }
     }
   }, []);
 
