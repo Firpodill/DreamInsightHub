@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import type { Dream } from '@shared/schema';
 
@@ -14,6 +14,7 @@ export function DreamJournal() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visionBoards, setVisionBoards] = useState<any[]>([]);
+  const [isPlaying, setIsPlaying] = useState(false);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
 

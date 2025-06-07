@@ -18,7 +18,11 @@ import {
   Save,
   Share2,
   Grid,
-  Layers
+  Layers,
+  Volume2,
+  Mail,
+  MessageSquare,
+  Copy
 } from 'lucide-react';
 import { useDreams, useGenerateImage } from '@/hooks/use-dreams';
 import type { Dream } from '@shared/schema';
@@ -61,6 +65,10 @@ export function DreamVisionBoard() {
   const [newBoardTitle, setNewBoardTitle] = useState('');
   const [newBoardDescription, setNewBoardDescription] = useState('');
   const [generationPrompt, setGenerationPrompt] = useState('');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [shareEmail, setShareEmail] = useState('');
+  const [shareMessage, setShareMessage] = useState('');
 
   const { data: dreams = [] } = useDreams();
   const generateImage = useGenerateImage();
@@ -89,6 +97,133 @@ export function DreamVisionBoard() {
     saveBoards(updatedBoards);
     if (currentBoard?.id === boardId) {
       setCurrentBoard(null);
+    }
+  };
+
+  // Voice playback for dream text
+  const playDreamText = (dreamText: string) => {
+    if (isPlaying) {
+      speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(dreamText);
+    utterance.rate = 0.8;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+    
+    utterance.onstart = () => setIsPlaying(true);
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+
+    speechSynthesis.speak(utterance);
+  };
+
+  // Save vision board
+  const handleSave = () => {
+    if (!currentBoard) return;
+    
+    const updatedBoard = {
+      ...currentBoard,
+      updatedAt: new Date()
+    };
+    
+    const updatedBoards = boards.map(board => 
+      board.id === currentBoard.id ? updatedBoard : board
+    );
+    
+    saveBoards(updatedBoards);
+    setCurrentBoard(updatedBoard);
+    
+    // Show success feedback
+    alert('Vision board saved successfully!');
+  };
+
+  // Export vision board as image
+  const handleExport = async () => {
+    if (!currentBoard) return;
+    
+    try {
+      // Create a canvas to render the vision board
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        alert('Canvas not supported in this browser');
+        return;
+      }
+      
+      canvas.width = 1200;
+      canvas.height = 800;
+      
+      // Fill background
+      ctx.fillStyle = currentBoard.background;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add title
+      ctx.fillStyle = '#000000';
+      ctx.font = '24px Arial';
+      ctx.fillText(currentBoard.title, 20, 40);
+      
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          alert('Failed to create image');
+          return;
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+      
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Export failed. Please try again.');
+    }
+  };
+
+  // Share vision board
+  const handleShare = () => {
+    setShareDialogOpen(true);
+  };
+
+  // Send share via email/text
+  const sendShare = (method: 'email' | 'sms') => {
+    if (!currentBoard || !shareEmail.trim()) return;
+    
+    const shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    
+    if (method === 'email') {
+      const subject = `Dream Vision Board: ${currentBoard.title}`;
+      const mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      window.open(mailtoUrl);
+    } else {
+      const smsUrl = `sms:${shareEmail}?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUrl);
+    }
+    
+    setShareDialogOpen(false);
+    setShareEmail('');
+    setShareMessage('');
+  };
+
+  // Copy share link to clipboard
+  const copyToClipboard = async () => {
+    if (!currentBoard) return;
+    
+    const shareText = `My dream vision board: "${currentBoard.title}"\n\n${currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    
+    try {
+      await navigator.clipboard.writeText(shareText);
+      alert('Vision board details copied to clipboard!');
+    } catch (error) {
+      console.error('Failed to copy:', error);
+      alert('Copy failed. Please try again.');
     }
   };
 
@@ -375,20 +510,74 @@ export function DreamVisionBoard() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleSave}>
             <Save size={16} className="mr-1" />
             Save
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleShare}>
             <Share2 size={16} className="mr-1" />
             Share
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleExport}>
             <Download size={16} className="mr-1" />
             Export
           </Button>
         </div>
       </div>
+
+      {/* Share Dialog */}
+      <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Vision Board</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Email or Phone Number</label>
+              <Input
+                value={shareEmail}
+                onChange={(e) => setShareEmail(e.target.value)}
+                placeholder="friend@example.com or +1234567890"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Personal Message (Optional)</label>
+              <Textarea
+                value={shareMessage}
+                onChange={(e) => setShareMessage(e.target.value)}
+                placeholder="Add a personal note..."
+                rows={3}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => sendShare('email')}
+                disabled={!shareEmail.trim()}
+                className="flex-1"
+              >
+                <Mail size={16} className="mr-2" />
+                Send Email
+              </Button>
+              <Button 
+                onClick={() => sendShare('sms')}
+                disabled={!shareEmail.trim()}
+                variant="outline"
+                className="flex-1"
+              >
+                <MessageSquare size={16} className="mr-2" />
+                Send Text
+              </Button>
+              <Button 
+                onClick={copyToClipboard}
+                variant="outline"
+              >
+                <Copy size={16} className="mr-2" />
+                Copy
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="flex-1 flex">
         {/* Sidebar */}
@@ -406,15 +595,26 @@ export function DreamVisionBoard() {
                 <Card key={dream.id} className="cursor-pointer">
                   <CardContent className="p-3">
                     <p className="text-sm mb-2">{dream.content.substring(0, 100)}...</p>
-                    <Button 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => generateImageFromDream(dream)}
-                      disabled={generateImage.isPending}
-                    >
-                      <Sparkles size={14} className="mr-1" />
-                      Generate Vision
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => playDreamText(dream.content)}
+                        className="flex-1"
+                      >
+                        <Volume2 size={14} className="mr-1" />
+                        {isPlaying ? 'Stop' : 'Listen'}
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => generateImageFromDream(dream)}
+                        disabled={generateImage.isPending}
+                      >
+                        <Sparkles size={14} className="mr-1" />
+                        Generate Vision
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
