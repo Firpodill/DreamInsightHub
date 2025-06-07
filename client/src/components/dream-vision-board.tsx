@@ -267,96 +267,89 @@ export function DreamVisionBoard() {
   const generateDefaultVoice = async (text: string, gender: 'female' | 'male') => {
     setIsGeneratingVoice(true);
     try {
+      // Ensure voices are loaded
+      const voices = speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        // Wait for voices to load
+        await new Promise(resolve => {
+          speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+        });
+      }
+
+      const availableVoices = speechSynthesis.getVoices();
+      console.log('Available voices:', availableVoices.map(v => ({ name: v.name, lang: v.lang })));
+      
       // Use Web Speech API to generate audio with selected voice
       const utterance = new SpeechSynthesisUtterance(text);
-      const voices = speechSynthesis.getVoices();
       
-      // Filter voices by gender preference
-      let preferredVoices = voices.filter(voice => {
-        const voiceName = voice.name.toLowerCase();
-        if (gender === 'female') {
-          return voice.lang.startsWith('en') && (
-            voiceName.includes('female') || 
-            voiceName.includes('woman') ||
-            voiceName.includes('samantha') ||
-            voiceName.includes('karen') ||
-            voiceName.includes('susan') ||
-            voiceName.includes('zira')
-          );
-        } else {
-          return voice.lang.startsWith('en') && (
-            voiceName.includes('male') || 
-            voiceName.includes('man') ||
-            voiceName.includes('david') ||
-            voiceName.includes('mark') ||
-            voiceName.includes('daniel')
-          );
+      // Better voice filtering logic
+      let selectedVoice = null;
+      
+      if (gender === 'female') {
+        // Look for female voices in order of preference
+        selectedVoice = availableVoices.find(voice => 
+          voice.lang.startsWith('en') && (
+            voice.name.toLowerCase().includes('female') ||
+            voice.name.toLowerCase().includes('woman') ||
+            voice.name.toLowerCase().includes('samantha') ||
+            voice.name.toLowerCase().includes('karen') ||
+            voice.name.toLowerCase().includes('susan') ||
+            voice.name.toLowerCase().includes('zira') ||
+            voice.name.toLowerCase().includes('alex') ||
+            voice.name.toLowerCase().includes('victoria') ||
+            voice.name.toLowerCase().includes('hazel')
+          )
+        );
+        
+        // If no specific female voice found, use higher pitch with any voice
+        if (!selectedVoice) {
+          selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en'));
         }
-      });
-
-      // Fallback to any English voice if no gender-specific voice found
-      if (preferredVoices.length === 0) {
-        preferredVoices = voices.filter(voice => voice.lang.startsWith('en'));
+        
+        utterance.pitch = 1.2; // Higher pitch for female
+        utterance.rate = 0.9;
+      } else {
+        // Look for male voices
+        selectedVoice = availableVoices.find(voice => 
+          voice.lang.startsWith('en') && (
+            voice.name.toLowerCase().includes('male') ||
+            voice.name.toLowerCase().includes('man') ||
+            voice.name.toLowerCase().includes('david') ||
+            voice.name.toLowerCase().includes('mark') ||
+            voice.name.toLowerCase().includes('daniel') ||
+            voice.name.toLowerCase().includes('james') ||
+            voice.name.toLowerCase().includes('tom') ||
+            voice.name.toLowerCase().includes('fred')
+          )
+        );
+        
+        // If no specific male voice found, use lower pitch with any voice
+        if (!selectedVoice) {
+          selectedVoice = availableVoices.find(voice => voice.lang.startsWith('en'));
+        }
+        
+        utterance.pitch = 0.8; // Lower pitch for male
+        utterance.rate = 0.85;
       }
 
-      if (preferredVoices.length > 0) {
-        utterance.voice = preferredVoices[0];
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        console.log(`Selected voice: ${selectedVoice.name} for ${gender}`);
       }
 
-      utterance.rate = 0.85;
-      utterance.pitch = gender === 'female' ? 1.1 : 0.9;
       utterance.volume = 0.9;
-
-      // Record the speech synthesis output
-      const audioContext = new AudioContext();
-      const destination = audioContext.createMediaStreamDestination();
-      const mediaRecorder = new MediaRecorder(destination.stream);
-      const audioChunks: Blob[] = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunks.push(event.data);
+      
+      // Simple approach - just play the voice and save text description
+      utterance.onstart = () => {
+        console.log('Speech started');
       };
-
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64Audio = reader.result as string;
-          if (currentBoard) {
-            const updatedBoard = {
-              ...currentBoard,
-              audioRecording: base64Audio,
-              audioDescription: text,
-              isVoiceCloned: false,
-              updatedAt: new Date()
-            };
-            setCurrentBoard(updatedBoard);
-            const updatedBoards = boards.map(board => 
-              board.id === currentBoard.id ? updatedBoard : board
-            );
-            saveBoards(updatedBoards);
-          }
-        };
-        reader.readAsDataURL(audioBlob);
-      };
-
-      mediaRecorder.start();
       
       utterance.onend = () => {
-        setTimeout(() => {
-          mediaRecorder.stop();
-          audioContext.close();
-        }, 100);
-      };
-
-      speechSynthesis.speak(utterance);
-      
-      // Fallback for browsers that don't support audio recording from speech synthesis
-      setTimeout(() => {
+        console.log('Speech ended');
         if (currentBoard) {
           const updatedBoard = {
             ...currentBoard,
-            audioDescription: text,
+            audioDescription: `${gender.charAt(0).toUpperCase() + gender.slice(1)} voice: "${text}"`,
             isVoiceCloned: false,
             updatedAt: new Date()
           };
@@ -366,12 +359,25 @@ export function DreamVisionBoard() {
           );
           saveBoards(updatedBoards);
         }
-      }, 3000);
+        setIsGeneratingVoice(false);
+        setDefaultVoiceDialogOpen(false);
+        setDefaultVoiceText('');
+        alert(`${gender.charAt(0).toUpperCase() + gender.slice(1)} voice generated successfully!`);
+      };
+
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        alert('Voice generation failed. Please try again.');
+        setIsGeneratingVoice(false);
+        setDefaultVoiceDialogOpen(false);
+        setDefaultVoiceText('');
+      };
+
+      speechSynthesis.speak(utterance);
 
     } catch (error) {
       console.error('Default voice generation failed:', error);
       alert('Voice generation failed. Please try recording manually instead.');
-    } finally {
       setIsGeneratingVoice(false);
       setDefaultVoiceDialogOpen(false);
       setDefaultVoiceText('');
