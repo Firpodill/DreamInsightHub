@@ -52,7 +52,8 @@ export const archetypeDefinitions: Record<string, Definition> = {
   },
   'Child': {
     definition: 'The archetype representing innocence, spontaneity, new beginnings, and untapped potential.',
-    jungianMeaning: 'Symbolizes the emerging self, creativity, and the capacity for renewal and psychological rebirth.'
+    jungianMeaning: 'Symbolizes the emerging self, creativity, and the capacity for renewal and psychological rebirth.',
+    campbellMeaning: 'The divine child or wonder child who represents new potential, often born under miraculous circumstances to fulfill a prophetic destiny.'
   },
   'Persona': {
     definition: 'The social mask or facade we present to the world, adapting to social expectations and roles.',
@@ -72,11 +73,13 @@ export const archetypeDefinitions: Record<string, Definition> = {
   },
   'Magician': {
     definition: 'The archetype of transformation, knowledge, and the ability to bridge different realms of reality.',
-    jungianMeaning: 'Symbolizes the capacity for psychological transformation and access to unconscious wisdom.'
+    jungianMeaning: 'Symbolizes the capacity for psychological transformation and access to unconscious wisdom.',
+    campbellMeaning: 'The shaman or wise figure who possesses supernatural knowledge and the power to transform reality through ritual and sacred practice.'
   },
   'Warrior': {
     definition: 'The archetype of courage, discipline, strength, and the willingness to fight for important causes.',
-    jungianMeaning: 'Represents the focused will and determination necessary for individuation and self-defense.'
+    jungianMeaning: 'Represents the focused will and determination necessary for individuation and self-defense.',
+    campbellMeaning: 'The champion who faces trials through physical and spiritual combat, embodying the warrior code and protective instincts of the tribe.'
   },
   'Ruler': {
     definition: 'The archetype of leadership, responsibility, control, and the maintenance of order and stability.',
@@ -199,7 +202,8 @@ export const symbolDefinitions: Record<string, Definition> = {
   },
   'journey': {
     definition: 'A travel experience representing life path, personal growth, and spiritual development.',
-    jungianMeaning: 'Symbolizes the individuation process and the soul\'s quest for wholeness and meaning.'
+    jungianMeaning: 'Symbolizes the individuation process and the soul\'s quest for wholeness and meaning.',
+    campbellMeaning: 'The monomyth structure of departure, initiation, and return that forms the universal pattern of heroic transformation across all cultures.'
   },
   'death': {
     definition: 'The end of life representing transformation, rebirth, and the conclusion of one phase.',
