@@ -398,7 +398,7 @@ export default function DreamChat() {
                         size="sm"
                         className="w-full mt-3 border-purple-600 text-purple-300 hover:bg-purple-800"
                       >
-                        Edit Vision Board
+                        View and Edit Vision Board
                       </Button>
                     </div>
                   ))}
