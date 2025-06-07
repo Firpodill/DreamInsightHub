@@ -227,7 +227,7 @@ export default function DreamAnalysis() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {analysis.recommendations.map((rec: string, index: number) => (
+                  {(analysis.recommendations || []).map((rec: string, index: number) => (
                     <li key={index} className="text-gray-300 text-sm flex items-start">
                       <span className="text-yellow-400 mr-2">•</span>
                       {rec}
