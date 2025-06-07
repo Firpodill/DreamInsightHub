@@ -113,6 +113,9 @@ export function DreamVisionBoard() {
   const [collagePhotos, setCollagePhotos] = useState<string[]>([]);
   const [collageTemplate, setCollageTemplate] = useState<string>('grid');
   const [collageTheme, setCollageTheme] = useState<string>('dreamy');
+  const [itemPhotoUploadDialogOpen, setItemPhotoUploadDialogOpen] = useState(false);
+  const [selectedItemForPhoto, setSelectedItemForPhoto] = useState<VisionBoardItem | null>(null);
+  const [newItemPhoto, setNewItemPhoto] = useState<string | null>(null);
 
   const { data: dreams = [] } = useDreams();
   const { toast } = useToast();
@@ -1087,6 +1090,48 @@ export function DreamVisionBoard() {
         variant: "destructive",
       });
     }
+  };
+
+  // Individual Item Photo Upload Functions
+  const handleItemPhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setNewItemPhoto(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addPhotoToVisionBoard = () => {
+    if (!newItemPhoto || !currentBoard) return;
+
+    const photoItem: VisionBoardItem = {
+      id: `personal-photo-${Date.now()}`,
+      type: 'image',
+      content: 'Personal Photo',
+      imageUrl: newItemPhoto,
+      position: { 
+        x: selectedItemForPhoto ? selectedItemForPhoto.position.x + 20 : Math.random() * 250, 
+        y: selectedItemForPhoto ? selectedItemForPhoto.position.y + 20 : Math.random() * 150 
+      },
+      size: { width: 200, height: 200 },
+      rotation: 0,
+      zIndex: currentBoard.items.length + 1
+    };
+
+    addItemToBoard(photoItem);
+
+    // Reset state
+    setItemPhotoUploadDialogOpen(false);
+    setSelectedItemForPhoto(null);
+    setNewItemPhoto(null);
+
+    toast({
+      title: "Personal Photo Added!",
+      description: "Your photo has been added to the vision board",
+    });
   };
 
   // Collage Creator Functions
@@ -2301,6 +2346,20 @@ ${dream.content}`;
               
               {selectedItem?.id === item.id && (
                 <div className="absolute -top-8 right-0 flex gap-1">
+                  {item.type === 'image' && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-6 w-6 p-0 text-blue-600"
+                      onClick={() => {
+                        setSelectedItemForPhoto(item);
+                        setItemPhotoUploadDialogOpen(true);
+                      }}
+                      title="Add Personal Photo"
+                    >
+                      <Camera size={12} />
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
@@ -2654,6 +2713,101 @@ ${dream.content}`;
                 Select at least one dream to create a collage
               </p>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Individual Item Photo Upload Dialog */}
+      <Dialog open={itemPhotoUploadDialogOpen} onOpenChange={setItemPhotoUploadDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="w-5 h-5 text-blue-600" />
+              Add Personal Photo
+            </DialogTitle>
+            <DialogDescription>
+              Upload a personal photo to add alongside this vision board item.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {selectedItemForPhoto && (
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">Adding photo near:</h4>
+                <div className="flex items-center gap-3">
+                  {selectedItemForPhoto.imageUrl && (
+                    <img 
+                      src={selectedItemForPhoto.imageUrl} 
+                      alt="Selected item" 
+                      className="w-16 h-16 object-cover rounded border"
+                    />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-blue-800">
+                      {selectedItemForPhoto.content}
+                    </p>
+                    <p className="text-xs text-blue-600">
+                      {selectedItemForPhoto.type === 'image' ? 'AI Generated Image' : 'Vision Board Item'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <label className="block">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">Click to upload your photo</p>
+                  <p className="text-xs text-gray-500 mt-1">JPG, PNG, or GIF (max 10MB)</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleItemPhotoUpload}
+                    className="hidden"
+                  />
+                </div>
+              </label>
+
+              {newItemPhoto && (
+                <div className="border rounded-lg p-3">
+                  <img 
+                    src={newItemPhoto} 
+                    alt="New personal photo" 
+                    className="w-full h-32 object-cover rounded"
+                  />
+                  <p className="text-sm text-gray-600 mt-2">Photo ready to add!</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <p className="text-xs text-gray-600">
+                Your personal photo will be positioned near the selected vision board item and can be moved independently.
+              </p>
+            </div>
+            
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setItemPhotoUploadDialogOpen(false);
+                  setSelectedItemForPhoto(null);
+                  setNewItemPhoto(null);
+                }}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={addPhotoToVisionBoard}
+                disabled={!newItemPhoto}
+                className="flex-1"
+              >
+                <Camera size={16} className="mr-2" />
+                Add Photo
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
