@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Clock, Moon, Sun, Zap, Eye, Brain, Bell, Watch } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion to reduce bundle size
 import { FitnessWatchConnector } from './fitness-watch-connector';
 import { SmartSleepScheduler } from './smart-sleep-scheduler';
 

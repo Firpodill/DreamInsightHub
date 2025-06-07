@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Play, Pause, Volume2, VolumeX, Brain, Waves, Moon, Star, CloudRain, Wind } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed framer-motion to reduce bundle size
 
 interface AudioTrack {
   id: string;

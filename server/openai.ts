@@ -92,22 +92,42 @@ Respond with valid JSON in this exact format:
   }
 }
 
-// Image generation functions removed to reduce GPU requirements and deployment complexity
-        throw new Error(`Image generation failed: Content policy issue`);
-      }
-    }
+export async function generateDreamVisualization(dreamContent: string, analysis: DreamAnalysis): Promise<{ url: string }> {
+  try {
+    const prompt = `Create a mystical, ethereal visualization: ${analysis.summary}. Style: Dreamlike, surreal, soft mystical lighting. Use rich purples, deep blues, golden accents. Mood: Contemplative, mysterious.`;
+
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024",
+      quality: "standard",
+    });
+
+    return { url: response.data?.[0]?.url || '' };
+  } catch (error) {
+    console.error('Image generation error:', error);
+    throw new Error(`Failed to generate dream visualization: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+export async function generateImage(prompt: string): Promise<{ url: string }> {
+  try {
+    const cleanPrompt = `Abstract artistic interpretation: ${prompt}. Style: peaceful, artistic, colorful, inspirational.`;
     
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: cleanPrompt,
+      n: 1,
+      size: "1024x1024",
+      quality: "standard",
+    });
+
+    return { url: response.data?.[0]?.url || '' };
+  } catch (error: any) {
+    console.error('Image generation error:', error);
     throw new Error(`Failed to generate image: ${error.message || 'Unknown error'}`);
   }
 }
 
-export async function transcribeAudio(audioBuffer: Buffer): Promise<{ text: string }> {
-  try {
-    // Note: In a real implementation, you'd save the buffer to a temporary file
-    // For now, we'll simulate the transcription
-    throw new Error('Audio transcription requires file upload - implement with temporary file storage');
-  } catch (error) {
-    console.error('Audio transcription error:', error);
-    throw new Error(`Failed to transcribe audio: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  }
-}
+// Audio transcription removed to reduce resource usage
