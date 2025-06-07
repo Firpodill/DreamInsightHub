@@ -18,7 +18,7 @@ export interface DreamAnalysis {
   shadowWork: string;
   individuationStage: string;
   emotionalTone: string;
-  recommendations: string[];
+  recommendations: string;
 }
 
 export async function analyzeDream(dreamContent: string, previousDreams?: string[]): Promise<DreamAnalysis> {

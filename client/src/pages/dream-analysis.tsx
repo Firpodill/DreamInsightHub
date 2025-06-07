@@ -182,7 +182,16 @@ export default function DreamAnalysis() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {(analysis.archetypes || []).map((archetype: string, index: number) => (
-                      <Badge key={index} variant="outline" className="text-red-400 border-red-400 text-xs">
+                      <Badge 
+                        key={index} 
+                        variant="outline" 
+                        className="text-red-400 border-red-400 text-xs cursor-pointer hover:bg-red-400/20 transition-colors"
+                        onClick={() => {
+                          setSelectedSymbol(archetype);
+                          setModalType('archetype');
+                          setModalOpen(true);
+                        }}
+                      >
                         {archetype}
                       </Badge>
                     ))}
@@ -197,7 +206,16 @@ export default function DreamAnalysis() {
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {(analysis.symbols || []).map((symbol: string, index: number) => (
-                      <Badge key={index} variant="outline" className="text-green-400 border-green-400 text-xs">
+                      <Badge 
+                        key={index} 
+                        variant="outline" 
+                        className="text-green-400 border-green-400 text-xs cursor-pointer hover:bg-green-400/20 transition-colors"
+                        onClick={() => {
+                          setSelectedSymbol(symbol);
+                          setModalType('symbol');
+                          setModalOpen(true);
+                        }}
+                      >
                         {symbol}
                       </Badge>
                     ))}
@@ -341,6 +359,14 @@ export default function DreamAnalysis() {
             </CardContent>
           </Card>
         )}
+
+        {/* Symbol Definition Modal */}
+        <SymbolDefinitionModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          symbol={selectedSymbol}
+          type={modalType}
+        />
       </div>
     </div>
   );
