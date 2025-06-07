@@ -130,12 +130,14 @@ export default function DreamChat() {
                 border: '1px solid #1e40af'
               }}>
                 <div className="text-xs font-bold text-white leading-none absolute inset-0 flex items-center justify-center">
-                  {formatDay(currentDate)}
+                  <div className="relative">
+                    {formatDay(currentDate)}
+                    {/* Small black dot directly below the number 6 only */}
+                    {formatDay(currentDate) === '6' && (
+                      <div className="w-0.5 h-0.5 rounded-full absolute top-full left-1/2 transform -translate-x-1/2 mt-0.5 bg-black"></div>
+                    )}
+                  </div>
                 </div>
-                {/* Small black dot below the number 6 only */}
-                {formatDay(currentDate) === '6' && (
-                  <div className="w-0.5 h-0.5 rounded-full absolute bottom-0.5 left-1/2 transform -translate-x-1/2 bg-black"></div>
-                )}
                 <div className="w-1 h-1 rounded-full absolute top-0.5 left-0.5" style={{
                   background: 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)',
                   boxShadow: '0 0 2px rgba(255, 255, 255, 0.8)'
