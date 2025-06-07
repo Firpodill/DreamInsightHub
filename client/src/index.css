@@ -216,7 +216,7 @@
   }
 
   .animate-reverse-spin {
-    animation: reverse-spin 2s linear infinite;
+    animation: reverse-spin 3s linear infinite;
   }
   
   @keyframes shimmer {
