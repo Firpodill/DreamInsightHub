@@ -26,8 +26,8 @@ async function generateDeploymentQR() {
     // Generate QR code as PNG
     const qrPng = await qrcode.toBuffer(deploymentUrl, {
       type: 'png',
-      width: 400,
-      margin: 2,
+      width: 600,
+      margin: 3,
       color: {
         dark: '#000000',
         light: '#FFFFFF'
