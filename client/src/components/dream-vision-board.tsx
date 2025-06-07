@@ -1547,6 +1547,19 @@ ${dream.content}`;
     });
   };
 
+  const handleTouchStart = (e: React.TouchEvent, item: VisionBoardItem) => {
+    e.preventDefault();
+    setSelectedItem(item);
+    setIsDragging(true);
+    
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    setDragOffset({
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    });
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !selectedItem) return;
 
