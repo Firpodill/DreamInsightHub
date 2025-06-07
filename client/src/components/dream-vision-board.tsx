@@ -76,6 +76,8 @@ export function DreamVisionBoard() {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [shareEmail, setShareEmail] = useState('');
   const [shareMessage, setShareMessage] = useState('');
+  const [shareOptionsOpen, setShareOptionsOpen] = useState(false);
+  const [exportOptionsOpen, setExportOptionsOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
@@ -459,96 +461,147 @@ export function DreamVisionBoard() {
     alert('Vision board saved successfully!');
   };
 
-  // Export vision board as image or video
-  const handleExport = async () => {
+  // Multiple export options
+  const exportAsImage = async () => {
     if (!currentBoard) return;
     
     try {
-      // Create a canvas to render the vision board
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        alert('Canvas not supported in this browser');
-        return;
-      }
-      
-      canvas.width = 1200;
-      canvas.height = 800;
-      
-      // Fill background
-      ctx.fillStyle = currentBoard.background;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Add title
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 32px Arial';
-      ctx.fillText(currentBoard.title, 40, 60);
-      
-      // Add description
-      ctx.fillStyle = '#333333';
-      ctx.font = '18px Arial';
-      const words = currentBoard.description.split(' ');
-      let line = '';
-      let y = 100;
-      for (let i = 0; i < words.length; i++) {
-        const testLine = line + words[i] + ' ';
-        const metrics = ctx.measureText(testLine);
-        if (metrics.width > 1120 && i > 0) {
-          ctx.fillText(line, 40, y);
-          line = words[i] + ' ';
-          y += 25;
-        } else {
-          line = testLine;
+      const canvas = await createVisionBoardCanvas(currentBoard);
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          alert('Failed to create image');
+          return;
         }
-      }
-      ctx.fillText(line, 40, y);
-      
-      // Render vision board items
-      currentBoard.items.forEach(item => {
-        ctx.save();
-        ctx.translate(item.position.x + item.size.width/2, item.position.y + item.size.height/2);
-        ctx.rotate(item.rotation * Math.PI / 180);
-        
-        if (item.type === 'text') {
-          ctx.fillStyle = item.style?.color || '#000000';
-          ctx.font = `${item.style?.fontSize || 16}px Arial`;
-          ctx.textAlign = 'center';
-          ctx.fillText(item.content, 0, 0);
-        } else if (item.type === 'symbol') {
-          ctx.fillStyle = item.style?.color || '#000000';
-          ctx.font = `${item.style?.fontSize || 24}px Arial`;
-          ctx.textAlign = 'center';
-          ctx.fillText(item.content, 0, 0);
-        }
-        
-        ctx.restore();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       });
-      
-      if (currentBoard.audioRecording) {
-        // Create video with audio
-        await createVideoWithAudio(canvas, currentBoard);
+    } catch (error) {
+      console.error('Image export failed:', error);
+      alert('Image export failed. Please try again.');
+    }
+  };
+
+  const exportAsVideo = async () => {
+    if (!currentBoard) return;
+    
+    try {
+      const canvas = await createVisionBoardCanvas(currentBoard);
+      await createVideoWithAudio(canvas, currentBoard);
+    } catch (error) {
+      console.error('Video export failed:', error);
+      alert('Video export failed. Please try again.');
+    }
+  };
+
+  const exportAsAudio = async () => {
+    if (!currentBoard?.audioRecording) {
+      alert('No audio recording found for this vision board.');
+      return;
+    }
+    
+    try {
+      const audioBlob = await fetch(currentBoard.audioRecording).then(r => r.blob());
+      const url = URL.createObjectURL(audioBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentBoard.title.replace(/\s+/g, '_')}_audio.wav`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Audio export failed:', error);
+      alert('Audio export failed. Please try again.');
+    }
+  };
+
+  const exportAsText = () => {
+    if (!currentBoard) return;
+    
+    const textContent = `${currentBoard.title}\n\n${currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Create canvas helper function
+  const createVisionBoardCanvas = async (board: VisionBoard): Promise<HTMLCanvasElement> => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      throw new Error('Canvas not supported');
+    }
+    
+    canvas.width = 1200;
+    canvas.height = 800;
+    
+    // Fill background
+    ctx.fillStyle = board.background;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Add title
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 32px Arial';
+    ctx.fillText(board.title, 40, 60);
+    
+    // Add description
+    ctx.fillStyle = '#333333';
+    ctx.font = '18px Arial';
+    const words = board.description.split(' ');
+    let line = '';
+    let y = 100;
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > 1120 && i > 0) {
+        ctx.fillText(line, 40, y);
+        line = words[i] + ' ';
+        y += 25;
       } else {
-        // Export as image only
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            alert('Failed to create image');
-            return;
-          }
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${currentBoard.title.replace(/\s+/g, '_')}_vision_board.png`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        });
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, 40, y);
+    
+    // Render vision board items
+    board.items.forEach(item => {
+      ctx.save();
+      ctx.translate(item.position.x + item.size.width/2, item.position.y + item.size.height/2);
+      ctx.rotate(item.rotation * Math.PI / 180);
+      
+      if (item.type === 'text') {
+        ctx.fillStyle = item.style?.color || '#000000';
+        ctx.font = `${item.style?.fontSize || 16}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(item.content, 0, 0);
+      } else if (item.type === 'symbol') {
+        ctx.fillStyle = item.style?.color || '#000000';
+        ctx.font = `${item.style?.fontSize || 24}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(item.content, 0, 0);
       }
       
-    } catch (error) {
-      console.error('Export failed:', error);
-      alert('Export failed. Please try again.');
-    }
+      ctx.restore();
+    });
+    
+    return canvas;
+  };
+
+  // Legacy export function for backwards compatibility
+  const handleExport = async () => {
+    setExportOptionsOpen(true);
   };
 
   // Create video file combining image and audio
@@ -630,9 +683,83 @@ export function DreamVisionBoard() {
     }
   };
 
-  // Share vision board
+  // Multiple sharing options
+  const shareImageOnly = async (method: 'email' | 'sms') => {
+    if (!currentBoard || !shareEmail.trim()) return;
+    
+    const shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    
+    if (method === 'email') {
+      const subject = `Dream Vision Board: ${currentBoard.title}`;
+      const mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      
+      // Download image for manual attachment
+      await exportAsImage();
+      alert('Image downloaded! Attach it to your email.');
+      window.open(mailtoUrl);
+    } else {
+      const smsUrl = `sms:${shareEmail}?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUrl);
+    }
+    
+    setShareDialogOpen(false);
+    setShareEmail('');
+    setShareMessage('');
+  };
+
+  const shareVideoWithAudio = async (method: 'email' | 'sms') => {
+    if (!currentBoard || !shareEmail.trim()) return;
+    
+    let shareText = `Check out my dream vision board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}`;
+    
+    if (currentBoard.audioRecording) {
+      shareText += `\n\n🎬 This vision board includes audio! A video file (.mp4) will be downloaded for sharing.`;
+    }
+    
+    shareText += `\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    
+    if (method === 'email') {
+      const subject = `Dream Vision Board: ${currentBoard.title}`;
+      const mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      
+      if (currentBoard.audioRecording) {
+        await exportAsVideo();
+        alert('Video file downloaded! Attach it to your email.');
+      }
+      
+      window.open(mailtoUrl);
+    } else {
+      const smsUrl = `sms:${shareEmail}?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUrl);
+    }
+    
+    setShareDialogOpen(false);
+    setShareEmail('');
+    setShareMessage('');
+  };
+
+  const shareTextOnly = (method: 'email' | 'sms') => {
+    if (!currentBoard || !shareEmail.trim()) return;
+    
+    const shareText = `Dream Vision Board: "${currentBoard.title}"\n\n${shareMessage || currentBoard.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+    
+    if (method === 'email') {
+      const subject = `Dream Vision Board: ${currentBoard.title}`;
+      const mailtoUrl = `mailto:${shareEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText)}`;
+      window.open(mailtoUrl);
+    } else {
+      const smsUrl = `sms:${shareEmail}?body=${encodeURIComponent(shareText)}`;
+      window.open(smsUrl);
+    }
+    
+    setShareDialogOpen(false);
+    setShareEmail('');
+    setShareMessage('');
+  };
+
+  // Share vision board with options
   const handleShare = () => {
-    setShareDialogOpen(true);
+    setShareOptionsOpen(true);
   };
 
   // Send share via email/text with media attachment
@@ -1078,11 +1205,11 @@ export function DreamVisionBoard() {
           </Button>
           <Button variant="outline" size="sm" onClick={handleShare}>
             <Share2 size={16} className="mr-1" />
-            Share
+            Share Options
           </Button>
           <Button variant="outline" size="sm" onClick={handleExport}>
             <Download size={16} className="mr-1" />
-            Export
+            Export Options
           </Button>
         </div>
       </div>
@@ -1258,6 +1385,155 @@ export function DreamVisionBoard() {
             <p className="text-xs text-gray-500">
               AI voice cloning creates high-quality, personalized audio using advanced machine learning.
             </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Export Options Dialog */}
+      <Dialog open={exportOptionsOpen} onOpenChange={setExportOptionsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Export Vision Board</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Choose your preferred export format:
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <Button 
+                onClick={() => {
+                  exportAsImage();
+                  setExportOptionsOpen(false);
+                }}
+                className="flex flex-col items-center p-6 h-auto"
+                variant="outline"
+              >
+                <ImageIcon size={24} className="mb-2" />
+                <span className="font-medium">Image (PNG)</span>
+                <span className="text-xs text-gray-500">Vision board as image</span>
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  exportAsVideo();
+                  setExportOptionsOpen(false);
+                }}
+                className="flex flex-col items-center p-6 h-auto"
+                variant="outline"
+                disabled={!currentBoard?.audioRecording}
+              >
+                <Play size={24} className="mb-2" />
+                <span className="font-medium">Video (MP4)</span>
+                <span className="text-xs text-gray-500">
+                  {currentBoard?.audioRecording ? 'Image + Audio' : 'No audio available'}
+                </span>
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  exportAsAudio();
+                  setExportOptionsOpen(false);
+                }}
+                className="flex flex-col items-center p-6 h-auto"
+                variant="outline"
+                disabled={!currentBoard?.audioRecording}
+              >
+                <Volume2 size={24} className="mb-2" />
+                <span className="font-medium">Audio (WAV)</span>
+                <span className="text-xs text-gray-500">
+                  {currentBoard?.audioRecording ? 'Audio only' : 'No audio available'}
+                </span>
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  exportAsText();
+                  setExportOptionsOpen(false);
+                }}
+                className="flex flex-col items-center p-6 h-auto"
+                variant="outline"
+              >
+                <MessageSquare size={24} className="mb-2" />
+                <span className="font-medium">Text (TXT)</span>
+                <span className="text-xs text-gray-500">Title + Description</span>
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Options Dialog */}
+      <Dialog open={shareOptionsOpen} onOpenChange={setShareOptionsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Vision Board</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Choose your sharing format:
+            </p>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => {
+                  setShareOptionsOpen(false);
+                  setShareDialogOpen(true);
+                }}
+                className="w-full flex items-center justify-between p-4 h-auto"
+                variant="outline"
+              >
+                <div className="flex items-center">
+                  <ImageIcon size={20} className="mr-3" />
+                  <div className="text-left">
+                    <div className="font-medium">Image + Text</div>
+                    <div className="text-xs text-gray-500">Share vision board image with description</div>
+                  </div>
+                </div>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Recommended</span>
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  setShareOptionsOpen(false);
+                  setShareDialogOpen(true);
+                }}
+                className="w-full flex items-center justify-between p-4 h-auto"
+                variant="outline"
+                disabled={!currentBoard?.audioRecording}
+              >
+                <div className="flex items-center">
+                  <Play size={20} className="mr-3" />
+                  <div className="text-left">
+                    <div className="font-medium">Video + Audio</div>
+                    <div className="text-xs text-gray-500">
+                      {currentBoard?.audioRecording ? 'Share complete experience as video' : 'No audio available'}
+                    </div>
+                  </div>
+                </div>
+                {currentBoard?.audioRecording && (
+                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Premium</span>
+                )}
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  const shareText = `Dream Vision Board: "${currentBoard?.title}"\n\n${currentBoard?.description}\n\nCreated with DreamSpeak - Jungian Dream Decoder`;
+                  navigator.clipboard.writeText(shareText);
+                  alert('Vision board text copied to clipboard!');
+                  setShareOptionsOpen(false);
+                }}
+                className="w-full flex items-center justify-between p-4 h-auto"
+                variant="outline"
+              >
+                <div className="flex items-center">
+                  <Copy size={20} className="mr-3" />
+                  <div className="text-left">
+                    <div className="font-medium">Text Only</div>
+                    <div className="text-xs text-gray-500">Copy title and description to clipboard</div>
+                  </div>
+                </div>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Quick</span>
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
