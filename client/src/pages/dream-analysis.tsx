@@ -42,7 +42,7 @@ export default function DreamAnalysis() {
     try {
       const symbols = analyzeDream.data.analysis.symbols?.join(', ') || '';
       const archetypes = analyzeDream.data.analysis.archetypes?.join(', ') || '';
-      const prompt = `Dream vision board: ${dreamText.substring(0, 150)}. Artistic collage style with symbols: ${symbols}. Embodying archetypes: ${archetypes}. Mystical, colorful, ethereal composition.`;
+      const prompt = `Peaceful artistic vision board inspired by symbols like ${symbols} and themes of ${archetypes}. Colorful, inspiring, abstract collage with geometric shapes and positive imagery.`;
       
       const result = await generateImage.mutateAsync({ prompt });
       
@@ -226,14 +226,9 @@ export default function DreamAnalysis() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
-                  {(analysis.recommendations || []).map((rec: string, index: number) => (
-                    <li key={index} className="text-gray-300 text-sm flex items-start">
-                      <span className="text-yellow-400 mr-2">•</span>
-                      {rec}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {(analysis.recommendations || []).join('. ')}
+                </p>
               </CardContent>
             </Card>
 
