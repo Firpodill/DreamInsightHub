@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { analyzeDream, generateDreamVisualization, generateImage } from "./openai";
 import { insertDreamSchema, insertChatMessageSchema } from "@shared/schema";
 import { z } from "zod";
+import path from "path";
+import { fileURLToPath } from "url";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Chat messages endpoints
@@ -298,6 +300,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Insights error:', error);
       res.status(500).json({ error: "Failed to generate insights" });
     }
+  });
+
+  // Serve the shareable QR code page
+  app.get("/qr", (req, res) => {
+    res.sendFile(path.join(process.cwd(), "qr-share.html"));
   });
 
   const httpServer = createServer(app);
