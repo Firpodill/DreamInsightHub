@@ -228,6 +228,18 @@
   .text-bubble-container {
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   }
+
+  /* Recording status fade animation */
+  @keyframes recording-fade {
+    0% { opacity: 0; transform: translateY(10px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+
+  .recording-status {
+    animation: recording-fade 3s ease-in-out;
+  }
   
   @keyframes shimmer {
     0% { background-position: -200px 0; }

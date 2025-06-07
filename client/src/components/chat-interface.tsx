@@ -88,7 +88,7 @@ export function ChatInterface() {
                     {currentTranscript || "Listening..."}
                   </div>
                 </div>
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center">
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 px-2 text-center recording-status">
                   🎤 Recording... Click SPEAK again to stop
                 </div>
               </div>
