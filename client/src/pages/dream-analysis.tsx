@@ -37,11 +37,11 @@ export default function DreamAnalysis() {
   }, [analyzeDream.data, analyzeDream.isPending]);
 
   const handleGenerateVisionBoard = async () => {
-    if (!dreamText || !analyzeDream.data) return;
+    if (!dreamText || !analyzeDream.data?.analysis) return;
 
     try {
-      const symbols = analyzeDream.data.symbols.join(', ');
-      const archetypes = analyzeDream.data.archetypes.join(', ');
+      const symbols = analyzeDream.data.analysis.symbols?.join(', ') || '';
+      const archetypes = analyzeDream.data.analysis.archetypes?.join(', ') || '';
       const prompt = `Dream vision board: ${dreamText.substring(0, 150)}. Artistic collage style with symbols: ${symbols}. Embodying archetypes: ${archetypes}. Mystical, colorful, ethereal composition.`;
       
       const result = await generateImage.mutateAsync({ prompt });
@@ -52,7 +52,7 @@ export default function DreamAnalysis() {
         // Save to localStorage for potential vision board creation
         const visionBoardData = {
           dreamText,
-          analysis: analyzeDream.data,
+          analysis: analyzeDream.data.analysis,
           imageUrl: result.imageUrl,
           createdAt: new Date().toISOString()
         };
@@ -63,7 +63,7 @@ export default function DreamAnalysis() {
     }
   };
 
-  const analysis = analyzeDream.data;
+  const analysis = analyzeDream.data?.analysis;
 
 
 
