@@ -883,19 +883,63 @@ export function DreamVisionBoard() {
       });
 
       if (result.imageUrl) {
-        addItemToBoard({
+        const newItem: VisionBoardItem = {
+          id: Date.now().toString(),
           type: 'image',
           content: `Dream: ${dream.title || 'Untitled'}`,
           imageUrl: result.imageUrl,
-          position: { x: Math.random() * 300, y: Math.random() * 200 },
-          size: { width: 200, height: 200 },
+          position: { x: Math.random() * 250, y: Math.random() * 150 },
+          size: { width: 300, height: 300 },
           rotation: 0,
           zIndex: currentBoard.items.length + 1
-        });
+        };
+        
+        addItemToBoard(newItem);
+        
+        // Auto-generate comprehensive audio narration combining dream and vision board
+        const fullNarrationText = createFullNarrationText(dream, currentBoard);
+        setDefaultVoiceText(fullNarrationText);
+        setDefaultVoiceDialogOpen(true);
       }
     } catch (error) {
       console.error('Failed to generate image:', error);
     }
+  };
+
+  // Create comprehensive narration text combining dream content and vision board
+  const createFullNarrationText = (dream?: Dream, board?: VisionBoard): string => {
+    let narration = '';
+    
+    if (dream && board) {
+      narration = `Dream Vision Board: ${board.title}. 
+
+Original Dream: ${dream.content}
+
+Vision Board Reflection: ${board.description}
+
+This vision board captures the essence and symbolism from my dream, creating a visual manifestation of the subconscious imagery and archetypal elements that emerged during sleep.`;
+    } else if (board) {
+      narration = `Vision Board: ${board.title}. 
+
+${board.description}
+
+This vision board represents my dreams, aspirations, and the symbolic imagery that resonates with my subconscious mind.`;
+    } else if (dream) {
+      narration = `Dream Narration: ${dream.title || 'My Dream'}.
+
+${dream.content}`;
+    }
+    
+    return narration;
+  };
+
+  // Enhanced voice generation that includes dream context
+  const generateComprehensiveAudio = async (dream?: Dream) => {
+    if (!currentBoard) return;
+    
+    const fullText = createFullNarrationText(dream, currentBoard);
+    setDefaultVoiceText(fullText);
+    setDefaultVoiceDialogOpen(true);
   };
 
   const generateImageFromPrompt = async () => {
@@ -1168,7 +1212,18 @@ export function DreamVisionBoard() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => setDefaultVoiceDialogOpen(true)}
+                  onClick={() => {
+                    // Auto-populate with comprehensive narration including dream content
+                    const associatedDream = dreams.find(dream => 
+                      currentBoard?.items.some(item => 
+                        item.content.includes(dream.title || '') || 
+                        item.content.includes('Dream:')
+                      )
+                    );
+                    const fullText = createFullNarrationText(associatedDream, currentBoard);
+                    setDefaultVoiceText(fullText || currentBoard?.description || '');
+                    setDefaultVoiceDialogOpen(true);
+                  }}
                   className="bg-blue-50 border-blue-200 text-blue-700"
                 >
                   <Volume2 size={14} className="mr-1" />
@@ -1651,9 +1706,9 @@ export function DreamVisionBoard() {
           {currentBoard.items.map((item) => (
             <div
               key={item.id}
-              className={`absolute cursor-move border-2 ${
-                selectedItem?.id === item.id ? 'border-blue-500' : 'border-transparent'
-              }`}
+              className={`absolute cursor-move ${
+                selectedItem?.id === item.id ? 'ring-2 ring-blue-500 ring-offset-2' : ''
+              } ${item.type === 'image' ? 'shadow-lg' : 'border-2 border-transparent'}`}
               style={{
                 left: item.position.x,
                 top: item.position.y,
