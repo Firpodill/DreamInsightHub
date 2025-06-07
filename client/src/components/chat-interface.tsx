@@ -98,7 +98,7 @@ export function ChatInterface() {
                   </div>
                 </div>
                 {!currentTranscript && (
-                  <div className={`absolute top-1/2 left-4 transform -translate-y-1/2 text-sm text-gray-900 px-3 py-2 text-left bg-white border border-gray-200 rounded-lg shadow-sm ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 30 }}>
+                  <div className={`absolute top-1/2 left-4 transform -translate-y-1/2 text-sm text-gray-900 px-3 py-2 text-left bg-white border border-gray-200 rounded-lg shadow-sm whitespace-nowrap ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`} style={{ zIndex: 30, maxWidth: 'none', width: 'auto' }}>
                     🎤 Recording... Click SPEAK again to STOP
                   </div>
                 )}
