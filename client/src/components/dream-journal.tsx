@@ -26,6 +26,26 @@ export function DreamJournal() {
     setVisionBoards(boards);
   }, []);
 
+  // Voice playback for dream text
+  const playDreamText = (dreamText: string) => {
+    if (isPlaying) {
+      speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(dreamText);
+    utterance.rate = 0.8;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+    
+    utterance.onstart = () => setIsPlaying(true);
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+
+    speechSynthesis.speak(utterance);
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -272,9 +292,22 @@ export function DreamJournal() {
               {dream.imageUrl ? 'Visualized' : 'No image'}
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="text-primary text-sm font-medium h-auto p-0">
-            View Details
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                playDreamText(dream.content);
+              }}
+            >
+              <Volume2 size={14} className="mr-1" />
+              {isPlaying ? 'Stop' : 'Listen'}
+            </Button>
+            <Button variant="ghost" size="sm" className="text-primary text-sm font-medium h-auto p-0">
+              View Details
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

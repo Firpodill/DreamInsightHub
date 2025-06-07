@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Brain, Keyboard, Info } from "lucide-react";
+import { Mic, Brain, Keyboard, Info, Volume2 } from "lucide-react";
 import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
