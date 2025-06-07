@@ -278,9 +278,395 @@ export const symbolDefinitions: Record<string, Definition> = {
     jungianMeaning: 'Symbolizes the divine child archetype, renewal, and the emerging possibilities within the psyche.'
   },
   'blood': {
-    definition: 'The life force flowing through the body, representing vitality, sacrifice, and family connections.',
-    jungianMeaning: 'Symbolizes the life force, ancestral connections, and the price of transformation or growth.'
+    definition: 'Life force fluid representing vitality, sacrifice, kinship, and the essence of life.',
+    jungianMeaning: 'Symbolizes life energy, emotional intensity, and the connection between physical and spiritual existence.'
   },
+  
+  // Animals
+  'wolf': {
+    definition: 'Wild canine representing instinct, wildness, loyalty, and pack consciousness.',
+    jungianMeaning: 'Symbolizes the wild, untamed aspects of the psyche and the need for both independence and community.'
+  },
+  'eagle': {
+    definition: 'Powerful bird of prey representing vision, freedom, strength, and connection to the divine.',
+    jungianMeaning: 'Symbolizes soaring consciousness, spiritual vision, and the capacity to see from great heights of understanding.'
+  },
+  'lion': {
+    definition: 'King of beasts representing courage, strength, pride, and royal power.',
+    jungianMeaning: 'Symbolizes the sovereign aspect of the Self and the courage needed for psychological transformation.'
+  },
+  'bear': {
+    definition: 'Large mammal representing strength, protection, introspection, and healing.',
+    jungianMeaning: 'Symbolizes the protective mother archetype and the power that comes from deep inner reflection.'
+  },
+  'butterfly': {
+    definition: 'Transformed insect representing metamorphosis, beauty, rebirth, and the soul.',
+    jungianMeaning: 'Symbolizes psychological transformation and the emergence of the beautiful Self from difficult circumstances.'
+  },
+  'spider': {
+    definition: 'Web-spinning arachnid representing creativity, fate, feminine power, and interconnection.',
+    jungianMeaning: 'Symbolizes the weaving of destiny, creative power, and the interconnected nature of all experience.'
+  },
+  'owl': {
+    definition: 'Nocturnal bird representing wisdom, mystery, intuition, and hidden knowledge.',
+    jungianMeaning: 'Symbolizes wisdom that comes from the darkness of the unconscious and the ability to see what others cannot.'
+  },
+  'deer': {
+    definition: 'Gentle forest animal representing grace, gentleness, spiritual authority, and sensitivity.',
+    jungianMeaning: 'Symbolizes the gentle, receptive aspects of consciousness and spiritual sensitivity.'
+  },
+  'rabbit': {
+    definition: 'Small mammal representing fertility, luck, speed, and fearfulness.',
+    jungianMeaning: 'Symbolizes fertility of ideas, quick thinking, and sometimes the anxious aspects of consciousness.'
+  },
+  'horse': {
+    definition: 'Noble animal representing freedom, power, nobility, and the life force.',
+    jungianMeaning: 'Symbolizes libido, life energy, and the powerful forces of the unconscious that can carry consciousness forward.'
+  },
+  'elephant': {
+    definition: 'Large mammal representing memory, wisdom, strength, and good fortune.',
+    jungianMeaning: 'Symbolizes the vast memory of the unconscious and the wisdom that comes from long experience.'
+  },
+  'fox': {
+    definition: 'Clever canine representing cunning, adaptability, intelligence, and trickery.',
+    jungianMeaning: 'Symbolizes the clever, adaptive aspects of consciousness and sometimes the trickster energy within.'
+  },
+  'turtle': {
+    definition: 'Shelled reptile representing longevity, wisdom, protection, and steady progress.',
+    jungianMeaning: 'Symbolizes the protective shell of the ego and the slow, steady progress of individuation.'
+  },
+  'whale': {
+    definition: 'Large sea mammal representing depth, ancient wisdom, emotional power, and the unconscious.',
+    jungianMeaning: 'Symbolizes the vast depths of the unconscious mind and the ancient wisdom contained within.'
+  },
+  'dragon': {
+    definition: 'Mythical creature representing power, wisdom, protection, and primal forces.',
+    jungianMeaning: 'Symbolizes the powerful, potentially destructive forces of the unconscious that must be integrated.'
+  },
+  'phoenix': {
+    definition: 'Mythical bird representing rebirth, renewal, resurrection, and triumph over adversity.',
+    jungianMeaning: 'Symbolizes psychological death and rebirth, the capacity for renewal after destruction.'
+  },
+  'unicorn': {
+    definition: 'Mythical horse representing purity, magic, healing, and the impossible made possible.',
+    jungianMeaning: 'Symbolizes the rare, magical aspects of the psyche and the integration of opposites into something unique.'
+  },
+  
+  // Natural Phenomena
+  'rainbow': {
+    definition: 'Arc of colors representing hope, promise, bridge between worlds, and divine covenant.',
+    jungianMeaning: 'Symbolizes the bridge between conscious and unconscious, the integration of all aspects of personality.'
+  },
+  'lightning': {
+    definition: 'Electrical discharge representing sudden illumination, divine power, and transformative energy.',
+    jungianMeaning: 'Symbolizes sudden insights, enlightenment, and the powerful force of unconscious content breaking into consciousness.'
+  },
+  'earthquake': {
+    definition: 'Ground shaking representing upheaval, fundamental change, and shaking of foundations.',
+    jungianMeaning: 'Symbolizes profound psychological upheaval and the shaking of fundamental beliefs or structures.'
+  },
+  'volcano': {
+    definition: 'Mountain that erupts representing suppressed emotions, creative force, and explosive transformation.',
+    jungianMeaning: 'Symbolizes repressed emotional content erupting into consciousness with transformative power.'
+  },
+  'avalanche': {
+    definition: 'Snow mass sliding down representing overwhelming force, loss of control, and buried emotions surfacing.',
+    jungianMeaning: 'Symbolizes unconscious content overwhelming consciousness or the release of long-buried emotions.'
+  },
+  'desert': {
+    definition: 'Arid landscape representing spiritual testing, purification, emptiness, and inner journey.',
+    jungianMeaning: 'Symbolizes the spiritual desert of individuation where old patterns must be abandoned for growth.'
+  },
+  'island': {
+    definition: 'Land surrounded by water representing isolation, self-sufficiency, and unique perspective.',
+    jungianMeaning: 'Symbolizes the individual consciousness surrounded by the unconscious, or the need for solitude.'
+  },
+  'valley': {
+    definition: 'Low land between hills representing fertility, shelter, depth, and hidden treasures.',
+    jungianMeaning: 'Symbolizes the depths of experience, the feminine receptive principle, and protected spaces for growth.'
+  },
+  'cliff': {
+    definition: 'Steep rock face representing danger, challenge, edge of consciousness, and leap of faith.',
+    jungianMeaning: 'Symbolizes the edge between known and unknown, or the precipice of major psychological change.'
+  },
+  'waterfall': {
+    definition: 'Falling water representing cleansing, power, flow of life, and emotional release.',
+    jungianMeaning: 'Symbolizes the flow of life energy, emotional catharsis, and the purifying power of feeling.'
+  },
+  
+  // Objects and Tools
+  'hammer': {
+    definition: 'Tool for building and breaking representing creation, destruction, and the power to shape reality.',
+    jungianMeaning: 'Symbolizes the power of will to shape consciousness and break down old patterns.'
+  },
+  'anchor': {
+    definition: 'Ship\'s weight representing stability, grounding, hope, and connection to foundation.',
+    jungianMeaning: 'Symbolizes the need for psychological grounding and stability during turbulent times.'
+  },
+  'compass': {
+    definition: 'Navigation tool representing direction, guidance, purpose, and finding one\'s way.',
+    jungianMeaning: 'Symbolizes inner guidance, moral direction, and the capacity to navigate through confusion.'
+  },
+  'ladder': {
+    definition: 'Climbing tool representing ascension, progress, levels of consciousness, and spiritual advancement.',
+    jungianMeaning: 'Symbolizes the stages of psychological development and the ascent toward higher consciousness.'
+  },
+  'rope': {
+    definition: 'Binding tool representing connection, salvation, bondage, and lifeline.',
+    jungianMeaning: 'Symbolizes connections between different aspects of psyche or the lifeline to consciousness.'
+  },
+  'chain': {
+    definition: 'Linked metal representing bondage, connection, strength through unity, and restriction.',
+    jungianMeaning: 'Symbolizes psychological bondage, karmic connections, or the strength that comes from integration.'
+  },
+  'wheel': {
+    definition: 'Circular tool representing cycles, progress, fate, and the wheel of life.',
+    jungianMeaning: 'Symbolizes the cyclical nature of psychological development and the eternal return.'
+  },
+  'scale': {
+    definition: 'Weighing device representing balance, justice, judgment, and moral evaluation.',
+    jungianMeaning: 'Symbolizes the weighing of conscious and unconscious elements and the search for psychological balance.'
+  },
+  'hourglass': {
+    definition: 'Time measuring device representing mortality, patience, and the passage of time.',
+    jungianMeaning: 'Symbolizes awareness of life\'s limitations and the need for timely psychological development.'
+  },
+  'telescope': {
+    definition: 'Viewing instrument representing vision, exploration, seeking distant truths, and expanded perspective.',
+    jungianMeaning: 'Symbolizes the capacity to see beyond immediate circumstances and gain broader perspective.'
+  },
+  'microscope': {
+    definition: 'Magnifying instrument representing detailed examination, hidden truths, and analytical focus.',
+    jungianMeaning: 'Symbolizes the need to examine psychological material closely and discover hidden patterns.'
+  },
+  'bottle': {
+    definition: 'Container representing containment, preservation, hidden messages, and stored potential.',
+    jungianMeaning: 'Symbolizes the container function of consciousness and the preservation of important insights.'
+  },
+  'candle': {
+    definition: 'Light source representing illumination, hope, spiritual guidance, and the flame of consciousness.',
+    jungianMeaning: 'Symbolizes the light of consciousness in the darkness of the unconscious.'
+  },
+  'bell': {
+    definition: 'Sound maker representing awakening, calling, announcement, and sacred communication.',
+    jungianMeaning: 'Symbolizes the call to consciousness, awakening from psychological sleep, or spiritual summons.'
+  },
+  'drum': {
+    definition: 'Percussion instrument representing rhythm, heartbeat, communication, and primal connection.',
+    jungianMeaning: 'Symbolizes the primal rhythms of the psyche and connection to unconscious patterns.'
+  },
+  
+  // Colors
+  'red': {
+    definition: 'Color representing passion, anger, energy, life force, and intense emotion.',
+    jungianMeaning: 'Symbolizes libido, life energy, passion, and the active principle of consciousness.'
+  },
+  'blue': {
+    definition: 'Color representing calm, spirituality, truth, depth, and infinite space.',
+    jungianMeaning: 'Symbolizes the spiritual dimension, calm reflection, and the vast depths of the unconscious.'
+  },
+  'green': {
+    definition: 'Color representing nature, growth, healing, fertility, and renewal.',
+    jungianMeaning: 'Symbolizes psychological growth, healing, and the life-giving aspects of the unconscious.'
+  },
+  'yellow': {
+    definition: 'Color representing intellect, clarity, enlightenment, and solar consciousness.',
+    jungianMeaning: 'Symbolizes intellectual illumination, clarity of thought, and conscious awareness.'
+  },
+  'purple': {
+    definition: 'Color representing royalty, spirituality, mystery, and transformation.',
+    jungianMeaning: 'Symbolizes the integration of opposites, spiritual nobility, and psychological transformation.'
+  },
+  'black': {
+    definition: 'Color representing mystery, death, the unknown, and hidden potential.',
+    jungianMeaning: 'Symbolizes the shadow, the unknown aspects of psyche, and the fertile darkness of the unconscious.'
+  },
+  'white': {
+    definition: 'Color representing purity, innocence, clarity, and spiritual illumination.',
+    jungianMeaning: 'Symbolizes consciousness, purity of intention, and the integration of all psychological elements.'
+  },
+  'gold': {
+    definition: 'Precious metal representing value, immortality, wisdom, and spiritual achievement.',
+    jungianMeaning: 'Symbolizes the Self, the goal of individuation, and the transformation of base consciousness into wisdom.'
+  },
+  'silver': {
+    definition: 'Precious metal representing moon energy, intuition, reflection, and feminine wisdom.',
+    jungianMeaning: 'Symbolizes the feminine principle, intuitive wisdom, and the reflective aspects of consciousness.'
+  },
+  
+  // Numbers
+  'one': {
+    definition: 'Number representing unity, beginning, singularity, and the source.',
+    jungianMeaning: 'Symbolizes the Self, unity of consciousness, and the beginning of psychological development.'
+  },
+  'two': {
+    definition: 'Number representing duality, opposition, choice, and relationship.',
+    jungianMeaning: 'Symbolizes the fundamental opposites in the psyche that must be balanced and integrated.'
+  },
+  'three': {
+    definition: 'Number representing synthesis, creativity, trinity, and resolution of opposites.',
+    jungianMeaning: 'Symbolizes the transcendent function that resolves opposites and creates new possibilities.'
+  },
+  'four': {
+    definition: 'Number representing stability, completeness, earth elements, and material manifestation.',
+    jungianMeaning: 'Symbolizes psychological wholeness, the four functions of consciousness, and stable integration.'
+  },
+  'seven': {
+    definition: 'Number representing completion, spiritual perfection, cycles, and mystical knowledge.',
+    jungianMeaning: 'Symbolizes the completion of psychological development and spiritual attainment.'
+  },
+  'twelve': {
+    definition: 'Number representing cosmic order, completion, cycles, and universal patterns.',
+    jungianMeaning: 'Symbolizes the complete integration of all psychological functions and cosmic consciousness.'
+  },
+  
+  // Body Parts
+  'eye': {
+    definition: 'Organ of sight representing vision, awareness, knowledge, and perception.',
+    jungianMeaning: 'Symbolizes consciousness, the capacity for insight, and the window to the soul.'
+  },
+  'hand': {
+    definition: 'Body part representing action, creation, skill, and manifestation.',
+    jungianMeaning: 'Symbolizes the capacity to act in the world and manifest psychological insights into reality.'
+  },
+  'heart': {
+    definition: 'Organ representing love, emotion, center of being, and life force.',
+    jungianMeaning: 'Symbolizes the feeling function, love, and the center of psychological and spiritual life.'
+  },
+  'head': {
+    definition: 'Body part representing thought, consciousness, leadership, and rational mind.',
+    jungianMeaning: 'Symbolizes the seat of consciousness, rational thinking, and ego awareness.'
+  },
+  'feet': {
+    definition: 'Body parts representing grounding, foundation, journey, and connection to earth.',
+    jungianMeaning: 'Symbolizes groundedness, the foundation of personality, and the capacity to move forward.'
+  },
+  'wings': {
+    definition: 'Appendages for flight representing freedom, transcendence, and spiritual elevation.',
+    jungianMeaning: 'Symbolizes the capacity for transcendence and liberation from earthbound consciousness.'
+  },
+  
+  // Spiritual and Religious Symbols
+  'cross': {
+    definition: 'Religious symbol representing sacrifice, redemption, intersection of opposites, and spiritual transformation.',
+    jungianMeaning: 'Symbolizes the intersection of conscious and unconscious, and the sacrifice necessary for individuation.'
+  },
+  'mandala': {
+    definition: 'Sacred circular design representing wholeness, unity, cosmic order, and the Self.',
+    jungianMeaning: 'Symbolizes the Self, psychological wholeness, and the natural tendency toward integration.'
+  },
+  'spiral': {
+    definition: 'Curved line representing growth, evolution, life cycles, and the journey inward.',
+    jungianMeaning: 'Symbolizes the cyclical nature of psychological development and the spiral path of individuation.'
+  },
+  'star': {
+    definition: 'Celestial body representing guidance, hope, destiny, and divine light.',
+    jungianMeaning: 'Symbolizes the guiding light of the Self and the destiny toward which the psyche moves.'
+  },
+  'circle': {
+    definition: 'Geometric shape representing wholeness, eternity, cycles, and completion.',
+    jungianMeaning: 'Symbolizes the Self, psychological wholeness, and the eternal aspects of consciousness.'
+  },
+  'triangle': {
+    definition: 'Three-sided shape representing trinity, balance, and ascending energy.',
+    jungianMeaning: 'Symbolizes the resolution of opposites through a third element and ascending consciousness.'
+  },
+  'square': {
+    definition: 'Four-sided shape representing stability, earth, material reality, and structure.',
+    jungianMeaning: 'Symbolizes psychological stability, grounding, and the material foundation of consciousness.'
+  },
+  'flower': {
+    definition: 'Plant bloom representing beauty, growth, potential, and the flowering of consciousness.',
+    jungianMeaning: 'Symbolizes the flowering of psychological development and the beauty of integrated consciousness.'
+  },
+  'lotus': {
+    definition: 'Sacred flower representing enlightenment, purity, rebirth, and spiritual awakening.',
+    jungianMeaning: 'Symbolizes the pure consciousness that emerges from the muddy depths of unconscious experience.'
+  },
+  'rose': {
+    definition: 'Thorned flower representing love, beauty, passion, and the balance of pleasure and pain.',
+    jungianMeaning: 'Symbolizes the complete experience of love, including both its joys and sufferings.'
+  },
+  
+  // Elements and Natural Forces
+  'earth': {
+    definition: 'Solid element representing stability, grounding, materialism, and fertility.',
+    jungianMeaning: 'Symbolizes the sensation function, groundedness, and the material foundation of existence.'
+  },
+  'air': {
+    definition: 'Gaseous element representing thought, communication, freedom, and mental activity.',
+    jungianMeaning: 'Symbolizes the thinking function, ideas, and the realm of mental and spiritual activity.'
+  },
+  'wind': {
+    definition: 'Moving air representing change, spirit, freedom, and the breath of life.',
+    jungianMeaning: 'Symbolizes the spirit, change, and the animating force that moves through consciousness.'
+  },
+  'ice': {
+    definition: 'Frozen water representing preservation, stillness, emotional coldness, and suspended time.',
+    jungianMeaning: 'Symbolizes frozen emotions, suspended development, or the preservation of important psychological content.'
+  },
+  'shadow': {
+    definition: 'Dark area representing the hidden, unknown aspects, and the parts we deny.',
+    jungianMeaning: 'Symbolizes the shadow archetype, repressed aspects of personality that must be integrated for wholeness.'
+  },
+  'light': {
+    definition: 'Illumination representing consciousness, knowledge, truth, and divine presence.',
+    jungianMeaning: 'Symbolizes consciousness, enlightenment, and the illuminating power of awareness.'
+  },
+  'darkness': {
+    definition: 'Absence of light representing the unknown, fear, mystery, and hidden potential.',
+    jungianMeaning: 'Symbolizes the unconscious, the unknown aspects of psyche, and the fertile darkness from which new consciousness emerges.'
+  },
+  
+  // Geometric and Abstract Concepts
+  'infinity': {
+    definition: 'Mathematical concept representing endlessness, eternal cycles, and limitless potential.',
+    jungianMeaning: 'Symbolizes the eternal aspects of the psyche and the endless nature of psychological development.'
+  },
+  'void': {
+    definition: 'Empty space representing nothingness, potential, the space between thoughts.',
+    jungianMeaning: 'Symbolizes the creative emptiness from which new consciousness emerges and the space for transformation.'
+  },
+  'maze': {
+    definition: 'Complex path representing confusion, the search for answers, and the journey to the center.',
+    jungianMeaning: 'Symbolizes the confusing path of individuation and the challenge of finding one\'s true center.'
+  },
+  'knot': {
+    definition: 'Tied rope representing problems, complexity, binding, and the need for resolution.',
+    jungianMeaning: 'Symbolizes psychological complexes, problems that need untangling, and the binding patterns of unconscious content.'
+  },
+  
+  // Modern and Cultural Symbols
+  'computer': {
+    definition: 'Electronic device representing information processing, artificial intelligence, and modern communication.',
+    jungianMeaning: 'Symbolizes the thinking function, information processing capabilities of consciousness, and sometimes artificial or disconnected thinking.'
+  },
+  'telephone': {
+    definition: 'Communication device representing connection, messages, and long-distance relationships.',
+    jungianMeaning: 'Symbolizes communication between different aspects of psyche or messages from the unconscious.'
+  },
+  'car': {
+    definition: 'Vehicle representing movement, control, personal power, and the direction of life.',
+    jungianMeaning: 'Symbolizes the ego\'s capacity to direct life course and the vehicle for psychological movement.'
+  },
+  'train': {
+    definition: 'Rail vehicle representing predetermined path, collective journey, and powerful forward movement.',
+    jungianMeaning: 'Symbolizes the collective aspects of psychological development and movement along predetermined patterns.'
+  },
+  'airplane': {
+    definition: 'Flying vehicle representing transcendence, escape, speed, and rising above earthly concerns.',
+    jungianMeaning: 'Symbolizes the capacity for transcendence and rapid movement between different levels of consciousness.'
+  },
+  'ship': {
+    definition: 'Water vessel representing journey through emotions, exploration, and navigation of the unconscious.',
+    jungianMeaning: 'Symbolizes the ego\'s capacity to navigate the emotional waters of the unconscious.'
+  },
+  'bicycle': {
+    definition: 'Two-wheeled vehicle representing balance, personal effort, and simple forward movement.',
+    jungianMeaning: 'Symbolizes the need for psychological balance and the effort required for personal development.'
+  },
+  
+  // Additional Symbols
   'stairs': {
     definition: 'Steps leading up or down, representing ascent, descent, and transitions between levels.',
     jungianMeaning: 'Symbolizes movement between conscious and unconscious levels, or progress in psychological development.'
