@@ -614,34 +614,61 @@ export function DreamVisionBoard() {
     setExportOptionsOpen(true);
   };
 
-  // Create video file combining image and audio
+  // Enhanced video creation with proper audio duration handling
   const createVideoWithAudio = async (canvas: HTMLCanvasElement, board: VisionBoard) => {
     try {
-      // Create video from canvas
-      const stream = canvas.captureStream(1); // 1 FPS for static image
+      if (!board.audioRecording) {
+        // No audio available, just export as image
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+        return;
+      }
+
+      // Create audio element to get actual duration
+      const audioElement = new Audio(board.audioRecording);
+      
+      await new Promise((resolve, reject) => {
+        audioElement.onloadedmetadata = resolve;
+        audioElement.onerror = reject;
+        audioElement.load();
+      });
+
+      const audioDuration = Math.max(audioElement.duration * 1000, 3000); // Minimum 3 seconds
+      
+      // Create video stream from canvas
+      const stream = canvas.captureStream(30); // Higher frame rate for smoother video
       const videoTrack = stream.getVideoTracks()[0];
       
-      // Create audio from the recorded audio
-      let audioTrack = null;
-      if (board.audioRecording) {
-        const audioElement = new Audio(board.audioRecording);
-        const audioContext = new AudioContext();
-        const source = audioContext.createMediaElementSource(audioElement);
-        const destination = audioContext.createMediaStreamDestination();
-        source.connect(destination);
-        audioTrack = destination.stream.getAudioTracks()[0];
-      }
+      // Create audio context and stream
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaElementSource(audioElement);
+      const destination = audioContext.createMediaStreamDestination();
+      source.connect(destination);
+      const audioTrack = destination.stream.getAudioTracks()[0];
       
-      // Combine video and audio streams
-      const combinedStream = new MediaStream();
-      combinedStream.addTrack(videoTrack);
-      if (audioTrack) {
-        combinedStream.addTrack(audioTrack);
-      }
+      // Combine streams
+      const combinedStream = new MediaStream([videoTrack, audioTrack]);
       
-      // Record the combined stream
+      // Use MP4 codec for better compatibility and smaller file size
+      const mimeType = MediaRecorder.isTypeSupported('video/mp4;codecs=h264,aac') 
+        ? 'video/mp4;codecs=h264,aac'
+        : MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+        ? 'video/webm;codecs=vp9,opus'
+        : 'video/webm';
+      
       const mediaRecorder = new MediaRecorder(combinedStream, {
-        mimeType: 'video/webm;codecs=vp9,opus'
+        mimeType,
+        videoBitsPerSecond: 1000000, // 1 Mbps for good quality with small size
+        audioBitsPerSecond: 128000   // 128 kbps for good audio quality
       });
       
       const chunks: Blob[] = [];
@@ -657,22 +684,26 @@ export function DreamVisionBoard() {
         const url = URL.createObjectURL(videoBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${board.title.replace(/\s+/g, '_')}_vision_board.mp4`;
+        a.download = `${board.title.replace(/\s+/g, '_')}_complete_vision.mp4`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        
+        // Cleanup
+        videoTrack.stop();
+        audioTrack.stop();
+        audioContext.close();
       };
       
+      // Start recording and play audio
       mediaRecorder.start();
+      audioElement.play();
       
-      // Record for the duration of the audio (minimum 3 seconds)
-      const duration = audioTrack ? 10000 : 3000; // 10 seconds or 3 seconds
+      // Stop recording when audio ends
       setTimeout(() => {
         mediaRecorder.stop();
-        videoTrack.stop();
-        if (audioTrack) audioTrack.stop();
-      }, duration);
+      }, audioDuration + 500); // Add small buffer
       
     } catch (error) {
       console.error('Video creation failed:', error);
@@ -1287,6 +1318,21 @@ ${dream.content}`;
             <Download size={16} className="mr-1" />
             Export Options
           </Button>
+          {currentBoard?.audioRecording && (
+            <Button 
+              variant="default" 
+              size="sm" 
+              onClick={async () => {
+                if (!currentBoard) return;
+                const canvas = await createVisionBoardCanvas(currentBoard);
+                await createVideoWithAudio(canvas, currentBoard);
+              }}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
+              <Play size={16} className="mr-1" />
+              Create Complete File
+            </Button>
+          )}
         </div>
       </div>
 
