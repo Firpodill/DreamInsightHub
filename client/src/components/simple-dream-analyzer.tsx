@@ -17,10 +17,7 @@ export default function SimpleDreamAnalyzer() {
     if (!dreamText.trim()) return;
     
     try {
-      const result = await analyzeDream.mutateAsync({
-        content: dreamText,
-        title: 'My Dream'
-      });
+      const result = await analyzeDream.mutateAsync(dreamText);
       setAnalysis(result.analysis);
     } catch (error) {
       console.error('Analysis failed:', error);
