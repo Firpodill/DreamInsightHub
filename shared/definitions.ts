@@ -309,6 +309,11 @@ export const symbolDefinitions: Record<string, Definition> = {
     definition: 'An educator figure representing guidance, knowledge transmission, and authority.',
     jungianMeaning: 'Represents the wise aspect of the psyche that guides learning and psychological development.'
   },
+  'mama sutra': {
+    definition: 'Michele, everybody\'s Mama Sutra is here with you and I see you...and you always LOVED to hear about my dreams....(laughs like Mae West and does a little shimmy sham)',
+    jungianMeaning: 'A nurturing archetypal figure representing maternal wisdom, comfort, and the eternal feminine principle that provides guidance and unconditional love.',
+    campbellMeaning: 'The Great Mother archetype who offers protection, wisdom, and spiritual nourishment on the hero\'s journey.'
+  },
   'classroom': {
     definition: 'A learning space representing structured education, social interaction, and skill development.',
     jungianMeaning: 'Symbolizes the controlled environment where conscious learning and social integration occur.'
