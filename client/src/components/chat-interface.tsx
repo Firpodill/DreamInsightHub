@@ -97,9 +97,11 @@ export function ChatInterface() {
                     {currentTranscript || "Listening..."}
                   </div>
                 </div>
-                <div className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-700 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
-                  🎤 Recording... Click SPEAK again to stop
-                </div>
+                {!currentTranscript && (
+                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-800 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
+                    🎤 Recording... Click SPEAK again to stop
+                  </div>
+                )}
               </div>
             ) : (
               <div className="w-full h-full flex flex-col speech-bubble-text relative">
@@ -132,7 +134,7 @@ export function ChatInterface() {
                   }}
                 />
                 {inputMode === 'text' && !dreamText.trim() && (
-                  <div className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-700 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
+                  <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-gray-800 px-2 text-center ${statusFading ? 'recording-status-fade' : 'recording-status-pulse'}`}>
                     ⌨️ Start typing your dream...
                   </div>
                 )}
