@@ -7,6 +7,7 @@ import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight,
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
+import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -17,6 +18,9 @@ export function DreamJournal() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visionBoards, setVisionBoards] = useState<any[]>([]);
   const [isDreamTextExpanded, setIsDreamTextExpanded] = useState(false);
+  const [symbolModalOpen, setSymbolModalOpen] = useState(false);
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [symbolType, setSymbolType] = useState<'archetype' | 'symbol'>('archetype');
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
   const { speak, stop, isPlaying } = useNaturalVoice();
@@ -119,8 +123,15 @@ export function DreamJournal() {
       `The ${symbols[0] || 'Magical'} ${archetypes[0] || 'Path'} Awakening`
     ];
     
-    const randomIndex = Math.floor(Math.random() * titleTemplates.length);
-    return titleTemplates[randomIndex];
+    // Use dream ID to ensure consistent title for same dream
+    const titleIndex = dream.id % titleTemplates.length;
+    return titleTemplates[titleIndex];
+  };
+
+  const openSymbolModal = (symbol: string, type: 'archetype' | 'symbol') => {
+    setSelectedSymbol(symbol);
+    setSymbolType(type);
+    setSymbolModalOpen(true);
   };
 
   const renderCalendarMonth = (monthIndex: number) => {
@@ -391,7 +402,9 @@ export function DreamJournal() {
               {/* Generated Image */}
               {selectedDream.imageUrl && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">Dreamscape</h3>
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2 tracking-wide">
+                    DREAMSCAPE
+                  </h3>
                   <div className="mb-2">
                     <p className="text-sm font-medium text-purple-600 italic">
                       {generateDreamscapeTitle(selectedDream)}
@@ -441,11 +454,12 @@ export function DreamJournal() {
                 <div className="mb-6">
                   <h3 className="font-medium text-gray-800 mb-2">Archetypes</h3>
                   <div className="flex flex-wrap gap-2">
-                    {selectedDream.archetypes.map((archetype) => (
+                    {selectedDream.archetypes.map((archetype, index) => (
                       <Badge 
-                        key={archetype} 
+                        key={`${selectedDream.id}-archetype-${index}`}
                         variant="secondary" 
-                        className={`${getArchetypeColor(archetype)} text-white`}
+                        className={`${getArchetypeColor(archetype)} text-white cursor-pointer hover:opacity-80 transition-opacity`}
+                        onClick={() => openSymbolModal(archetype, 'archetype')}
                       >
                         {archetype}
                       </Badge>
@@ -459,11 +473,12 @@ export function DreamJournal() {
                 <div className="mb-6">
                   <h3 className="font-medium text-gray-800 mb-2">Symbols</h3>
                   <div className="flex flex-wrap gap-2">
-                    {selectedDream.symbols.map((symbol) => (
+                    {selectedDream.symbols.map((symbol, index) => (
                       <Badge 
-                        key={symbol} 
+                        key={`${selectedDream.id}-symbol-${index}`}
                         variant="outline" 
-                        className="text-gray-600"
+                        className="border-purple-300 text-purple-700 cursor-pointer hover:bg-purple-50 transition-colors"
+                        onClick={() => openSymbolModal(symbol, 'symbol')}
                       >
                         {symbol}
                       </Badge>
