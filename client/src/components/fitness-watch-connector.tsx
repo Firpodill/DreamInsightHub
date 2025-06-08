@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Smartphone, Watch, Wifi, WifiOff, Activity, Heart, Moon, CheckCircle } from 'lucide-react';
+import { Smartphone, Watch, Wifi, WifiOff, Activity, Heart, Moon, CheckCircle, Clock } from 'lucide-react';
 
 interface FitnessDevice {
   id: string;
@@ -40,11 +40,12 @@ export function FitnessWatchConnector() {
   const [sleepData, setSleepData] = useState<SleepData[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
-  const [activeMetric, setActiveMetric] = useState<'sleep' | 'heart' | 'steps' | null>(null);
+  const [activeMetric, setActiveMetric] = useState<'sleep_time' | 'sleep_score' | null>(null);
   const [realTimeData, setRealTimeData] = useState({
     currentHeartRate: 0,
     todaySteps: 0,
-    sleepScore: 0,
+    sleepScore: 85,
+    sleepDuration: 7.5,
     lastUpdate: new Date()
   });
 
@@ -111,8 +112,10 @@ export function FitnessWatchConnector() {
         const sleepData = await sleepResponse.json();
         const latestSleep = sleepData.sleep?.[0];
         const sleepScore = latestSleep?.efficiency || (latestSleep?.minutesAsleep ? Math.round((latestSleep.minutesAsleep / 480) * 100) : 85);
+        const sleepDuration = latestSleep?.minutesAsleep ? (latestSleep.minutesAsleep / 60) : 7.5;
         
         updatedData.sleepScore = Math.min(100, sleepScore);
+        updatedData.sleepDuration = sleepDuration;
       }
 
       if (heartRateResponse && heartRateResponse.ok) {
@@ -253,8 +256,8 @@ export function FitnessWatchConnector() {
       setLastSyncTime(new Date());
       
       const deviceData = {
-        'apple_health': { currentHeartRate: 72, todaySteps: 3420, sleepScore: 83 },
-        'fitbit_device': { currentHeartRate: 68, todaySteps: 5240, sleepScore: 78 }
+        'apple_health': { currentHeartRate: 72, todaySteps: 3420, sleepScore: 83, sleepDuration: 7.2 },
+        'fitbit_device': { currentHeartRate: 68, todaySteps: 5240, sleepScore: 78, sleepDuration: 7.8 }
       };
       
       setRealTimeData({
@@ -397,10 +400,10 @@ export function FitnessWatchConnector() {
                 </AlertDescription>
               </Alert>
 
-              {/* Live Fitness Metrics Dashboard */}
+              {/* Sleep Data Dashboard */}
               <div className="bg-gray-800 rounded-lg p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-white font-semibold text-lg">Live Fitness Metrics</h3>
+                  <h3 className="text-white font-semibold text-lg">Sleep Data</h3>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span className="text-xs text-green-400 font-medium">
@@ -408,38 +411,27 @@ export function FitnessWatchConnector() {
                     </span>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Heart Rate Button */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Sleep Time */}
                   <Button
-                    variant={activeMetric === 'heart' ? 'default' : 'outline'}
-                    className="h-auto p-4 flex flex-col items-center space-y-2 bg-red-900/20 border-red-500/50 hover:bg-red-900/40"
-                    onClick={() => setActiveMetric(activeMetric === 'heart' ? null : 'heart')}
-                  >
-                    <Heart className="h-6 w-6 text-red-400" />
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-red-400">{realTimeData.currentHeartRate}</div>
-                      <div className="text-sm text-gray-400">BPM</div>
-                    </div>
-                  </Button>
-
-                  {/* Steps Button */}
-                  <Button
-                    variant={activeMetric === 'steps' ? 'default' : 'outline'}
+                    variant={activeMetric === 'sleep_time' ? 'default' : 'outline'}
                     className="h-auto p-4 flex flex-col items-center space-y-2 bg-blue-900/20 border-blue-500/50 hover:bg-blue-900/40"
-                    onClick={() => setActiveMetric(activeMetric === 'steps' ? null : 'steps')}
+                    onClick={() => setActiveMetric(activeMetric === 'sleep_time' ? null : 'sleep_time')}
                   >
-                    <Activity className="h-6 w-6 text-blue-400" />
+                    <Clock className="h-6 w-6 text-blue-400" />
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-400">{realTimeData.todaySteps.toLocaleString()}</div>
-                      <div className="text-sm text-gray-400">Steps</div>
+                      <div className="text-2xl font-bold text-blue-400">
+                        {Math.floor(realTimeData.sleepDuration || 7.5)}h {Math.round(((realTimeData.sleepDuration || 7.5) % 1) * 60)}m
+                      </div>
+                      <div className="text-sm text-gray-400">Sleep Time</div>
                     </div>
                   </Button>
 
-                  {/* Sleep Score Button */}
+                  {/* Sleep Score */}
                   <Button
-                    variant={activeMetric === 'sleep' ? 'default' : 'outline'}
+                    variant={activeMetric === 'sleep_score' ? 'default' : 'outline'}
                     className="h-auto p-4 flex flex-col items-center space-y-2 bg-purple-900/20 border-purple-500/50 hover:bg-purple-900/40"
-                    onClick={() => setActiveMetric(activeMetric === 'sleep' ? null : 'sleep')}
+                    onClick={() => setActiveMetric(activeMetric === 'sleep_score' ? null : 'sleep_score')}
                   >
                     <Moon className="h-6 w-6 text-purple-400" />
                     <div className="text-center">
@@ -449,62 +441,8 @@ export function FitnessWatchConnector() {
                   </Button>
                 </div>
 
-                {/* Detailed Analytics */}
-                {activeMetric === 'heart' && (
-                  <div className="bg-gray-900 rounded-lg p-4 space-y-3">
-                    <h4 className="text-red-400 font-medium">Heart Rate Analysis</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-400">Resting HR:</span>
-                        <span className="text-white ml-2">{Math.max(50, realTimeData.currentHeartRate - 15)} BPM</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Max HR:</span>
-                        <span className="text-white ml-2">{realTimeData.currentHeartRate + 20} BPM</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Zone:</span>
-                        <span className="text-green-400 ml-2">Moderate</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Variability:</span>
-                        <span className="text-white ml-2">Good</span>
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-2">
-                      💡 Your heart rate indicates good cardiovascular health and readiness for quality sleep.
-                    </div>
-                  </div>
-                )}
-
-                {activeMetric === 'steps' && (
-                  <div className="bg-gray-900 rounded-lg p-4 space-y-3">
-                    <h4 className="text-blue-400 font-medium">Activity Analysis</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-400">Goal Progress:</span>
-                        <span className="text-white ml-2">{Math.round((realTimeData.todaySteps / 10000) * 100)}%</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Distance:</span>
-                        <span className="text-white ml-2">{(realTimeData.todaySteps * 0.0008).toFixed(1)} km</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Calories:</span>
-                        <span className="text-white ml-2">{Math.round(realTimeData.todaySteps * 0.04)}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Active Time:</span>
-                        <span className="text-white ml-2">{Math.round(realTimeData.todaySteps / 100)} min</span>
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-2">
-                      💡 Regular activity improves sleep quality and dream recall. Keep moving!
-                    </div>
-                  </div>
-                )}
-
-                {activeMetric === 'sleep' && (
+                {/* Sleep Analytics */}
+                {(activeMetric === 'sleep_time' || activeMetric === 'sleep_score') && (
                   <div className="bg-gray-900 rounded-lg p-4 space-y-3">
                     <h4 className="text-purple-400 font-medium">Sleep Quality Analysis</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
