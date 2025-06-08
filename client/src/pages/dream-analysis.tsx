@@ -7,6 +7,7 @@ import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles, Archi
 import { useAnalyzeDream, useGenerateImage, useUpdateDream } from '@/hooks/use-dreams';
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
+import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
 
 export default function DreamAnalysis() {
   const [location, navigate] = useLocation();
@@ -135,9 +136,17 @@ export default function DreamAnalysis() {
             {/* Summary */}
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Brain className="w-5 h-5 mr-2" />
-                  Dream Summary
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Brain className="w-5 h-5 mr-2" />
+                    Dream Summary
+                  </div>
+                  <EnhancedVoiceButton 
+                    text={analysis.summary}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -150,9 +159,17 @@ export default function DreamAnalysis() {
             {/* Jungian Interpretation */}
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Star className="w-5 h-5 mr-2" />
-                  Jungian Interpretation
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Star className="w-5 h-5 mr-2" />
+                    Jungian Interpretation
+                  </div>
+                  <EnhancedVoiceButton 
+                    text={analysis.jungianInterpretation}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -228,9 +245,17 @@ export default function DreamAnalysis() {
             {/* Shadow Work */}
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Heart className="w-5 h-5 mr-2" />
-                  Shadow Work
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Heart className="w-5 h-5 mr-2" />
+                    Shadow Work
+                  </div>
+                  <EnhancedVoiceButton 
+                    text={analysis.shadowWork}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
                 </CardTitle>
               </CardHeader>
               <CardContent>
