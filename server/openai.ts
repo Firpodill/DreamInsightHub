@@ -120,31 +120,34 @@ export async function generateDreamVisualization(dreamContent: string, analysis:
       ? `Emotional atmosphere: ${analysis.emotionalTone}. ` 
       : '';
 
-    const prompt = `Create a Pop Art comic book style collage featuring these dream analysis elements: ${analysisWords.join(', ')}. 
+    const prompt = `Create a textless Pop Art comic book style visual collage representing these dream symbols: ${analysisWords.join(', ')}. 
 
 ${archetypeElements}${symbolElements}${predominantSymbolElement}${emotionalTone}
 
-Style: Classic Pop Art comic book aesthetic with bold, clean lines and vibrant colors. Create a dynamic collage composition that combines multiple scenes and imagery panels representing the psychological themes from the dream analysis.
+CRITICAL: This must be a purely visual image with absolutely no text, letters, words, signs, labels, or written language of any kind.
+
+Style: Classic Pop Art comic book aesthetic with bold, clean lines and vibrant colors. Create a dynamic visual collage that uses only imagery, shapes, and colors to represent psychological themes.
 
 Visual elements:
-- Bold comic book outlines and clean shapes
+- Bold comic book outlines and clean geometric shapes
 - Bright primary colors (red, blue, yellow) with high contrast
 - Classic halftone dot patterns and Ben-Day dots
-- Multiple panel-like compositions within single image
-- Roy Lichtenstein inspired clean graphic style
+- Roy Lichtenstein inspired clean graphic style with pure imagery
 - Andy Warhol style color blocking and repetition
-- Collage effect mixing different visual elements
-- Dynamic angular compositions and bold graphics
-- Absolutely no text, words, letters, or speech bubbles
+- Abstract symbolic representations using only visual elements
+- Dynamic angular compositions with bold graphics
+- Multiple visual panels showing different symbolic imagery
+- NO TEXT, NO LETTERS, NO WORDS, NO SIGNS, NO LABELS
 
-Composition: Arrange visual elements representing the dream themes in a dynamic collage format, with each psychological symbol and archetype translated into bold graphic imagery. Clean, graphic novel aesthetics with vibrant Pop Art color palette.`;
+Focus on pure visual symbolism: use abstract shapes, colors, and imagery to represent the psychological concepts. Think museum-quality Pop Art that communicates through visual metaphor alone, not text.`;
 
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt: prompt,
       n: 1,
       size: "1024x1024",
-      quality: "standard",
+      quality: "hd",
+      style: "vivid",
     });
 
     return { url: response.data?.[0]?.url || '' };
