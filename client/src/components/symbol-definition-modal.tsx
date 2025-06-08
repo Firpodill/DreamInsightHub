@@ -62,8 +62,9 @@ function generateMapUrl(locationName: string): string {
 export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDefinitionModalProps) {
   const [searchTerm, setSearchTerm] = useState('');
   
-  const definitions = type === 'archetype' ? archetypeDefinitions : symbolDefinitions;
-  const currentDefinition = definitions[symbol.toLowerCase()] || definitions[symbol] || getDefinition(symbol);
+  // Only use archetype definitions if explicitly looking for archetypes
+  const definitions = type === 'archetype' ? archetypeDefinitions : {};
+  const currentDefinition = type === 'archetype' ? (definitions[symbol.toLowerCase()] || definitions[symbol]) : null;
   
   const isPlace = isLikelyPlace(symbol);
   const isPerson = isLikelyPersonName(symbol);
@@ -259,14 +260,8 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                   <p className="text-gray-600 leading-relaxed">{currentDefinition.definition}</p>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-white/60 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <User className="w-4 h-4 text-blue-600" />
-                      <h4 className="font-semibold text-blue-800">Jungian Psychology</h4>
-                    </div>
-                    <p className="text-gray-700 text-sm leading-relaxed">{currentDefinition.jungianMeaning}</p>
-                  </div>
+                <div className="grid md:grid-cols-1 gap-4">
+                  {/* Remove Jungian content completely */}
                   
                   {/* Map Integration for Places */}
                   {isPlace && mapUrl && (
@@ -385,15 +380,7 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                     </div>
                   )}
                   
-                  {currentDefinition.campbellMeaning && (
-                    <div className="bg-white/60 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Users className="w-4 h-4 text-purple-600" />
-                        <h4 className="font-semibold text-purple-800">Campbell's Mythology</h4>
-                      </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">{currentDefinition.campbellMeaning}</p>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </div>

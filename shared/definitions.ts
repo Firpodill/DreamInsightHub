@@ -482,27 +482,18 @@ function generateContextualDefinition(term: string): Definition {
     return commonSymbols[term];
   }
   
-  // Check if it's a potential place name (contains geographic indicators)
-  if (isLikelyPlace(term)) {
-    return {
-      definition: `${term} is a geographic location. Click the map button below to view its exact location and explore the area.`,
-      jungianMeaning: `Geographic locations in dreams often represent life journeys, destinations, or significant places from your experiences.`
-    };
+  // For places - only return factual information if we have it
+  if (isLikelyPlace(term) && commonSymbols[term.toLowerCase()]) {
+    return commonSymbols[term.toLowerCase()];
   }
   
-  // Check if it's a potential person's name (capitalized, common name patterns)
-  if (isLikelyPersonName(term)) {
-    return {
-      definition: `${term} is a person's name. This individual may represent someone significant in your life or personal relationships.`,
-      jungianMeaning: `People in dreams often embody qualities, emotions, or relationships that are meaningful to the dreamer.`
-    };
+  // For people - only return factual information if we have it  
+  if (isLikelyPersonName(term) && commonSymbols[term.toLowerCase()]) {
+    return commonSymbols[term.toLowerCase()];
   }
   
-  // Return basic info directing to search for real definitions
-  return {
-    definition: `Search for real definition and information about "${term}" using the links below.`,
-    jungianMeaning: `For authentic information about this term, use the search options provided.`
-  };
+  // Don't return any definitions - force dictionary lookup or search
+  return null;
 }
 
 function isLikelyPlace(term: string): boolean {
