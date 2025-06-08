@@ -134,14 +134,14 @@ export default function DreamChat() {
   return (
     <div className="max-w-md mx-auto bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 text-white min-h-screen relative overflow-hidden">
       {/* Header */}
-      <header className="text-center py-2 px-6">
+      <header className="text-center py-2 px-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center animate-eyeball-spin relative" style={{
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center animate-eyeball-spin relative" style={{
               background: 'radial-gradient(circle at center, #ffffff 20%, #e5e7eb 40%, #374151 70%, #111827 100%)',
               border: '2px solid #1f2937'
             }}>
-              <div className="w-6 h-6 rounded-full relative flex items-center justify-center animate-eyeball-spin" style={{
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full relative flex items-center justify-center animate-eyeball-spin" style={{
                 background: 'radial-gradient(circle at 30% 30%, #3b82f6, #1e40af, #0f172a)',
                 border: '1px solid #1e40af'
               }}>
@@ -165,12 +165,12 @@ export default function DreamChat() {
               >
                 {formatTime(currentDate)}
               </button>
-              <span className="text-sm font-medium">TODAY</span>
+              <span className="text-xs sm:text-sm font-medium">TODAY</span>
               <span className="text-xs font-bold" style={{ color: '#E53E3E' }}>{formatDayName(currentDate)}</span>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium px-2 py-1 rounded" style={{
+            <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded" style={{
               backgroundColor: profileName ? '#E53E3E' : 'transparent',
               color: profileName ? '#FFFFFF' : 'inherit'
             }}>
@@ -178,7 +178,7 @@ export default function DreamChat() {
             </span>
             <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
               <DialogTrigger asChild>
-                <button className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105" style={{
+                <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all hover:scale-105" style={{
                   background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
                   border: '2px solid #FFFF00'
                 }}>
@@ -189,7 +189,7 @@ export default function DreamChat() {
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <User className="w-6 h-6 text-gray-600" />
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
                   )}
                 </button>
               </DialogTrigger>
@@ -261,30 +261,30 @@ export default function DreamChat() {
             </Dialog>
           </div>
         </div>
-        <div className="text-center mt-4">
-          <div className="mb-2" style={{
+        <div className="text-center mt-4 px-2">
+          <div className="mb-2 mx-auto max-w-xs" style={{
             background: '#E53E3E',
-            padding: '16px 24px',
+            padding: '12px 16px',
             borderRadius: '12px',
-            border: '4px solid #000000',
+            border: '3px solid #000000',
             transform: 'rotate(-1deg)',
-            boxShadow: '8px 8px 0px #000000',
+            boxShadow: '6px 6px 0px #000000',
             position: 'relative',
             zIndex: 10
           }}>
-            <h1 className="text-5xl font-black" style={{
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black" style={{
               color: '#FFFF00',
-              WebkitTextStroke: '3px #000000',
-              letterSpacing: '4px',
+              WebkitTextStroke: '2px #000000',
+              letterSpacing: '2px',
               fontFamily: 'Impact, Arial Black, sans-serif',
               textTransform: 'uppercase',
               filter: 'contrast(1.4) saturate(1.5)',
               lineHeight: '1',
               marginBottom: '4px'
             }}>DREAMSPEAK<span style={{ fontSize: '0.3em', verticalAlign: 'super', color: '#FFFF00', WebkitTextStroke: '0.5px #000000' }}>©</span></h1>
-            <h2 className="text-sm font-bold" style={{
+            <h2 className="text-xs sm:text-sm font-bold" style={{
               color: '#FFFF00',
-              letterSpacing: '6px',
+              letterSpacing: '3px',
               fontFamily: 'Impact, Arial Black, sans-serif',
               textTransform: 'uppercase',
               lineHeight: '1'
@@ -294,25 +294,25 @@ export default function DreamChat() {
       </header>
 
       {/* Navigation Tabs */}
-      <div className="px-6 mb-2 -mt-1">
+      <div className="px-4 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
-            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <MessageCircle className="w-3 h-3 mr-1" />
-              Chat
+          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700 h-12">
+            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
+              <MessageCircle className="w-3 h-3" />
+              <span className="hidden xs:inline">Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <Brain className="w-3 h-3 mr-1" />
-              Insights
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
+              <Brain className="w-3 h-3" />
+              <span className="hidden xs:inline">Insights</span>
             </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <BookOpen className="w-3 h-3 mr-1" />
-              Journal Logs
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
+              <BookOpen className="w-3 h-3" />
+              <span className="hidden xs:inline sm:hidden">Logs</span>
+              <span className="hidden sm:inline">Journal Logs</span>
             </TabsTrigger>
-
-            <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <Clock className="w-3 h-3 mr-1" />
-              Sleep
+            <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
+              <Clock className="w-3 h-3" />
+              <span className="hidden xs:inline">Sleep</span>
             </TabsTrigger>
           </TabsList>
           
