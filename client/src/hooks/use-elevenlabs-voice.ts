@@ -45,8 +45,9 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         setIsLoading(true);
         setError(null);
         
-        const response = await fetch('/api/elevenlabs/voices', {
-          credentials: 'include'
+        const response = await fetch(`/api/elevenlabs/voices?t=${Date.now()}`, {
+          credentials: 'include',
+          cache: 'no-cache'
         });
         
         if (!response.ok) {
