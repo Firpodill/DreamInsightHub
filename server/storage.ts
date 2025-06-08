@@ -66,9 +66,15 @@ export class MemStorage implements IStorage {
   async createDream(insertDream: InsertDream): Promise<Dream> {
     const id = this.currentDreamId++;
     const dream: Dream = { 
-      ...insertDream, 
       id, 
-      createdAt: new Date()
+      createdAt: new Date(),
+      title: insertDream.title,
+      content: insertDream.content,
+      userId: insertDream.userId,
+      analysis: insertDream.analysis ?? null,
+      archetypes: insertDream.archetypes ?? null,
+      symbols: insertDream.symbols ?? null,
+      imageUrl: insertDream.imageUrl ?? null
     };
     this.dreams.set(id, dream);
     return dream;
@@ -115,9 +121,13 @@ export class MemStorage implements IStorage {
   async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
     const id = this.currentMessageId++;
     const message: ChatMessage = { 
-      ...insertMessage, 
       id, 
-      createdAt: new Date()
+      createdAt: new Date(),
+      role: insertMessage.role,
+      content: insertMessage.content,
+      dreamId: insertMessage.dreamId !== undefined ? insertMessage.dreamId : null,
+      messageType: insertMessage.messageType !== undefined ? insertMessage.messageType : null,
+      metadata: insertMessage.metadata !== undefined ? insertMessage.metadata : null
     };
     this.chatMessages.set(id, message);
     return message;

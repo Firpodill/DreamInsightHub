@@ -238,30 +238,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const symbolCount = new Map<string, number>();
       
       dreams.forEach(dream => {
-        dream.archetypes?.forEach(archetype => {
-          archetypeCount.set(archetype, (archetypeCount.get(archetype) || 0) + 1);
-        });
-        dream.symbols?.forEach(symbol => {
-          symbolCount.set(symbol, (symbolCount.get(symbol) || 0) + 1);
-        });
+        // Handle archetypes - ensure we have valid array data
+        if (dream.archetypes && Array.isArray(dream.archetypes)) {
+          dream.archetypes.forEach(archetype => {
+            if (archetype && typeof archetype === 'string') {
+              archetypeCount.set(archetype, (archetypeCount.get(archetype) || 0) + 1);
+            }
+          });
+        }
+        
+        // Handle symbols - ensure we have valid array data
+        if (dream.symbols && Array.isArray(dream.symbols)) {
+          dream.symbols.forEach(symbol => {
+            if (symbol && typeof symbol === 'string') {
+              symbolCount.set(symbol, (symbolCount.get(symbol) || 0) + 1);
+            }
+          });
+        }
       });
 
       const totalDreams = dreams.length;
-      const archetypeFrequencies = Array.from(archetypeCount.entries())
+      const archetypeFrequencies = totalDreams > 0 ? Array.from(archetypeCount.entries())
         .map(([archetype, count]) => ({
           archetype,
           count,
           frequency: Math.round((count / totalDreams) * 100)
         }))
-        .sort((a, b) => b.count - a.count);
+        .sort((a, b) => b.count - a.count) : [];
 
-      const symbolFrequencies = Array.from(symbolCount.entries())
+      const symbolFrequencies = totalDreams > 0 ? Array.from(symbolCount.entries())
         .map(([symbol, count]) => ({
           symbol,
           count,
           frequency: Math.round((count / totalDreams) * 100)
         }))
-        .sort((a, b) => b.count - a.count);
+        .sort((a, b) => b.count - a.count) : [];
 
       // Calculate individuation progress (simplified)
       const uniqueArchetypes = archetypeCount.size;
