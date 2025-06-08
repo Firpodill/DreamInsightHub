@@ -6,8 +6,8 @@ interface HighlightedDreamTextProps {
   className?: string;
 }
 
-// Enhanced detection for proper names, places, and significant entities
-type HighlightableTerm = { term: string; start: number; end: number; type: 'person' | 'place' | 'entity' };
+// Enhanced detection for proper names, places, significant entities, and archetypes
+type HighlightableTerm = { term: string; start: number; end: number; type: 'person' | 'place' | 'entity' | 'archetype' };
 
 function detectHighlightableTerms(text: string): HighlightableTerm[] {
   const terms: HighlightableTerm[] = [];
@@ -27,6 +27,12 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     /\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?/g,  // Capitalized names (2+ chars to avoid single letters)
   ];
   
+  // Jung and Campbell archetypes to detect
+  const archetypes = [
+    'Hero', 'Shadow', 'Anima', 'Animus', 'Self', 'Wise Old Man', 'Great Mother', 'Trickster', 
+    'The Lover', 'The Sage', 'The Ruler', 'The Father', 'Mother', 'Father', 'Mentor', 'Guardian'
+  ];
+
   // Common proper names and famous people to specifically catch
   const commonNames = [
     'Angie', 'Angela', 'Christopher', 'Michael', 'Sarah', 'David', 'Lisa', 'Emily', 'James', 'Mary', 
@@ -80,17 +86,37 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     }
   });
   
-  // Find famous people first (priority over common names)
-  famousPeople.forEach(name => {
-    const regex = new RegExp(`\\b${name}\\b`, 'gi');
+  // Find archetypes first (highest priority)
+  archetypes.forEach(archetype => {
+    const regex = new RegExp(`\\b${archetype}\\b`, 'gi');
     let match: RegExpExecArray | null;
     while ((match = regex.exec(text)) !== null) {
       terms.push({
         term: match[0],
         start: match.index,
         end: match.index + match[0].length,
-        type: 'person'
+        type: 'archetype'
       });
+    }
+  });
+
+  // Find famous people second (priority over common names)
+  famousPeople.forEach(name => {
+    const regex = new RegExp(`\\b${name}\\b`, 'gi');
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+      // Check if this overlaps with existing terms
+      const overlaps = terms.some(term => 
+        match!.index < term.end && match!.index + match![0].length > term.start
+      );
+      if (!overlaps) {
+        terms.push({
+          term: match[0],
+          start: match.index,
+          end: match.index + match[0].length,
+          type: 'person'
+        });
+      }
     }
   });
 
@@ -184,12 +210,14 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
 
 export function HighlightedDreamText({ text, className = "" }: HighlightedDreamTextProps) {
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<'archetype' | 'symbol'>('symbol');
   const [modalOpen, setModalOpen] = useState(false);
   
   const highlightableTerms = detectHighlightableTerms(text);
   
-  const handleTermClick = (term: string) => {
+  const handleTermClick = (term: string, type: HighlightableTerm['type']) => {
     setSelectedSymbol(term);
+    setSelectedType(type === 'archetype' ? 'archetype' : 'symbol');
     setModalOpen(true);
   };
   
@@ -211,8 +239,10 @@ export function HighlightedDreamText({ text, className = "" }: HighlightedDreamT
         );
       }
       
-      // Add the highlighted term
-      const colorClass = term.type === 'place' 
+      // Add the highlighted term with archetype-specific styling
+      const colorClass = term.type === 'archetype'
+        ? 'text-red-800 bg-gradient-to-r from-red-100 to-orange-100 border-red-400 hover:bg-red-200 font-bold shadow-md'
+        : term.type === 'place' 
         ? 'text-green-700 bg-green-100 border-green-300 hover:bg-green-200' 
         : term.type === 'person'
         ? 'text-blue-700 bg-blue-100 border-blue-300 hover:bg-blue-200'
@@ -222,8 +252,8 @@ export function HighlightedDreamText({ text, className = "" }: HighlightedDreamT
         <span
           key={`term-${index}`}
           className={`${colorClass} px-1 py-0.5 rounded cursor-pointer border transition-all duration-200 hover:shadow-sm font-medium`}
-          onClick={() => handleTermClick(term.term)}
-          title={`Click to learn about ${term.term}`}
+          onClick={() => handleTermClick(term.term, term.type)}
+          title={`Click to learn about ${term.term}${term.type === 'archetype' ? ' (Jungian Archetype)' : ''}`}
         >
           {term.term}
         </span>
@@ -258,7 +288,7 @@ export function HighlightedDreamText({ text, className = "" }: HighlightedDreamT
             setSelectedSymbol(null);
           }}
           symbol={selectedSymbol}
-          type="symbol"
+          type={selectedType}
         />
       )}
     </>
