@@ -48,7 +48,7 @@ export default function DreamAnalysis() {
     try {
       const symbols = analyzeDream.data.analysis.symbols?.join(', ') || '';
       const archetypes = analyzeDream.data.analysis.archetypes?.join(', ') || '';
-      const prompt = `Pop art comic book style illustration inspired by dream symbols like ${symbols} and archetypes of ${archetypes}. Bold colors, halftone patterns, thick black outlines, vintage comic aesthetic with Ben-Day dots and dramatic lighting. Retro superhero comic book art style.`;
+      const prompt = `Pop art comic book style collage composition inspired by dream symbols like ${symbols} and archetypes of ${archetypes}. Multiple panels and elements arranged in a dynamic collage layout, bold colors, halftone patterns, thick black outlines, Ben-Day dots, speech bubbles, vintage comic aesthetic with dramatic lighting. Retro superhero comic book collage art style with overlapping panels and mixed compositions.`;
       
       const result = await generateImage.mutateAsync({ prompt });
       
