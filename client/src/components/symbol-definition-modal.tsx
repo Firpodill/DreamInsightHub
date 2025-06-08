@@ -75,18 +75,18 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white border-purple-500/30">
-        <DialogHeader className="border-b border-purple-500/30 pb-4">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-black via-gray-900 to-black text-white border-gray-600/30">
+        <DialogHeader className="border-b border-gray-600/30 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-600/20 rounded-lg">
-                <Book className="w-6 h-6 text-purple-300" />
+              <div className="p-2 bg-gray-700/40 rounded-lg">
+                <Book className="w-6 h-6 text-gray-300" />
               </div>
               <div>
                 <DialogTitle className="text-2xl font-bold text-white">
                   Dream Symbol Encyclopedia
                 </DialogTitle>
-                <p className="text-purple-200 text-sm mt-1">
+                <p className="text-gray-300 text-sm mt-1">
                   Browse and search through our comprehensive collection of dream symbols and archetypes with their
                   psychological meanings.
                 </p>
@@ -96,7 +96,7 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
               onClick={onClose}
               variant="ghost"
               size="icon"
-              className="text-purple-300 hover:text-white hover:bg-purple-600/20"
+              className="text-gray-300 hover:text-white hover:bg-gray-700/20"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -106,12 +106,12 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
         <div className="space-y-6 py-6">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-purple-400" />
+            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
             <Input
               placeholder="Search archetypes and symbols..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-slate-800/50 border-purple-500/30 text-white placeholder:text-purple-300"
+              className="pl-10 bg-gray-800/50 border-gray-600/30 text-white placeholder:text-gray-400"
             />
           </div>
 
