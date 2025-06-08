@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2, X } from 'lucide-react';
+import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
@@ -16,6 +16,7 @@ export function DreamJournal() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [visionBoards, setVisionBoards] = useState<any[]>([]);
+  const [isDreamTextExpanded, setIsDreamTextExpanded] = useState(false);
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
   const { speak, stop, isPlaying } = useNaturalVoice();
@@ -358,12 +359,6 @@ export function DreamJournal() {
                 </Button>
               </div>
 
-              {/* Dream Content */}
-              <div className="mb-6">
-                <h3 className="font-medium text-gray-800 mb-2">Dream Description</h3>
-                <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
-              </div>
-
               {/* Generated Image */}
               {selectedDream.imageUrl && (
                 <div className="mb-6">
@@ -385,6 +380,27 @@ export function DreamJournal() {
                   </div>
                 </div>
               )}
+
+              {/* Dream Content - Collapsible */}
+              <div className="mb-6">
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsDreamTextExpanded(!isDreamTextExpanded)}
+                  className="flex items-center w-full justify-between p-0 h-auto font-medium text-gray-800 hover:bg-transparent"
+                >
+                  <span>Original Dream Text</span>
+                  {isDreamTextExpanded ? (
+                    <ChevronUp className="w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                </Button>
+                {isDreamTextExpanded && (
+                  <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
+                  </div>
+                )}
+              </div>
 
               {/* Archetypes */}
               {selectedDream.archetypes && selectedDream.archetypes.length > 0 && (
