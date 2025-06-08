@@ -430,8 +430,8 @@ export function FitnessWatchConnector() {
           <div className="font-medium mb-2">Integration Status:</div>
           <div className="text-sm space-y-1">
             <div><strong>Apple Health:</strong> ✅ HealthKit API implemented (requires iOS Safari)</div>
-            <div><strong>Fitbit:</strong> ✅ OAuth 2.0 integration active with real data access</div>
-            <div>Click Connect to authorize access to your fitness data</div>
+            <div><strong>Fitbit:</strong> ✅ OAuth 2.0 integration active - redirect URL configured</div>
+            <div>Ready to connect with your real Fitbit account data</div>
           </div>
         </AlertDescription>
       </Alert>
