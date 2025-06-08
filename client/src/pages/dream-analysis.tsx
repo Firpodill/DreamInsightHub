@@ -8,6 +8,7 @@ import { useAnalyzeDream, useGenerateImage, useUpdateDream } from '@/hooks/use-d
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
+import { HighlightedDreamText } from '@/components/highlighted-dream-text';
 
 // Archetype color mapping from Complete Archetype Spectrum
 const archetypeColors: Record<string, string> = {
@@ -155,6 +156,28 @@ export default function DreamAnalysis() {
       {/* Content */}
       <div className={isStandalone ? "p-6 space-y-6" : "p-4 space-y-4"}>
 
+        {/* Original Dream Text */}
+        {dreamText && (
+          <Card className="bg-gradient-to-br from-red-50 via-yellow-50 to-red-100 border-2 border-red-200">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent mb-1 tracking-wide uppercase flex items-center justify-between">
+                Original Dream Text
+                <EnhancedVoiceButton 
+                  text={dreamText}
+                  variant="outline"
+                  size="sm"
+                  className="text-red-600 border-red-300 hover:bg-red-50"
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <HighlightedDreamText 
+                text={dreamText}
+                className="text-gray-800 leading-relaxed font-medium"
+              />
+            </CardContent>
+          </Card>
+        )}
 
         {/* Loading State */}
         {analyzeDream.isPending && (
