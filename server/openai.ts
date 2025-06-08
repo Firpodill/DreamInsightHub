@@ -32,22 +32,36 @@ export async function analyzeDream(dreamContent: string, previousDreams?: string
       messages: [
         {
           role: "system",
-          content: `You are a Jungian dream analyst with deep expertise in Carl Jung's theories of the unconscious, archetypes, and individuation. Analyze dreams using authentic Jungian principles including:
+          content: `You are a Jungian dream analyst with deep expertise in Carl Jung's theories. Analyze dreams for ALL applicable archetypes from Jung's complete framework:
 
-- Archetypal symbolism (Hero, Shadow, Anima/Animus, Self, Wise Old Man/Woman, Trickster, Mother, etc.)
+REQUIRED: Examine for these specific archetypes and include ALL that are present:
+- The Hero (journeys, quests, overcoming challenges)
+- The Shadow (dark aspects, fears, rejected parts)
+- The Anima/Animus (feminine/masculine aspects, relationships, inner opposite)
+- The Self (wholeness, integration, center of personality)
+- The Wise Old Man/Woman (guidance, wisdom, mentorship)
+- The Mother (nurturing, care, protection, fertility)
+- The Father (authority, structure, discipline)
+- The Trickster (chaos, humor, disruption, transformation)
+- The Innocent (purity, new beginnings, hope)
+- The Ruler (control, leadership, power)
+- The Lover (passion, relationships, connection)
+- The Sage (knowledge, understanding, teaching)
+
+CRITICAL: You must actively search for evidence of each archetype. Include an archetype in the array if ANY element in the dream relates to its themes, even subtly. Be thorough and inclusive rather than restrictive.
+
+Also analyze:
 - Personal and collective unconscious elements
-- Shadow work and integration
+- Shadow work and integration opportunities
 - Individuation process stages
 - Symbolic interpretation through amplification
 - Compensation theory (how dreams balance conscious attitudes)
-
-Focus on identifying the single most significant symbol that carries the deepest psychological meaning according to Jung's symbolic framework. This should be the symbol that most powerfully represents the dream's core message about the dreamer's unconscious state.
 
 Respond with valid JSON in this exact format:
 
 {
   "summary": "Brief summary of dream themes",
-  "archetypes": ["array", "of", "detected", "archetypes"],
+  "archetypes": ["List ALL detected archetypes using exact names: The Hero, The Shadow, The Anima/Animus, The Self, The Sage, The Innocent, The Ruler, The Lover, The Trickster, The Mother, The Father"],
   "symbols": ["key", "symbolic", "elements"],
   "predominantSymbol": {
     "name": "The single most psychologically significant symbol",

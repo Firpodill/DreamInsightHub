@@ -47,7 +47,7 @@ export function EnhancedVoiceButton({
       setIsPlaying(false);
     };
     audioManager.registerAudio(stopAll);
-  }, [audioManager, systemVoice, elevenLabsVoice]);
+  }, []);
 
   // Show voice hint on first render if not dismissed - only once globally
   useEffect(() => {

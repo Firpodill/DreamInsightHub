@@ -61,7 +61,7 @@ export function useGlobalVoicePreference() {
     }
   };
 
-  // Load from localStorage on first use
+  // Load from localStorage on first use or set default to Chessie V3
   useEffect(() => {
     if (globalSelectedVoice === null) {
       try {
@@ -72,6 +72,11 @@ export function useGlobalVoicePreference() {
         if (savedId && savedName && savedType) {
           // We'll reconstruct the voice when we have access to the voice lists
           console.log('Found saved voice preference:', savedName, savedType);
+        } else {
+          // Set default to Chessie V3 if no preference saved
+          localStorage.setItem('dreamspeak-voice-name', 'Chessie V3 (Premium AI)');
+          localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
+          console.log('Set default voice to Chessie V3');
         }
       } catch (error) {
         console.error('Failed to load voice preference:', error);

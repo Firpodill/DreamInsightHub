@@ -108,6 +108,26 @@ const archetypeDatabase: Record<string, ArchetypeData> = {
     individuationRole: "Breaks rigid patterns and enables creative transformation",
     frequency: 0,
     dreamExamples: ["Pranks", "Shape-shifting", "Rule breaking", "Unexpected events"]
+  },
+  "The Mother": {
+    name: "The Mother",
+    description: "Represents nurturing, protection, fertility, and unconditional care.",
+    icon: Heart,
+    color: "#ec4899",
+    shadowAspect: "Smothering, possessiveness, or emotional manipulation",
+    individuationRole: "Develops capacity for care and nurturing",
+    frequency: 0,
+    dreamExamples: ["Maternal figures", "Caring for others", "Protection", "Birth"]
+  },
+  "The Father": {
+    name: "The Father",
+    description: "Embodies authority, structure, discipline, and guidance.",
+    icon: Shield,
+    color: "#1f2937",
+    shadowAspect: "Authoritarianism, emotional distance, or harsh judgment",
+    individuationRole: "Establishes structure and moral compass",
+    frequency: 0,
+    dreamExamples: ["Authority figures", "Rules and order", "Guidance", "Discipline"]
   }
 };
 
