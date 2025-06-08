@@ -82,6 +82,26 @@ export const archetypeDefinitions: Record<string, Definition> = {
     definition: 'The contrasexual archetype representing the feminine aspect in men (Anima) and the masculine aspect in women (Animus).',
     jungianMeaning: 'The bridge between conscious and unconscious, facilitating psychological wholeness through integration of opposite-gender qualities. Essential for individuation and healthy relationships.',
     campbellMeaning: 'The divine feminine/masculine that calls the hero into deeper spiritual awareness, often appearing as the sacred marriage or the union of opposites that completes the heroic transformation.'
+  },
+  'The Hero': {
+    definition: 'The protagonist who embarks on a transformative journey, facing challenges and overcoming obstacles.',
+    jungianMeaning: 'Represents the ego\'s journey toward individuation and self-realization through trials and growth.',
+    campbellMeaning: 'The universal figure who follows the monomyth pattern: departure from ordinary world, initiation through trials, and return with wisdom to benefit others.'
+  },
+  'The Shadow': {
+    definition: 'The hidden, repressed, or denied aspects of the personality that the conscious mind rejects.',
+    jungianMeaning: 'Contains both negative traits and undeveloped positive potential that must be integrated for wholeness.',
+    campbellMeaning: 'The dark force or antagonist that represents the hero\'s fears, inner demons, and the trials that must be faced to achieve transformation.'
+  },
+  'The Self': {
+    definition: 'The unified consciousness and unconscious of an individual, representing the totality and wholeness of the psyche.',
+    jungianMeaning: 'The central archetype that represents psychological integration and the goal of individuation - the complete, authentic person.',
+    campbellMeaning: 'The divine center or cosmic consciousness that the hero seeks to unite with, representing the ultimate boon or treasure of enlightenment.'
+  },
+  'The Trickster': {
+    definition: 'The shapeshifting archetype of cunning, humor, and boundary-crossing that disrupts established order to catalyze change.',
+    jungianMeaning: 'Represents the shadow\'s positive aspect - the creative force that breaks rigid patterns and brings psychological flexibility through paradox and play.',
+    campbellMeaning: 'The divine fool or sacred clown who serves as both helper and challenger, using wit and transformation to guide the hero through necessary chaos toward wisdom.'
   }
 };
 
