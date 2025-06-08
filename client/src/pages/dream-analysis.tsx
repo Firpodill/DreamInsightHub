@@ -118,6 +118,18 @@ export default function DreamAnalysis() {
 
   return (
     <div className="max-w-md mx-auto bg-black text-white min-h-screen relative overflow-hidden">
+      {/* HOME Button */}
+      <div className="p-4">
+        <Link to="/">
+          <Button 
+            className="bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 text-white font-bold text-sm px-4 py-2 rounded-lg border-2 border-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 uppercase tracking-wider"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            HOME
+          </Button>
+        </Link>
+      </div>
+
       {/* Header */}
       <header className="p-6 border-b border-gray-800">
         <div className="flex items-center justify-center mb-4">

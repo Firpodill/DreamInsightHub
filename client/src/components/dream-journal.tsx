@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2, X, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2, X, ChevronDown, ChevronUp, Trash2, ArrowLeft } from 'lucide-react';
 import { useDreams, useSearchDreams, useDeleteDream } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
@@ -392,6 +392,17 @@ export function DreamJournal() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
+              {/* HOME Button */}
+              <div className="mb-4">
+                <Button 
+                  onClick={() => setSelectedDream(null)}
+                  className="bg-gradient-to-r from-red-600 via-yellow-500 to-red-600 text-white font-bold text-sm px-4 py-2 rounded-lg border-2 border-black shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 uppercase tracking-wider"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  HOME
+                </Button>
+              </div>
+
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="text-center flex-1">
