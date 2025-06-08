@@ -74,7 +74,7 @@ export function useGlobalVoicePreference() {
           console.log('Found saved voice preference:', savedName, savedType);
         } else {
           // Set default to Chessie V3 if no preference saved
-          localStorage.setItem('dreamspeak-voice-name', 'Chessie V3 (Premium AI)');
+          localStorage.setItem('dreamspeak-voice-name', 'Chessie V3');
           localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
           console.log('Set default voice to Chessie V3');
         }
