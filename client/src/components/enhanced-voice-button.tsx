@@ -47,7 +47,7 @@ export function EnhancedVoiceButton({
       setIsPlaying(false);
     };
     audioManager.registerAudio(stopAll);
-  }, [audioManager]);
+  }, []);
 
   // Show voice hint on first render if not dismissed - only once globally
   useEffect(() => {
@@ -77,14 +77,14 @@ export function EnhancedVoiceButton({
 
     console.log('Playing with selected voice:', selectedVoice);
     
-    // Stop all other audio first
+    // Stop all other audio and set this as playing
     audioManager.setPlaying(true);
     setIsPlaying(true);
     
     try {
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-        await elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
+        elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
       } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
         console.log('Using system voice:', selectedVoice.voice.name);
         systemVoice.setVoice(selectedVoice.voice);
@@ -95,6 +95,8 @@ export function EnhancedVoiceButton({
       }
     } catch (error) {
       console.error('Voice playback failed:', error);
+      setIsPlaying(false);
+      audioManager.setPlaying(false);
     }
     
     // Auto-stop after estimated duration
@@ -123,17 +125,17 @@ export function EnhancedVoiceButton({
       <Button
         variant={variant}
         size={size}
-        onClick={isAnyPlaying ? handleStop : handlePlay}
+        onClick={isPlaying ? handleStop : handlePlay}
         className={className}
         disabled={elevenLabsVoice.isLoading}
         data-voice-control
       >
-        {isAnyPlaying ? (
+        {isPlaying ? (
           <VolumeX className="w-4 h-4 mr-1" />
         ) : (
           <Volume2 className="w-4 h-4 mr-1" />
         )}
-        {isAnyPlaying ? 'Stop' : 'Listen'}
+        {isPlaying ? 'Stop' : 'Listen'}
       </Button>
       
       <div className="relative">
