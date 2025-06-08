@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Book, Search, User, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Book, Search, User, Users, MapPin, ExternalLink } from 'lucide-react';
 import { archetypeDefinitions, symbolDefinitions, getDefinition, getAllTerms, type Definition } from '@shared/definitions';
 
 interface SymbolDefinitionModalProps {
@@ -18,11 +19,54 @@ interface SymbolDefinitionModalProps {
   type: 'archetype' | 'symbol';
 }
 
+// Helper functions for place detection and map integration
+function isLikelyPlace(term: string): boolean {
+  const placeIndicators = [
+    'mount', 'mountain', 'lake', 'river', 'city', 'town', 'street', 'avenue', 'road',
+    'park', 'beach', 'forest', 'desert', 'valley', 'hill', 'island', 'bridge',
+    'building', 'house', 'home', 'office', 'store', 'mall', 'restaurant', 'cafe',
+    'shasta', 'francisco', 'angeles', 'york', 'chicago', 'boston', 'seattle',
+    'california', 'texas', 'florida', 'nevada', 'oregon', 'washington'
+  ];
+  
+  const lowerTerm = term.toLowerCase();
+  return placeIndicators.some(indicator => 
+    lowerTerm.includes(indicator) || indicator.includes(lowerTerm)
+  );
+}
+
+function isLikelyPersonName(term: string): boolean {
+  const namePatterns = [
+    /^[A-Z][a-z]+$/,  // Capitalized single word
+    /^[A-Z][a-z]+ [A-Z][a-z]+$/,  // First Last name pattern
+  ];
+  
+  const commonNames = [
+    'john', 'jane', 'michael', 'sarah', 'david', 'lisa', 'chris', 'emily',
+    'james', 'mary', 'robert', 'patricia', 'william', 'jennifer', 'richard',
+    'elizabeth', 'angie', 'angela', 'christopher', 'maria', 'daniel', 'susan'
+  ];
+  
+  const lowerTerm = term.toLowerCase();
+  
+  return namePatterns.some(pattern => pattern.test(term)) || 
+         commonNames.includes(lowerTerm);
+}
+
+function generateMapUrl(locationName: string): string {
+  const encodedLocation = encodeURIComponent(locationName);
+  return `https://www.google.com/maps/search/${encodedLocation}`;
+}
+
 export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDefinitionModalProps) {
   const [searchTerm, setSearchTerm] = useState('');
   
   const definitions = type === 'archetype' ? archetypeDefinitions : symbolDefinitions;
   const currentDefinition = definitions[symbol.toLowerCase()] || definitions[symbol] || getDefinition(symbol);
+  
+  const isPlace = isLikelyPlace(symbol);
+  const isPerson = isLikelyPersonName(symbol);
+  const mapUrl = isPlace ? generateMapUrl(symbol) : null;
   
   const filteredDefinitions = Object.entries(definitions).filter(([key, value]) =>
     key.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,6 +132,41 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                     </div>
                     <p className="text-gray-700 text-sm leading-relaxed">{currentDefinition.jungianMeaning}</p>
                   </div>
+                  
+                  {/* Map Integration for Places */}
+                  {isPlace && mapUrl && (
+                    <div className="bg-white/60 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <MapPin className="w-4 h-4 text-green-600" />
+                        <h4 className="font-semibold text-green-800">Location Map</h4>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-gray-700 text-sm">This appears to be a geographic location. View it on a map for additional context:</p>
+                        <Button
+                          onClick={() => window.open(mapUrl, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="w-full flex items-center gap-2"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          View "{symbol}" on Google Maps
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Person Name Enhancement */}
+                  {isPerson && (
+                    <div className="bg-white/60 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <User className="w-4 h-4 text-indigo-600" />
+                        <h4 className="font-semibold text-indigo-800">Person in Dreams</h4>
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        When people appear in dreams, they often represent aspects of your own personality, unresolved relationships, or archetypal figures. Consider: What qualities does this person embody? What is your relationship with them? How do you feel about them in waking life?
+                      </p>
+                    </div>
+                  )}
                   
                   {currentDefinition.campbellMeaning && (
                     <div className="bg-white/60 rounded-lg p-4">

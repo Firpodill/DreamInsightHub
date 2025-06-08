@@ -434,11 +434,61 @@ function generateContextualDefinition(term: string): Definition {
     return commonSymbols[term];
   }
   
+  // Check if it's a potential place name (contains geographic indicators)
+  if (isLikelyPlace(term)) {
+    return {
+      definition: `A geographic location appearing in dreams, representing journeys, destinations, or significant places in your life. Places in dreams often symbolize psychological states, life stages, or emotional territories.`,
+      jungianMeaning: `Represents a psychological landscape or state of being. The specific location may hold personal significance or symbolize where you are in your life journey. Consider your associations with this place and what it represents to your psyche.`
+    };
+  }
+  
+  // Check if it's a potential person's name (capitalized, common name patterns)
+  if (isLikelyPersonName(term)) {
+    return {
+      definition: `A person appearing in dreams, representing relationships, aspects of yourself, or archetypal figures. People in dreams often embody qualities, emotions, or parts of your personality that need attention.`,
+      jungianMeaning: `May represent an aspect of your own psyche projected onto this person, unfinished emotional business, or qualities you associate with them. Consider what this person means to you and what traits they embody.`
+    };
+  }
+  
   // Generate contextual definition based on symbol patterns
   return {
     definition: `A significant element appearing in dreams, representing personal meaning and symbolic importance. This symbol carries emotional resonance and appears as part of the unconscious mind's processing of experiences.`,
     jungianMeaning: `Represents an aspect of the psyche seeking integration and understanding. The appearance of this symbol suggests it holds particular significance for psychological development and the individuation process.`
   };
+}
+
+function isLikelyPlace(term: string): boolean {
+  const placeIndicators = [
+    'mount', 'mountain', 'lake', 'river', 'city', 'town', 'street', 'avenue', 'road',
+    'park', 'beach', 'forest', 'desert', 'valley', 'hill', 'island', 'bridge',
+    'building', 'house', 'home', 'office', 'store', 'mall', 'restaurant', 'cafe',
+    'shasta', 'francisco', 'angeles', 'york', 'chicago', 'boston', 'seattle',
+    'california', 'texas', 'florida', 'nevada', 'oregon', 'washington'
+  ];
+  
+  const lowerTerm = term.toLowerCase();
+  return placeIndicators.some(indicator => 
+    lowerTerm.includes(indicator) || indicator.includes(lowerTerm)
+  );
+}
+
+function isLikelyPersonName(term: string): boolean {
+  // Common name patterns and indicators
+  const namePatterns = [
+    /^[A-Z][a-z]+$/,  // Capitalized single word
+    /^[A-Z][a-z]+ [A-Z][a-z]+$/,  // First Last name pattern
+  ];
+  
+  const commonNames = [
+    'john', 'jane', 'michael', 'sarah', 'david', 'lisa', 'chris', 'emily',
+    'james', 'mary', 'robert', 'patricia', 'william', 'jennifer', 'richard',
+    'elizabeth', 'angie', 'angela', 'christopher', 'maria', 'daniel', 'susan'
+  ];
+  
+  const lowerTerm = term.toLowerCase();
+  
+  return namePatterns.some(pattern => pattern.test(term)) || 
+         commonNames.includes(lowerTerm);
 }
 
 // Function to get all available terms
