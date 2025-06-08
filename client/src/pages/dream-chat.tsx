@@ -322,7 +322,7 @@ export default function DreamChat() {
           </TabsList>
           
           <TabsContent value="chat" className="mt-6">
-            <ChatInterface />
+            <ChatInterface onDecodeComplete={() => setActiveTab('analysis')} />
           </TabsContent>
           
           <TabsContent value="journal" className="mt-6">
@@ -331,6 +331,10 @@ export default function DreamChat() {
           
           <TabsContent value="sleep" className="mt-6">
             <SleepCycleTracker />
+          </TabsContent>
+          
+          <TabsContent value="analysis" className="mt-6">
+            <DreamAnalysis />
           </TabsContent>
           
           <TabsContent value="insights" className="mt-6">

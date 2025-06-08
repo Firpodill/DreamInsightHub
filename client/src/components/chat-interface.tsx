@@ -8,7 +8,11 @@ import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
 import { useLocation } from "wouter";
 import backgroundImage from "@assets/vecteezy_open-red-lips-with-speech-bubble-pop-art-background-on-dot_.jpg";
 
-export function ChatInterface() {
+interface ChatInterfaceProps {
+  onDecodeComplete?: () => void;
+}
+
+export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
   const [dreamText, setDreamText] = useState("");
   const [isVoiceRecording, setIsVoiceRecording] = useState(false);
   const [isDecoding, setIsDecoding] = useState(false);
@@ -62,11 +66,27 @@ export function ChatInterface() {
   const handleDecodeClick = async () => {
     if (!dreamText.trim()) return;
     
-    // Save dream text to localStorage for the analysis page
-    localStorage.setItem('currentDreamText', dreamText);
+    setIsDecoding(true);
     
-    // Navigate to analysis page
-    navigate('/analysis');
+    try {
+      // Save dream text to localStorage for the analysis page
+      localStorage.setItem('currentDreamText', dreamText);
+      
+      // Analyze the dream
+      await analyzeDream.mutateAsync(dreamText);
+      
+      // Call the callback to switch to Analysis tab
+      if (onDecodeComplete) {
+        onDecodeComplete();
+      } else {
+        // Fallback to navigation if no callback provided
+        navigate('/analysis');
+      }
+    } catch (error) {
+      console.error('Dream analysis failed:', error);
+    } finally {
+      setIsDecoding(false);
+    }
   };
 
   return (
