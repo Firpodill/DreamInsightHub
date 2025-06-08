@@ -8,6 +8,7 @@ import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
+import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -326,18 +327,13 @@ export function DreamJournal() {
               {dream.imageUrl ? 'Visualized' : 'No image'}
             </span>
           </div>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+            <EnhancedVoiceButton 
+              text={dream.content}
+              variant="outline"
               size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                playDreamText(dream.content);
-              }}
-            >
-              <Volume2 size={14} className="mr-1" />
-              {isPlaying ? 'Stop' : 'Listen'}
-            </Button>
+              className="text-gray-600 border-gray-300 hover:bg-gray-50"
+            />
             <Button 
               variant="ghost" 
               size="sm" 
