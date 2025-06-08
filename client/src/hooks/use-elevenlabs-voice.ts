@@ -43,13 +43,13 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     const loadVoices = async () => {
       try {
         setIsLoading(true);
-        const response = await apiRequest('GET', '/api/elevenlabs/voices');
-        const voices = Array.isArray(response) ? response : [];
-        setAvailableVoices(voices);
-        
-        // Set default voice to first available
-        if (voices.length > 0 && !currentVoice) {
-          setCurrentVoice(voices[0]);
+        const voices = await apiRequest('GET', '/api/elevenlabs/voices');
+        if (Array.isArray(voices)) {
+          setAvailableVoices(voices);
+          // Set default voice to first available
+          if (voices.length > 0 && !currentVoice) {
+            setCurrentVoice(voices[0]);
+          }
         }
       } catch (err) {
         console.error('Failed to load ElevenLabs voices:', err);

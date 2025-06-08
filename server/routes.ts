@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { analyzeDream, generateDreamVisualization, generateImage } from "./openai";
-import { elevenLabsService } from "./elevenlabs";
+import { getElevenLabsVoices, synthesizeElevenLabsSpeech } from "./elevenlabs";
 import { insertDreamSchema, insertChatMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
@@ -339,7 +339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ElevenLabs Voice API endpoints
   app.get("/api/elevenlabs/voices", async (req, res) => {
     try {
-      const voices = await elevenLabsService.getVoices();
+      const voices = await getElevenLabsVoices();
       res.json(voices);
     } catch (error) {
       console.error('ElevenLabs voices error:', error);
@@ -355,11 +355,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Text and voice_id are required" });
       }
 
-      const audioBuffer = await elevenLabsService.synthesizeSpeech({
-        text,
-        voice_id,
-        voice_settings
-      });
+      const audioBuffer = await synthesizeElevenLabsSpeech(text, voice_id, voice_settings);
 
       res.set({
         'Content-Type': 'audio/mpeg',
