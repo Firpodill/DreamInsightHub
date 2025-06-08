@@ -88,7 +88,8 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     if (!text.trim()) return;
 
     try {
-      setIsPlaying(true);
+      setIsLoading(true);
+      setIsPlaying(false);
       setError(null);
       
       // Stop any currently playing audio
@@ -128,6 +129,8 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         throw new Error(`Failed to synthesize speech: ${response.status}`);
       }
 
+      setIsLoading(false);
+
       // Create audio blob and play immediately
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
@@ -155,6 +158,10 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         audio.oncanplay = playAudio;
       }
 
+      audio.onplay = () => {
+        setIsPlaying(true);
+      };
+
       audio.onended = () => {
         setIsPlaying(false);
         URL.revokeObjectURL(audioUrl);
@@ -163,6 +170,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       audio.onerror = () => {
         setError('Audio playback error');
         setIsPlaying(false);
+        setIsLoading(false);
         URL.revokeObjectURL(audioUrl);
       };
 
@@ -170,6 +178,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       console.error('Speech synthesis error:', err);
       setError(err instanceof Error ? err.message : 'Speech synthesis failed');
       setIsPlaying(false);
+      setIsLoading(false);
     }
   }, [currentVoice, currentAudio]);
 
@@ -178,6 +187,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       currentAudio.pause();
       currentAudio.currentTime = 0;
       setIsPlaying(false);
+      setIsLoading(false);
     }
   }, [currentAudio]);
 

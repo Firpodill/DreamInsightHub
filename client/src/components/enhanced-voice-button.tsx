@@ -74,7 +74,9 @@ export function EnhancedVoiceButton({
   };
 
   const handleToggle = () => {
-    if (isPlaying || isLoading) {
+    const isCurrentlyBusy = isPlaying || isLoading || systemVoice.isPlaying || elevenLabsVoice.isPlaying || elevenLabsVoice.isLoading;
+    
+    if (isCurrentlyBusy) {
       // Stop current audio
       systemVoice.stop();
       elevenLabsVoice.stop();
@@ -87,47 +89,19 @@ export function EnhancedVoiceButton({
 
       console.log('Playing with selected voice:', selectedVoice);
       
-      setIsLoading(true);
       audioManager.setPlaying(true);
       
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-        
-        // Add a small delay to show loading spinner
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsPlaying(true);
-        }, 500);
-        
         elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
       } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
         console.log('Using system voice:', selectedVoice.voice.name);
-        
-        // System voices are usually faster
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsPlaying(true);
-        }, 200);
-        
         systemVoice.setVoice(selectedVoice.voice);
         systemVoice.speak(text);
       } else {
         console.log('Using default system voice');
-        
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsPlaying(true);
-        }, 200);
-        
         systemVoice.speak(text);
       }
-      
-      // Auto-stop after estimated duration
-      setTimeout(() => {
-        setIsPlaying(false);
-        setIsLoading(false);
-        audioManager.setPlaying(false);
-      }, Math.max(text.length * 60, 5000));
     }
   };
 
@@ -163,7 +137,8 @@ export function EnhancedVoiceButton({
     }
   }, [elevenLabsVoice.availableVoices, selectedVoice, setSelectedVoice]);
 
-  const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
+  const isCurrentlyLoading = isLoading || elevenLabsVoice.isLoading;
+  const isCurrentlyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
 
   return (
     <div className="flex items-center space-x-1 relative group" data-voice-control>
@@ -172,17 +147,17 @@ export function EnhancedVoiceButton({
         size={size}
         onClick={handleToggle}
         className={className}
-        disabled={elevenLabsVoice.isLoading}
+        disabled={false}
         data-voice-control
       >
-        {isLoading ? (
+        {isCurrentlyLoading ? (
           <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-        ) : isPlaying ? (
+        ) : isCurrentlyPlaying ? (
           <VolumeX className="w-4 h-4 mr-1" />
         ) : (
           <Volume2 className="w-4 h-4 mr-1" />
         )}
-        {isLoading ? 'Loading...' : isPlaying ? 'Stop' : 'Listen'}
+        {isCurrentlyLoading ? 'Loading...' : isCurrentlyPlaying ? 'Stop' : 'Listen'}
       </Button>
       
       <div className="relative">
