@@ -430,8 +430,8 @@ export function DreamJournal() {
               {/* Original Dream Text with Expand/Collapse */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">
-                    Original Dream
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 via-yellow-500 to-black bg-clip-text text-transparent mb-1 tracking-wide uppercase">
+                    Original Dream Text
                   </h3>
                   <div className="flex items-center gap-2">
                     <EnhancedVoiceButton 
