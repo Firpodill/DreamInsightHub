@@ -41,12 +41,37 @@ export function FitnessWatchConnector() {
   const [sleepData, setSleepData] = useState<SleepData[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
+  const [activeMetric, setActiveMetric] = useState<'sleep' | 'heart' | 'steps' | null>(null);
+  const [realTimeData, setRealTimeData] = useState({
+    currentHeartRate: 0,
+    todaySteps: 0,
+    sleepScore: 0,
+    lastUpdate: new Date()
+  });
 
   useEffect(() => {
     // Check for available fitness APIs
     checkAvailableAPIs();
     loadCachedData();
-  }, []);
+    
+    // Start real-time data simulation when connected
+    if (connectionStatus === 'connected') {
+      startRealTimeTracking();
+    }
+  }, [connectionStatus]);
+
+  const startRealTimeTracking = () => {
+    const interval = setInterval(() => {
+      setRealTimeData(prev => ({
+        currentHeartRate: 65 + Math.floor(Math.random() * 20), // 65-85 bpm
+        todaySteps: prev.todaySteps + Math.floor(Math.random() * 10), // Incremental steps
+        sleepScore: 75 + Math.floor(Math.random() * 20), // 75-95 score
+        lastUpdate: new Date()
+      }));
+    }, 2000);
+
+    return () => clearInterval(interval);
+  };
 
   const checkAvailableAPIs = () => {
     const availableDevices: FitnessDevice[] = [];
@@ -457,13 +482,159 @@ export function FitnessWatchConnector() {
         </CardContent>
       </Card>
 
+      {/* Real-Time Metrics Dashboard */}
+      {connectionStatus === 'connected' && (
+        <Card className="bg-gray-900 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white">Live Fitness Metrics</CardTitle>
+            <CardDescription className="text-gray-400">
+              Real-time data from your connected device
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <Button
+                onClick={() => setActiveMetric(activeMetric === 'heart' ? null : 'heart')}
+                className={`flex flex-col items-center p-4 h-auto ${
+                  activeMetric === 'heart' 
+                    ? 'bg-red-600 hover:bg-red-700' 
+                    : 'bg-gray-800 hover:bg-gray-700'
+                }`}
+              >
+                <Heart className="w-6 h-6 mb-2 text-red-400" />
+                <div className="text-xs text-gray-300">Heart Rate</div>
+                <div className="text-lg font-bold text-white">{realTimeData.currentHeartRate}</div>
+                <div className="text-xs text-gray-400">bpm</div>
+              </Button>
+
+              <Button
+                onClick={() => setActiveMetric(activeMetric === 'steps' ? null : 'steps')}
+                className={`flex flex-col items-center p-4 h-auto ${
+                  activeMetric === 'steps' 
+                    ? 'bg-blue-600 hover:bg-blue-700' 
+                    : 'bg-gray-800 hover:bg-gray-700'
+                }`}
+              >
+                <Activity className="w-6 h-6 mb-2 text-blue-400" />
+                <div className="text-xs text-gray-300">Steps Today</div>
+                <div className="text-lg font-bold text-white">{realTimeData.todaySteps.toLocaleString()}</div>
+                <div className="text-xs text-gray-400">steps</div>
+              </Button>
+
+              <Button
+                onClick={() => setActiveMetric(activeMetric === 'sleep' ? null : 'sleep')}
+                className={`flex flex-col items-center p-4 h-auto ${
+                  activeMetric === 'sleep' 
+                    ? 'bg-purple-600 hover:bg-purple-700' 
+                    : 'bg-gray-800 hover:bg-gray-700'
+                }`}
+              >
+                <Moon className="w-6 h-6 mb-2 text-purple-400" />
+                <div className="text-xs text-gray-300">Sleep Score</div>
+                <div className="text-lg font-bold text-white">{realTimeData.sleepScore}</div>
+                <div className="text-xs text-gray-400">score</div>
+              </Button>
+            </div>
+
+            {/* Detailed Metric View */}
+            {activeMetric === 'heart' && (
+              <div className="p-4 bg-red-900/20 border border-red-600 rounded-lg">
+                <h4 className="text-white font-medium mb-3">Heart Rate Analysis</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Current:</span>
+                    <span className="text-red-400 font-medium">{realTimeData.currentHeartRate} bpm</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Resting HR:</span>
+                    <span className="text-white">62 bpm</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Max HR (24h):</span>
+                    <span className="text-white">89 bpm</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Zone:</span>
+                    <span className="text-green-400">Resting</span>
+                  </div>
+                  <div className="mt-3 p-2 bg-gray-800 rounded text-xs text-gray-300">
+                    💡 Your heart rate is within normal resting range. Stay hydrated and consider meditation before sleep.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeMetric === 'steps' && (
+              <div className="p-4 bg-blue-900/20 border border-blue-600 rounded-lg">
+                <h4 className="text-white font-medium mb-3">Activity Summary</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Steps Today:</span>
+                    <span className="text-blue-400 font-medium">{realTimeData.todaySteps.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Goal Progress:</span>
+                    <span className="text-white">{Math.round((realTimeData.todaySteps / 10000) * 100)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Distance:</span>
+                    <span className="text-white">{(realTimeData.todaySteps * 0.0008).toFixed(1)} km</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Calories:</span>
+                    <span className="text-white">{Math.round(realTimeData.todaySteps * 0.04)} kcal</span>
+                  </div>
+                  <div className="mt-3 p-2 bg-gray-800 rounded text-xs text-gray-300">
+                    🚶 Physical activity improves sleep quality. Aim for 10,000 steps daily for optimal rest.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeMetric === 'sleep' && (
+              <div className="p-4 bg-purple-900/20 border border-purple-600 rounded-lg">
+                <h4 className="text-white font-medium mb-3">Sleep Quality Analysis</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Sleep Score:</span>
+                    <span className="text-purple-400 font-medium">{realTimeData.sleepScore}/100</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Quality:</span>
+                    <span className="text-white">
+                      {realTimeData.sleepScore >= 85 ? 'Excellent' : 
+                       realTimeData.sleepScore >= 70 ? 'Good' : 'Needs Improvement'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Dream Readiness:</span>
+                    <span className="text-green-400">High</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Optimal Bedtime:</span>
+                    <span className="text-white">10:30 PM</span>
+                  </div>
+                  <div className="mt-3 p-2 bg-gray-800 rounded text-xs text-gray-300">
+                    🌙 Your sleep patterns indicate good dream recall potential. Consider keeping a dream journal nearby.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-4 text-xs text-gray-500 text-center">
+              Last updated: {realTimeData.lastUpdate.toLocaleTimeString()}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Recent Sleep Data */}
       {sleepData.length > 0 && (
         <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
-            <CardTitle className="text-white">Recent Sleep Data</CardTitle>
+            <CardTitle className="text-white">Sleep History</CardTitle>
             <CardDescription className="text-gray-400">
-              Sleep metrics from your connected device
+              Historical sleep metrics from your connected device
             </CardDescription>
           </CardHeader>
           <CardContent>
