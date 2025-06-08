@@ -387,10 +387,23 @@ export function FitnessWatchConnector() {
   };
 
   const disconnectDevice = () => {
+    // Clear Fitbit authentication tokens
+    localStorage.removeItem('fitbit_access_token');
+    localStorage.removeItem('fitbit_user_id');
+    localStorage.removeItem('fitbit_oauth_state');
+    
+    // Clear cached sleep data
+    localStorage.removeItem('dreamapp_sleep_data');
+    
+    // Reset all state
     setDevices(prev => prev.map(device => ({ ...device, connected: false })));
     setConnectionStatus('disconnected');
     setLastSyncTime(null);
     setRealTimeData({ currentHeartRate: 0, todaySteps: 0, sleepScore: 0, lastUpdate: new Date() });
+    setSleepData([]);
+    setActiveMetric(null);
+    
+    console.log('Device disconnected and all data cleared');
   };
 
   const formatTime = (date: Date) => {

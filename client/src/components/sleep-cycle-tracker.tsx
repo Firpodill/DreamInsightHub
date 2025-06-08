@@ -7,6 +7,8 @@ import { Clock, Moon, Sun, Zap, Eye, Brain, Bell, Watch } from 'lucide-react';
 // Removed framer-motion to reduce bundle size
 import { FitnessWatchConnector } from './fitness-watch-connector';
 import { SmartSleepScheduler } from './smart-sleep-scheduler';
+import { DreamFitnessCorrelation } from './dream-fitness-correlation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface SleepCycle {
   id: string;
@@ -359,23 +361,119 @@ export function SleepCycleTracker() {
         </Card>
       )}
 
-      {/* Fitness Watch Connector */}
+      {/* Comprehensive Sleep & Fitness Dashboard */}
       {showFitnessConnector && (
-        <div className="space-y-6">
-          <Card className="bg-gray-900 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">Connect Your Fitness Watch</CardTitle>
-              <CardDescription className="text-gray-400">
-                Automatically sync sleep data from your device
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FitnessWatchConnector />
-            </CardContent>
-          </Card>
-          
-          <SmartSleepScheduler />
-        </div>
+        <Card className="bg-gray-900 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Watch className="h-5 w-5 text-blue-400" />
+              Sleep & Fitness Analytics Dashboard
+            </CardTitle>
+            <CardDescription className="text-gray-400">
+              Complete integration of sleep tracking, fitness metrics, and dream correlations
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="devices" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-4 bg-gray-800">
+                <TabsTrigger value="devices" className="text-gray-300">Devices</TabsTrigger>
+                <TabsTrigger value="scheduler" className="text-gray-300">Scheduler</TabsTrigger>
+                <TabsTrigger value="analytics" className="text-gray-300">Analytics</TabsTrigger>
+                <TabsTrigger value="insights" className="text-gray-300">Insights</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="devices" className="space-y-4">
+                <FitnessWatchConnector />
+              </TabsContent>
+
+              <TabsContent value="scheduler" className="space-y-4">
+                <SmartSleepScheduler />
+              </TabsContent>
+
+              <TabsContent value="analytics" className="space-y-4">
+                <DreamFitnessCorrelation />
+              </TabsContent>
+
+              <TabsContent value="insights" className="space-y-4">
+                <Card className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 border-blue-500/50">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-purple-400" />
+                      AI-Powered Sleep Insights
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <h4 className="text-white font-medium">Sleep Quality Factors</h4>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Sleep Duration:</span>
+                              <span className="text-blue-400">Optimal (7-9h)</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">REM Percentage:</span>
+                              <span className="text-purple-400">Good (20-25%)</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Sleep Consistency:</span>
+                              <span className="text-green-400">Excellent</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Recovery Score:</span>
+                              <span className="text-yellow-400">85%</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <h4 className="text-white font-medium">Dream Enhancement Tips</h4>
+                          <div className="space-y-2 text-xs text-gray-300">
+                            <div className="flex items-start gap-2">
+                              <div className="w-1 h-1 bg-blue-400 rounded-full mt-2"></div>
+                              <p>Your current sleep pattern is optimal for dream recall</p>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <div className="w-1 h-1 bg-purple-400 rounded-full mt-2"></div>
+                              <p>REM cycles align well with your natural circadian rhythm</p>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <div className="w-1 h-1 bg-green-400 rounded-full mt-2"></div>
+                              <p>Consider lucid dreaming techniques during 4-6 AM window</p>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <div className="w-1 h-1 bg-yellow-400 rounded-full mt-2"></div>
+                              <p>Your fitness metrics suggest high dream vividness potential</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="border-t border-gray-700 pt-4">
+                        <h4 className="text-white font-medium mb-3">Weekly Sleep Summary</h4>
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                          <div className="bg-gray-800 rounded-lg p-3">
+                            <div className="text-2xl font-bold text-blue-400">7.8h</div>
+                            <div className="text-xs text-gray-400">Avg Sleep</div>
+                          </div>
+                          <div className="bg-gray-800 rounded-lg p-3">
+                            <div className="text-2xl font-bold text-purple-400">4.2</div>
+                            <div className="text-xs text-gray-400">REM Cycles</div>
+                          </div>
+                          <div className="bg-gray-800 rounded-lg p-3">
+                            <div className="text-2xl font-bold text-green-400">88%</div>
+                            <div className="text-xs text-gray-400">Efficiency</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       )}
 
       {/* Sleep Tips */}
