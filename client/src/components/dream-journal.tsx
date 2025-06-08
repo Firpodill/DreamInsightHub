@@ -25,6 +25,7 @@ export function DreamJournal() {
   const { data: allDreams = [], isLoading } = useDreams();
   const { data: searchResults = [] } = useSearchDreams(searchQuery);
   const { speak, stop, isPlaying } = useNaturalVoice();
+  const deleteDream = useDeleteDream();
   const [, setLocation] = useLocation();
 
   const dreams = searchQuery.trim() ? searchResults : allDreams;
@@ -338,6 +339,20 @@ export function DreamJournal() {
               }}
             >
               View Details
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-400 hover:text-red-600 hover:bg-red-50 h-auto p-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (confirm('Are you sure you want to delete this dream? This action cannot be undone.')) {
+                  deleteDream.mutate(dream.id);
+                }
+              }}
+              title="Delete dream"
+            >
+              <Trash2 className="w-3 h-3" />
             </Button>
           </div>
         </div>
