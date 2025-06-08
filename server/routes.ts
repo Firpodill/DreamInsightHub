@@ -213,6 +213,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/dreams/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      const deleted = await storage.deleteDream(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ error: "Dream not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete dream" });
+    }
+  });
+
   app.get("/api/dreams/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);

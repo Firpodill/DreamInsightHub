@@ -88,6 +88,20 @@ export function useUpdateDream() {
   });
 }
 
+export function useDeleteDream() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (dreamId: number) => {
+      const response = await apiRequest('DELETE', `/api/dreams/${dreamId}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/dreams'] });
+    }
+  });
+}
+
 export function useGenerateImage() {
   const queryClient = useQueryClient();
 

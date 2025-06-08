@@ -11,6 +11,7 @@ export interface IStorage {
   getDreamsByUserId(userId: number): Promise<Dream[]>;
   createDream(dream: InsertDream): Promise<Dream>;
   updateDream(id: number, updates: Partial<Dream>): Promise<Dream | undefined>;
+  deleteDream(id: number): Promise<boolean>;
   searchDreams(userId: number, query: string): Promise<Dream[]>;
 
   // Chat message methods
@@ -87,6 +88,10 @@ export class MemStorage implements IStorage {
     const updatedDream = { ...existingDream, ...updates };
     this.dreams.set(id, updatedDream);
     return updatedDream;
+  }
+
+  async deleteDream(id: number): Promise<boolean> {
+    return this.dreams.delete(id);
   }
 
   async searchDreams(userId: number, query: string): Promise<Dream[]> {
