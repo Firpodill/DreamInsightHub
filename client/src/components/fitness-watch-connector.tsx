@@ -82,39 +82,55 @@ export function FitnessWatchConnector() {
     }
 
     try {
-      const activitiesResponse = await fetch('/api/fitbit/activities', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
+      const [activitiesResponse, sleepResponse, heartRateResponse] = await Promise.all([
+        fetch('/api/fitbit/activities', {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        }),
+        fetch('/api/fitbit/sleep', {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        }),
+        fetch('/api/fitbit/heart-rate', {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        }).catch(() => null) // Heart rate might not be available
+      ]);
+
+      let updatedData: any = { lastUpdate: new Date() };
 
       if (activitiesResponse.ok) {
         const activitiesData = await activitiesResponse.json();
-        const steps = activitiesData.summary?.steps || 0;
+        const steps = parseInt(activitiesData.summary?.steps) || 0;
+        const restingHeartRate = parseInt(activitiesData.summary?.restingHeartRate) || null;
         
-        setRealTimeData(prev => ({
-          ...prev,
-          todaySteps: steps,
-          lastUpdate: new Date()
-        }));
-      }
-
-      const sleepResponse = await fetch('/api/fitbit/sleep', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
+        updatedData.todaySteps = steps;
+        if (restingHeartRate) {
+          updatedData.currentHeartRate = restingHeartRate;
         }
-      });
+      }
 
       if (sleepResponse.ok) {
         const sleepData = await sleepResponse.json();
-        const sleepScore = sleepData.sleep?.[0]?.efficiency || 85;
+        const latestSleep = sleepData.sleep?.[0];
+        const sleepScore = latestSleep?.efficiency || (latestSleep?.minutesAsleep ? Math.round((latestSleep.minutesAsleep / 480) * 100) : 85);
         
-        setRealTimeData(prev => ({
-          ...prev,
-          sleepScore: sleepScore,
-          lastUpdate: new Date()
-        }));
+        updatedData.sleepScore = Math.min(100, sleepScore);
       }
+
+      if (heartRateResponse && heartRateResponse.ok) {
+        const heartData = await heartRateResponse.json();
+        const currentHR = heartData['activities-heart']?.[0]?.value?.heartRateZones?.[0]?.min || 
+                         heartData['activities-heart']?.[0]?.value?.restingHeartRate;
+        
+        if (currentHR) {
+          updatedData.currentHeartRate = parseInt(currentHR);
+        }
+      }
+
+      setRealTimeData(prev => ({
+        ...prev,
+        ...updatedData
+      }));
+
+      console.log('Fitbit data updated:', updatedData);
 
     } catch (error) {
       console.error('Failed to fetch Fitbit data:', error);
@@ -122,16 +138,22 @@ export function FitnessWatchConnector() {
   };
 
   const startRealTimeTracking = () => {
-    const interval = setInterval(() => {
-      setRealTimeData(prev => ({
-        currentHeartRate: 65 + Math.floor(Math.random() * 20),
-        todaySteps: prev.todaySteps + Math.floor(Math.random() * 10),
-        sleepScore: 75 + Math.floor(Math.random() * 20),
-        lastUpdate: new Date()
-      }));
-    }, 2000);
+    // For connected Fitbit devices, only fetch real data periodically
+    const accessToken = localStorage.getItem('fitbit_access_token');
+    if (accessToken) {
+      // Fetch initial data immediately
+      fetchFitbitRealTimeData();
+      
+      // Then update every 2 minutes with real data only
+      const interval = setInterval(() => {
+        fetchFitbitRealTimeData();
+      }, 120000); // Update every 2 minutes with authentic data
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
+    
+    // No simulation for unconnected devices
+    return () => {};
   };
 
   const checkAvailableDevices = () => {
@@ -471,7 +493,15 @@ export function FitnessWatchConnector() {
 
               {/* Live Fitness Metrics Dashboard */}
               <div className="bg-gray-800 rounded-lg p-6 space-y-4">
-                <h3 className="text-white font-semibold text-lg">Live Fitness Metrics</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-white font-semibold text-lg">Live Fitness Metrics</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-400 font-medium">
+                      {localStorage.getItem('fitbit_access_token') ? 'Real Fitbit Data' : 'Demo Mode'}
+                    </span>
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Heart Rate Button */}
                   <Button

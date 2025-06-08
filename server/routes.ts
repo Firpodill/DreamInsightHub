@@ -436,6 +436,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/fitbit/heart-rate", async (req, res) => {
+    try {
+      const accessToken = req.headers.authorization?.replace("Bearer ", "");
+      
+      if (!accessToken) {
+        return res.status(401).json({ error: "Access token required" });
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Fetch today's heart rate data
+      const heartRateResponse = await fetch(`https://api.fitbit.com/1/user/-/activities/heart/date/${today}/1d.json`, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+
+      if (!heartRateResponse.ok) {
+        throw new Error("Failed to fetch Fitbit heart rate data");
+      }
+
+      const heartRateData = await heartRateResponse.json();
+      res.json(heartRateData);
+      
+    } catch (error) {
+      console.error("Fitbit heart rate error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Heart rate fetch failed" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
