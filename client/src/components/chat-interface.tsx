@@ -6,6 +6,7 @@ import { VoiceRecorder } from "./voice-recorder";
 import { useAnalyzeDream } from "@/hooks/use-dreams";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
 import { useLocation } from "wouter";
+import { VoiceInputTooltip, useVoiceInputTooltip } from "./voice-input-tooltip";
 import backgroundImage from "@assets/vecteezy_open-red-lips-with-speech-bubble-pop-art-background-on-dot_.jpg";
 
 interface ChatInterfaceProps {
@@ -23,6 +24,8 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
   const [statusFading, setStatusFading] = useState(false);
   const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
+  
+  const { showTooltip, dismissTooltip, dontShowAgain } = useVoiceInputTooltip();
 
   const {
     transcript,
@@ -292,7 +295,12 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
         </div>
       </div>
 
-
+      {/* Voice Input Tooltip */}
+      <VoiceInputTooltip
+        isVisible={showTooltip}
+        onDismiss={dismissTooltip}
+        onDontShowAgain={dontShowAgain}
+      />
     </div>
   );
 }
