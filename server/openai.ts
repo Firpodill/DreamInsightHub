@@ -94,7 +94,40 @@ Respond with valid JSON in this exact format:
 
 export async function generateDreamVisualization(dreamContent: string, analysis: DreamAnalysis): Promise<{ url: string }> {
   try {
-    const prompt = `Create a mystical, ethereal visualization: ${analysis.summary}. Style: Dreamlike, surreal, soft mystical lighting. Use rich purples, deep blues, golden accents. Mood: Contemplative, mysterious.`;
+    // Build comprehensive prompt incorporating symbols and archetypes
+    const archetypeElements = analysis.archetypes.length > 0 
+      ? `Incorporate these Jungian archetypes: ${analysis.archetypes.join(', ')}. ` 
+      : '';
+    
+    const symbolElements = analysis.symbols.length > 0 
+      ? `Include symbolic elements: ${analysis.symbols.join(', ')}. ` 
+      : '';
+    
+    const predominantSymbolElement = analysis.predominantSymbol?.name 
+      ? `Center the composition around ${analysis.predominantSymbol.name} as the focal point. ` 
+      : '';
+    
+    const emotionalTone = analysis.emotionalTone 
+      ? `Emotional atmosphere: ${analysis.emotionalTone}. ` 
+      : '';
+
+    const prompt = `Create a Pop Art Comic Book style collage visualization of: ${analysis.summary}. 
+
+${archetypeElements}${symbolElements}${predominantSymbolElement}${emotionalTone}
+
+Style: Bold Pop Art Comic Book aesthetic with vibrant colors, halftone dots, dynamic compositions, and collage elements. Use bright primary colors (red, blue, yellow) with high contrast. Create a layered collage effect combining different visual elements representing the psychological symbols and archetypes.
+
+Visual elements to include:
+- Comic book style rendering with bold outlines
+- Halftone dot patterns and Ben-Day dots
+- Vibrant color palette with high saturation
+- Collage-style composition mixing different scenes
+- Roy Lichtenstein inspired aesthetic
+- Andy Warhol style color blocking
+- Dynamic angular compositions
+- No text or speech bubbles
+
+Mood: Energetic, psychologically symbolic, visually striking, dreamlike but with bold graphic novel aesthetics.`;
 
     const response = await openai.images.generate({
       model: "dall-e-3",
