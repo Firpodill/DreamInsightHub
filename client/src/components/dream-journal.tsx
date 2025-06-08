@@ -273,14 +273,14 @@ export function DreamJournal() {
               </Badge>
             ))}
             {dream.archetypes && dream.archetypes.length > 2 && (
-              <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-500">
+              <Badge variant="secondary" className="text-xs bg-black text-yellow-400 border border-yellow-400 font-semibold">
                 +{dream.archetypes.length - 2}
               </Badge>
             )}
           </div>
         </div>
         
-        <p className="text-sm text-gray-600 mb-3 line-clamp-3">
+        <p className="text-sm text-gray-700 mb-3 line-clamp-3 font-medium">
           {dream.content}
         </p>
 
@@ -290,19 +290,19 @@ export function DreamJournal() {
             <img 
               src={dream.imageUrl} 
               alt="AI-generated dream visualization"
-              className="w-full h-32 object-cover rounded-lg border border-gray-200"
+              className="w-full h-32 object-cover rounded-lg border-2 border-red-300"
             />
           </div>
         )}
 
         {/* Analysis Preview */}
         {dream.analysis && (
-          <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-3 mb-3 border border-red-200">
+          <div className="bg-gradient-to-r from-red-100 to-yellow-100 rounded-lg p-3 mb-3 border-2 border-red-300">
             <div className="flex items-center mb-1">
               <div className="w-2 h-2 bg-red-600 rounded-full mr-2"></div>
-              <span className="text-sm font-bold text-gray-800">Analysis</span>
+              <span className="text-sm font-bold text-gray-900">Analysis Available</span>
             </div>
-            <p className="text-xs text-gray-600 line-clamp-2">{dream.analysis}</p>
+            <p className="text-xs text-gray-700 line-clamp-2 font-medium">{dream.analysis}</p>
           </div>
         )}
         
@@ -363,32 +363,21 @@ export function DreamJournal() {
           >
             <div className="p-6">
               {/* Header */}
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800">{selectedDream.title}</h2>
-                  <p className="text-sm text-gray-500 flex items-center mt-1">
-                    <Calendar className="w-3 h-3 mr-1" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="text-center flex-1">
+                  <p className="text-2xl font-bold text-gray-900 flex items-center justify-center">
+                    <Calendar className="w-6 h-6 mr-3 text-red-600" />
                     {formatDate(selectedDream.createdAt.toString(), 'full')}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setLocation('/analysis')}
-                    className="text-red-600 border-red-600 hover:bg-red-50"
-                  >
-                    Back to Analysis
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => setSelectedDream(null)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <X className="w-5 h-5" />
-                  </Button>
-                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setSelectedDream(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
               </div>
 
               {/* Generated Image */}
@@ -465,10 +454,17 @@ export function DreamJournal() {
               )}
 
               {/* Actions */}
-              <div className="flex justify-center pt-4 border-t border-gray-200">
+              <div className="flex justify-center gap-4 pt-6 border-t border-red-200">
+                <Button 
+                  onClick={() => setLocation('/analysis')}
+                  variant="outline"
+                  className="text-red-600 border-red-500 hover:bg-red-50 font-bold px-8 py-3 text-lg"
+                >
+                  Back to Analysis
+                </Button>
                 <Button 
                   onClick={() => setSelectedDream(null)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8"
+                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-bold"
                 >
                   Close
                 </Button>
