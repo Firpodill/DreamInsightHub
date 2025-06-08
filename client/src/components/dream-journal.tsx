@@ -270,6 +270,17 @@ export function DreamJournal() {
           {dream.content}
         </p>
 
+        {/* Generated Image */}
+        {dream.imageUrl && (
+          <div className="mb-3">
+            <img 
+              src={dream.imageUrl} 
+              alt="AI-generated dream visualization"
+              className="w-full h-32 object-cover rounded-lg border border-gray-200"
+            />
+          </div>
+        )}
+
         {/* Analysis Preview */}
         {dream.analysis && (
           <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-3 mb-3 border border-red-200">

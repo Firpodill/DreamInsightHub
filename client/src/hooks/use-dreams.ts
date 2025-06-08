@@ -74,6 +74,20 @@ export function useAnalyzeDream() {
   });
 }
 
+export function useUpdateDream() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (params: { dreamId: number; updates: Partial<Dream> }) => {
+      const response = await apiRequest('PATCH', `/api/dreams/${params.dreamId}`, params.updates);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/dreams'] });
+    }
+  });
+}
+
 export function useGenerateImage() {
   const queryClient = useQueryClient();
 

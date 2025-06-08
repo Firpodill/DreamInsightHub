@@ -195,6 +195,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/dreams/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      
+      const updatedDream = await storage.updateDream(id, updates);
+      
+      if (!updatedDream) {
+        return res.status(404).json({ error: "Dream not found" });
+      }
+      
+      res.json(updatedDream);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update dream" });
+    }
+  });
+
   app.get("/api/dreams/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);

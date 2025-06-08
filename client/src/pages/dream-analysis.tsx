@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Eye, Brain, Heart, Star, Lightbulb, Palette, Sparkles, Archive } from 'lucide-react';
-import { useAnalyzeDream, useGenerateImage } from '@/hooks/use-dreams';
+import { useAnalyzeDream, useGenerateImage, useUpdateDream } from '@/hooks/use-dreams';
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 
@@ -18,6 +18,7 @@ export default function DreamAnalysis() {
   const [modalType, setModalType] = useState<'archetype' | 'symbol'>('symbol');
   const analyzeDream = useAnalyzeDream();
   const generateImage = useGenerateImage();
+  const updateDream = useUpdateDream();
 
   useEffect(() => {
     // Get dream text from URL params or localStorage
@@ -54,17 +55,16 @@ export default function DreamAnalysis() {
       if (result.imageUrl) {
         setGeneratedImage(result.imageUrl);
         
-        // Save to localStorage for potential vision board creation
-        const visionBoardData = {
-          dreamText,
-          analysis: analyzeDream.data.analysis,
-          imageUrl: result.imageUrl,
-          createdAt: new Date().toISOString()
-        };
-        localStorage.setItem('generatedVisionBoard', JSON.stringify(visionBoardData));
+        // Save the image URL to the dream record so it appears in Journal Log
+        if (analyzeDream.data.dream?.id) {
+          await updateDream.mutateAsync({
+            dreamId: analyzeDream.data.dream.id,
+            updates: { imageUrl: result.imageUrl }
+          });
+        }
       }
     } catch (error) {
-      console.error('Failed to generate vision board:', error);
+      console.error('Failed to generate dream image:', error);
     }
   };
 
