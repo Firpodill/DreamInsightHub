@@ -145,25 +145,29 @@ export function FitnessWatchConnector() {
     setConnectionStatus('connecting');
     
     try {
-      // Request permission for Apple HealthKit
-      if (typeof (window as any).webkit !== 'undefined') {
-        // This would use HealthKit JavaScript API in a real implementation
-        // For now, we'll simulate the connection
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Simulate successful connection
-        setDevices(prev => prev.map(device => 
-          device.id === 'apple_health' 
-            ? { ...device, connected: true, lastSync: new Date() }
-            : device
-        ));
-        
-        setConnectionStatus('connected');
-        setLastSyncTime(new Date());
-        
-        // Simulate fetching sleep data
-        fetchAppleHealthData();
-      }
+      // Simulate connection process for demo purposes
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Simulate successful connection
+      setDevices(prev => prev.map(device => 
+        device.id === 'apple_health' 
+          ? { ...device, connected: true, lastSync: new Date() }
+          : device
+      ));
+      
+      setConnectionStatus('connected');
+      setLastSyncTime(new Date());
+      
+      // Initialize real-time data
+      setRealTimeData({
+        currentHeartRate: 72,
+        todaySteps: 3420,
+        sleepScore: 83,
+        lastUpdate: new Date()
+      });
+      
+      // Simulate fetching sleep data
+      fetchAppleHealthData();
     } catch (error) {
       console.error('Failed to connect to Apple Health:', error);
       setConnectionStatus('disconnected');
@@ -174,15 +178,7 @@ export function FitnessWatchConnector() {
     setConnectionStatus('connecting');
     
     try {
-      // Use Fitbit Web API with OAuth
-      const clientId = 'YOUR_FITBIT_CLIENT_ID'; // Would be set in environment
-      const redirectUri = encodeURIComponent(window.location.origin + '/fitbit-callback');
-      const scope = 'sleep heartrate activity';
-      
-      const authUrl = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-      
-      // In a real implementation, this would open OAuth flow
-      // For demo, we'll simulate successful connection
+      // Simulate connection process for demo purposes
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setDevices(prev => prev.map(device => 
@@ -193,6 +189,14 @@ export function FitnessWatchConnector() {
       
       setConnectionStatus('connected');
       setLastSyncTime(new Date());
+      
+      // Initialize real-time data
+      setRealTimeData({
+        currentHeartRate: 68,
+        todaySteps: 5240,
+        sleepScore: 78,
+        lastUpdate: new Date()
+      });
       
       // Simulate fetching sleep data
       fetchFitbitData();
@@ -206,8 +210,7 @@ export function FitnessWatchConnector() {
     setConnectionStatus('connecting');
     
     try {
-      // Use Garmin Connect IQ API
-      // This would require proper Garmin developer credentials
+      // Simulate connection process for demo purposes
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setDevices(prev => prev.map(device => 
@@ -218,6 +221,14 @@ export function FitnessWatchConnector() {
       
       setConnectionStatus('connected');
       setLastSyncTime(new Date());
+      
+      // Initialize real-time data
+      setRealTimeData({
+        currentHeartRate: 74,
+        todaySteps: 7890,
+        sleepScore: 91,
+        lastUpdate: new Date()
+      });
       
       // Simulate fetching sleep data
       fetchGarminData();
