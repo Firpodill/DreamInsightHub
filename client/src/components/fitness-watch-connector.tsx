@@ -323,8 +323,8 @@ export function FitnessWatchConnector() {
         throw new Error('Fitbit credentials not configured');
       }
       
-      // Construct OAuth URL
-      const redirectUri = encodeURIComponent(window.location.origin + '/fitbit-callback');
+      // Construct OAuth URL - must match registered redirect URI exactly
+      const redirectUri = encodeURIComponent('https://b6e2195d-9d45-47f1-97d6-70f86c4eff86-00-12k1zs8jp9eml.riker.replit.dev/fitbit-callback');
       const scope = 'activity heartrate sleep';
       const responseType = 'code';
       const state = Math.random().toString(36).substring(2, 15);
