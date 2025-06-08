@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { useDreamInsights } from '@/hooks/use-dreams';
+import { SymbolDefinitionModal } from './symbol-definition-modal';
 import { Crown, Sword, Heart, Sun, Moon, Star, Shield, Eye } from 'lucide-react';
 
 interface ArchetypeData {
@@ -112,6 +113,8 @@ const archetypeDatabase: Record<string, ArchetypeData> = {
 
 export function ArchetypeVisualization() {
   const [selectedArchetype, setSelectedArchetype] = useState<string | null>(null);
+  const [modalArchetype, setModalArchetype] = useState<string>('');
+  const [modalOpen, setModalOpen] = useState(false);
   const insights = useDreamInsights();
   const [archetypeData, setArchetypeData] = useState<ArchetypeData[]>([]);
   const [totalDreams, setTotalDreams] = useState(0);
@@ -121,17 +124,32 @@ export function ArchetypeVisualization() {
       const data = insights.data;
       setTotalDreams(data.totalDreams);
       
-      // Process archetype frequencies with proper name mapping
-      const processedArchetypes = Object.values(archetypeDatabase).map(archetype => {
-        // Map API archetype names to frontend database names
-        const apiName = archetype.name.replace('The ', '').replace('/Animus', '');
-        const frequency = data.archetypeFrequencies.find(
-          (freq: any) => freq.archetype === apiName || freq.archetype === archetype.name
-        );
-        return {
-          ...archetype,
-          frequency: frequency ? frequency.frequency : 0
-        };
+      // Only show archetypes that actually appear in journal entries
+      const processedArchetypes = data.archetypeFrequencies.map((apiArchetype: any) => {
+        // Find matching archetype in database or create basic entry
+        const dbArchetype = Object.values(archetypeDatabase).find(arch => {
+          const apiName = arch.name.replace('The ', '').replace('/Animus', '');
+          return apiArchetype.archetype === apiName || apiArchetype.archetype === arch.name;
+        });
+
+        if (dbArchetype) {
+          return {
+            ...dbArchetype,
+            frequency: apiArchetype.frequency
+          };
+        } else {
+          // Handle missing archetypes with basic data
+          return {
+            name: `The ${apiArchetype.archetype}`,
+            description: `Represents the ${apiArchetype.archetype} archetype in your dreams.`,
+            icon: Star,
+            color: "#6b7280",
+            shadowAspect: "Integration and understanding needed",
+            individuationRole: "Part of your psychological development",
+            frequency: apiArchetype.frequency,
+            dreamExamples: ["Appears in your recent dreams"]
+          };
+        }
       }).sort((a, b) => b.frequency - a.frequency);
       
       setArchetypeData(processedArchetypes);
@@ -232,7 +250,7 @@ export function ArchetypeVisualization() {
                       )}
                     </div>
                     <div className="text-xs text-gray-400">
-                      {(archetype.frequency * 100).toFixed(1)}% of your dreams
+                      {archetype.frequency.toFixed(1)}% of your dreams
                     </div>
                   </div>
                 </div>
@@ -255,39 +273,47 @@ export function ArchetypeVisualization() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3">
-            {archetypeData.map((archetype) => (
-              <div
-                key={archetype.name}
-                className="p-3 rounded-lg border cursor-pointer transition-all hover:scale-105"
-                style={{ 
-                  borderColor: archetype.frequency > 0 ? archetype.color + '60' : '#374151',
-                  backgroundColor: archetype.frequency > 0 ? archetype.color + '10' : '#1f2937',
-                  opacity: archetype.frequency > 0 ? 1 : 0.6
-                }}
-                onClick={() => setSelectedArchetype(archetype.name)}
-              >
-                <div className="text-center">
-                  <div 
-                    className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2"
-                    style={{ backgroundColor: archetype.color + '20' }}
-                  >
-                    <archetype.icon 
-                      className="w-4 h-4" 
-                      style={{ color: archetype.color }}
-                    />
-                  </div>
-                  <div className="text-white text-xs font-medium mb-1">
-                    {archetype.name}
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    {archetype.frequency > 0 
-                      ? `${(archetype.frequency * 100).toFixed(1)}%`
-                      : 'Not detected'
-                    }
+            {Object.values(archetypeDatabase).map((archetype) => {
+              const activeArchetype = archetypeData.find(a => a.name === archetype.name);
+              const frequency = activeArchetype?.frequency || 0;
+              
+              return (
+                <div
+                  key={archetype.name}
+                  className="p-3 rounded-lg border cursor-pointer transition-all hover:scale-105"
+                  style={{ 
+                    borderColor: frequency > 0 ? archetype.color + '60' : '#374151',
+                    backgroundColor: frequency > 0 ? archetype.color + '10' : '#1f2937',
+                    opacity: frequency > 0 ? 1 : 0.6
+                  }}
+                  onClick={() => {
+                    setModalArchetype(archetype.name);
+                    setModalOpen(true);
+                  }}
+                >
+                  <div className="text-center">
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2"
+                      style={{ backgroundColor: archetype.color + '20' }}
+                    >
+                      <archetype.icon 
+                        className="w-4 h-4" 
+                        style={{ color: archetype.color }}
+                      />
+                    </div>
+                    <div className="text-white text-xs font-medium mb-1">
+                      {archetype.name}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {frequency > 0 
+                        ? `${frequency.toFixed(1)}%`
+                        : 'Not detected'
+                      }
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </CardContent>
       </Card>
@@ -370,7 +396,7 @@ export function ArchetypeVisualization() {
                         className="flex-1"
                       />
                       <span className="text-gray-300 text-sm">
-                        {(archetype.frequency * 100).toFixed(1)}%
+                        {archetype.frequency.toFixed(1)}%
                       </span>
                     </div>
                     <p className="text-gray-400 text-xs mt-2">
