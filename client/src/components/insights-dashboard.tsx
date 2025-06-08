@@ -3,12 +3,13 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Brain, Mountain, Key, Eye, TrendingUp, Crown, BarChart3 } from 'lucide-react';
-import { useDreamInsights } from '@/hooks/use-dreams';
+import { useDreamInsights, useDreams } from '@/hooks/use-dreams';
 import { ArchetypeVisualization } from './archetype-visualization';
 import type { ArchetypeFrequency, RecentPattern } from '@/types/dream';
 
 export function InsightsDashboard() {
   const { data: insights, isLoading } = useDreamInsights();
+  const { data: dreams = [] } = useDreams();
 
   const getPatternIcon = (iconName: string) => {
     const icons = {
@@ -35,6 +36,21 @@ export function InsightsDashboard() {
     };
     return colors[archetype as keyof typeof colors] || colors.default;
   };
+
+  // Get today's dream analysis
+  const getTodaysAnalysis = () => {
+    const today = new Date();
+    const todayStr = today.toDateString();
+    
+    const todaysDreams = dreams.filter(dream => {
+      const dreamDate = new Date(dream.createdAt);
+      return dreamDate.toDateString() === todayStr && dream.analysis;
+    });
+    
+    return todaysDreams.length > 0 ? todaysDreams[todaysDreams.length - 1] : null;
+  };
+
+  const todaysAnalysis = getTodaysAnalysis();
 
   if (isLoading) {
     return (
@@ -84,10 +100,33 @@ export function InsightsDashboard() {
         
         <TabsContent value="overview" className="mt-6">
           <div className="space-y-4">
-            {/* Header */}
+            {/* Header with Today's Analysis */}
             <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
               <h2 className="text-xl font-semibold text-white mb-2">Your Dream Insights</h2>
-              <p className="text-sm text-gray-400">Discover patterns in your unconscious mind</p>
+              {todaysAnalysis ? (
+                <div className="bg-gradient-to-r from-red-900/30 to-yellow-900/30 rounded-lg p-3 mt-3 border border-red-700/30">
+                  <div className="flex items-center mb-2">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-sm font-semibold text-white">Today's AI Analysis</span>
+                  </div>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    {todaysAnalysis.analysis}
+                  </p>
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {todaysAnalysis.archetypes?.slice(0, 3).map((archetype) => (
+                      <Badge 
+                        key={archetype} 
+                        variant="secondary" 
+                        className={`text-xs ${getArchetypeColor(archetype)} text-white border-0`}
+                      >
+                        {archetype}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">Discover patterns in your unconscious mind</p>
+              )}
             </div>
 
             {/* Overview Stats */}
