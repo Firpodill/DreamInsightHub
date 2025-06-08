@@ -90,6 +90,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     if (!text.trim()) return;
 
     try {
+      setIsStopping(false); // Clear stopping flag when starting new speech
       setIsLoading(true);
       setIsPlaying(false);
       setError(null);
@@ -137,6 +138,12 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       }
 
       setIsLoading(false);
+
+      // Check if we should stop before creating audio
+      if (isStopping) {
+        console.log('Synthesis completed but stopping flag is set - not playing audio');
+        return;
+      }
 
       // Create audio blob and play immediately
       const audioBlob = await response.blob();
