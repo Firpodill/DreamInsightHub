@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -43,6 +44,12 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             <Book className="w-5 h-5" />
             {currentDefinition ? `Definition: ${symbol}` : 'Dream Symbol Encyclopedia'}
           </DialogTitle>
+          <DialogDescription>
+            {currentDefinition 
+              ? `Explore the Jungian psychological meaning of "${symbol}" and its role in dream interpretation.`
+              : 'Browse and search through our comprehensive collection of dream symbols and archetypes with their psychological meanings.'
+            }
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4">
