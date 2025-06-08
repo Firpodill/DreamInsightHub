@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 
 interface ElevenLabsVoice {
@@ -37,6 +37,8 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   const [currentVoice, setCurrentVoice] = useState<ElevenLabsVoice | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
+  const [isStopping, setIsStopping] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Load available voices on mount
   useEffect(() => {
@@ -112,6 +114,10 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         ...settings,
       };
 
+      // Create abort controller for this request
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
       // Make request to synthesize speech
       const response = await fetch('/api/elevenlabs/synthesize', {
         method: 'POST',
@@ -123,6 +129,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
           voice_id: selectedVoiceId,
           voice_settings: voiceSettings,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -183,6 +190,12 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   }, [currentVoice, currentAudio]);
 
   const stop = useCallback(() => {
+    // Abort any ongoing network request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    
     // Stop current audio if exists
     if (currentAudio) {
       currentAudio.pause();
@@ -203,6 +216,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     // Force state reset
     setIsPlaying(false);
     setIsLoading(false);
+    setIsStopping(true);
   }, [currentAudio]);
 
   const setVoice = useCallback((voice: ElevenLabsVoice) => {
