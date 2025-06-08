@@ -61,6 +61,16 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
     console.log(`Loaded ${elevenLabsVoice.availableVoices.length} ElevenLabs voices and ${systemVoice.availableVoices.length} system voices`);
 
     setVoiceOptions(options);
+    
+    // Set Chessie British Character as default selection if available
+    if (!selectedVoice && options.length > 0) {
+      const chessieVoice = options.find(option => 
+        option.type === 'elevenlabs' && option.name === 'Chessie British Character'
+      );
+      if (chessieVoice) {
+        setSelectedVoice(chessieVoice);
+      }
+    }
   }, [systemVoice.availableVoices, elevenLabsVoice.availableVoices]);
 
   const handlePreview = async (voiceOption: VoiceOption) => {
