@@ -39,16 +39,20 @@ export function EnhancedVoiceButton({
 
   // Show voice hint on first render if not dismissed
   useEffect(() => {
-    const hintDismissed = localStorage.getItem('voice-hint-dismissed');
+    const hintDismissed = localStorage.getItem('voice-notifications-disabled');
     if (!hintDismissed) {
-      const timer = setTimeout(() => setShowVoiceHint(true), 1000);
+      const timer = setTimeout(() => setShowVoiceHint(true), 2000);
       return () => clearTimeout(timer);
     }
   }, []);
 
   const dismissVoiceHint = () => {
     setShowVoiceHint(false);
-    localStorage.setItem('voice-hint-dismissed', 'true');
+  };
+
+  const disableNotifications = () => {
+    setShowVoiceHint(false);
+    localStorage.setItem('voice-notifications-disabled', 'true');
   };
 
   const handlePlay = async () => {
@@ -121,26 +125,7 @@ export function EnhancedVoiceButton({
           <Settings className="w-3 h-3" />
         </Button>
         
-        {/* Compact voice hint */}
-        {showVoiceHint && (
-          <div className="absolute -top-10 -right-4 z-50">
-            <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs shadow-md relative">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute -top-1 -right-1 w-4 h-4 bg-white text-blue-500 hover:bg-gray-100 rounded-full"
-                onClick={dismissVoiceHint}
-              >
-                <X className="w-2 h-2" />
-              </Button>
-              <div className="pr-3">
-                <div className="whitespace-nowrap">Voice options available</div>
-              </div>
-              {/* Small arrow pointing down */}
-              <div className="absolute -bottom-1 right-2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-l-transparent border-r-transparent border-t-blue-500"></div>
-            </div>
-          </div>
-        )}
+
       </div>
 
       <VoiceSelector
@@ -149,6 +134,39 @@ export function EnhancedVoiceButton({
         onVoiceSelect={handleVoiceSelect}
         text={text}
       />
+
+      {/* Voice Discovery Popup */}
+      {showVoiceHint && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-sm w-full p-6 shadow-xl">
+            <div className="text-center">
+              <div className="text-2xl mb-3">🎙️</div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Voice Options Available</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Click the settings wheel next to any Listen button to choose from 38+ AI voices, including your custom Chessie V3 voice.
+              </p>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={dismissVoiceHint}
+                  className="flex-1"
+                >
+                  Got it
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={disableNotifications}
+                  className="flex-1 text-gray-500"
+                >
+                  Don't show again
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
