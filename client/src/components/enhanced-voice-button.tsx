@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Volume2, VolumeX, Settings, X } from 'lucide-react';
+import { Volume2, VolumeX, Settings, X, Loader2 } from 'lucide-react';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useElevenLabsVoice } from '@/hooks/use-elevenlabs-voice';
 import { useGlobalVoicePreference } from '@/hooks/use-voice-preference';
@@ -31,6 +31,7 @@ export function EnhancedVoiceButton({
   size = 'sm' 
 }: EnhancedVoiceButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showVoiceSelector, setShowVoiceSelector] = useState(false);
   const [showVoiceHint, setShowVoiceHint] = useState(false);
   
@@ -73,11 +74,12 @@ export function EnhancedVoiceButton({
   };
 
   const handleToggle = () => {
-    if (isPlaying) {
+    if (isPlaying || isLoading) {
       // Stop current audio
       systemVoice.stop();
       elevenLabsVoice.stop();
       setIsPlaying(false);
+      setIsLoading(false);
       audioManager.setPlaying(false);
     } else {
       // Start playing
@@ -85,26 +87,47 @@ export function EnhancedVoiceButton({
 
       console.log('Playing with selected voice:', selectedVoice);
       
+      setIsLoading(true);
       audioManager.setPlaying(true);
-      setIsPlaying(true);
       
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
+        
+        // Add a small delay to show loading spinner
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsPlaying(true);
+        }, 500);
+        
         elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
       } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
         console.log('Using system voice:', selectedVoice.voice.name);
+        
+        // System voices are usually faster
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsPlaying(true);
+        }, 200);
+        
         systemVoice.setVoice(selectedVoice.voice);
         systemVoice.speak(text);
       } else {
         console.log('Using default system voice');
+        
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsPlaying(true);
+        }, 200);
+        
         systemVoice.speak(text);
       }
       
       // Auto-stop after estimated duration
       setTimeout(() => {
         setIsPlaying(false);
+        setIsLoading(false);
         audioManager.setPlaying(false);
-      }, Math.max(text.length * 60, 3000));
+      }, Math.max(text.length * 60, 5000));
     }
   };
 
@@ -152,12 +175,14 @@ export function EnhancedVoiceButton({
         disabled={elevenLabsVoice.isLoading}
         data-voice-control
       >
-        {isPlaying ? (
+        {isLoading ? (
+          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+        ) : isPlaying ? (
           <VolumeX className="w-4 h-4 mr-1" />
         ) : (
           <Volume2 className="w-4 h-4 mr-1" />
         )}
-        {isPlaying ? 'Stop' : 'Listen'}
+        {isLoading ? 'Loading...' : isPlaying ? 'Stop' : 'Listen'}
       </Button>
       
       <div className="relative">
