@@ -3,15 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { Brain, Sparkles, Volume2, VolumeX, Wifi, WifiOff } from 'lucide-react';
 import { useAnalyzeDream } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
+import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 export default function SimpleDreamAnalyzer() {
   const [dreamText, setDreamText] = useState('');
   const [analysis, setAnalysis] = useState<any>(null);
   const analyzeDream = useAnalyzeDream();
   const { speak, stop, isPlaying } = useNaturalVoice();
+  const { isOnline, storeDreamOffline, offlineCount } = useOfflineSync();
 
   const handleAnalyze = async () => {
     if (!dreamText.trim()) return;
