@@ -77,13 +77,7 @@ export default function DreamAnalysis() {
     <div className="max-w-md mx-auto bg-black text-white min-h-screen relative overflow-hidden">
       {/* Header */}
       <header className="p-6 border-b border-gray-800">
-        <div className="flex items-center justify-between mb-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </Link>
+        <div className="flex items-center justify-center mb-4">
           <div className="text-center">
             <div className="text-sm font-bold px-3 py-1 rounded" style={{
               backgroundColor: '#E53E3E',
@@ -95,7 +89,6 @@ export default function DreamAnalysis() {
               DREAM DECODED
             </div>
           </div>
-          <div className="w-16"></div>
         </div>
       </header>
 
