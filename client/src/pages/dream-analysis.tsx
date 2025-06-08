@@ -257,9 +257,17 @@ export default function DreamAnalysis() {
             {/* Recommendations */}
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Lightbulb className="w-5 h-5 mr-2" />
-                  Recommendations
+                <CardTitle className="text-white flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Lightbulb className="w-5 h-5 mr-2" />
+                    Recommendations
+                  </div>
+                  <EnhancedVoiceButton 
+                    text={analysis.recommendations}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
                 </CardTitle>
               </CardHeader>
               <CardContent>
