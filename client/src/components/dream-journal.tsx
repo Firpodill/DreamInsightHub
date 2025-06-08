@@ -247,8 +247,38 @@ export function DreamJournal() {
     </Card>
   );
 
-  const getArchetypeColor = (archetype: string) => {
-    return 'bg-black text-yellow-400 border border-yellow-400';
+  // Archetype color mapping from Complete Archetype Spectrum
+  const archetypeColors: Record<string, string> = {
+    "The Hero": "#dc2626",
+    "Hero": "#dc2626",
+    "The Ruler": "#7c2d12", 
+    "Ruler": "#7c2d12",
+    "The Lover": "#be185d",
+    "Lover": "#be185d", 
+    "The Sage": "#1e40af",
+    "Sage": "#1e40af",
+    "The Shadow": "#6b7280",
+    "Shadow": "#6b7280",
+    "The Innocent": "#eab308",
+    "Innocent": "#eab308",
+    "The Anima": "#8b5cf6",
+    "Anima": "#8b5cf6",
+    "The Animus": "#8b5cf6",
+    "Animus": "#8b5cf6",
+    "The Self": "#22d3ee",
+    "Self": "#22d3ee",
+    "The Trickster": "#f97316",
+    "Trickster": "#f97316",
+    "The Mother": "#ec4899",
+    "Mother": "#ec4899",
+    "The Wise Old Man": "#1e40af",
+    "Wise Old Man": "#1e40af",
+    "The Wise Old Woman": "#1e40af",
+    "Wise Old Woman": "#1e40af"
+  };
+
+  const getArchetypeColor = (archetype: string): string => {
+    return archetypeColors[archetype] || "#6b7280";
   };
 
   const renderDreamEntry = (dream: Dream) => (
@@ -447,16 +477,29 @@ export function DreamJournal() {
                 <div className="mb-6">
                   <h3 className="font-bold text-gray-900 mb-3">Archetypes</h3>
                   <div className="flex flex-wrap gap-3">
-                    {selectedDream.archetypes.map((archetype, index) => (
-                      <Badge 
-                        key={`${selectedDream.id}-archetype-${index}`}
-                        variant="secondary" 
-                        className="bg-black text-yellow-400 hover:bg-gray-800 cursor-pointer transition-colors px-3 py-1 text-sm font-semibold border-2 border-yellow-400"
-                        onClick={() => openSymbolModal(archetype, 'archetype')}
-                      >
-                        {archetype}
-                      </Badge>
-                    ))}
+                    {selectedDream.archetypes.map((archetype, index) => {
+                      const color = getArchetypeColor(archetype);
+                      return (
+                        <Badge 
+                          key={`${selectedDream.id}-archetype-${index}`}
+                          className="cursor-pointer transition-colors px-3 py-1 text-sm font-semibold rounded-full"
+                          style={{
+                            color: color,
+                            backgroundColor: `${color}20`,
+                            border: `2px solid ${color}60`
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = `${color}30`;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = `${color}20`;
+                          }}
+                          onClick={() => openSymbolModal(archetype, 'archetype')}
+                        >
+                          {archetype}
+                        </Badge>
+                      );
+                    })}
                   </div>
                 </div>
               )}
