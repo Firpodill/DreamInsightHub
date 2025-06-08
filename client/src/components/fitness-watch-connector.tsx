@@ -331,7 +331,7 @@ export function FitnessWatchConnector() {
     setDevices(prev => prev.map(device => ({ ...device, connected: false })));
     setConnectionStatus('disconnected');
     setLastSyncTime(null);
-    setRealTimeData({ currentHeartRate: 0, todaySteps: 0, sleepScore: 0, lastUpdate: new Date() });
+    setRealTimeData({ currentHeartRate: 0, todaySteps: 0, sleepScore: 0, sleepDuration: 0, lastUpdate: new Date() });
     setSleepData([]);
     setActiveMetric(null);
     
