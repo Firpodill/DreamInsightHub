@@ -199,6 +199,29 @@ export default function DreamAnalysis() {
                 <p className="text-gray-300 text-sm leading-relaxed mb-4">
                   {analysis.jungianInterpretation}
                 </p>
+                
+                {/* Inline Archetype Badges within Interpretation */}
+                {analysis.archetypes && analysis.archetypes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {analysis.archetypes.map((archetype: string, index: number) => {
+                      const color = getArchetypeColor(archetype);
+                      return (
+                        <Badge 
+                          key={`inline-${index}`} 
+                          variant="outline" 
+                          className="text-xs"
+                          style={{
+                            color: color,
+                            borderColor: color,
+                            backgroundColor: `${color}15`
+                          }}
+                        >
+                          {archetype}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                )}
                 <div className="mb-4">
                   <h4 className="text-white font-semibold mb-2">Individuation Stage:</h4>
                   <span className="text-yellow-400 text-sm">
