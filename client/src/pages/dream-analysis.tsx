@@ -101,20 +101,7 @@ export default function DreamAnalysis() {
 
       {/* Content */}
       <div className="p-6 space-y-6">
-        {/* Dream Text */}
-        <Card className="bg-gray-900 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Eye className="w-5 h-5 mr-2" />
-              Your Dream
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              {dreamText || 'No dream text available'}
-            </p>
-          </CardContent>
-        </Card>
+
 
         {/* Loading State */}
         {analyzeDream.isPending && (
