@@ -114,6 +114,10 @@ export function FitnessWatchConnector() {
     setConnectionStatus('connecting');
     
     try {
+      // For demonstration purposes only - real implementation requires:
+      // Fitbit: OAuth 2.0 with Client ID/Secret from Fitbit Developer Console
+      // Apple Health: HealthKit JavaScript API (iOS Safari only)
+      
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setDevices(prev => prev.map(device => 
@@ -125,7 +129,7 @@ export function FitnessWatchConnector() {
       setConnectionStatus('connected');
       setLastSyncTime(new Date());
       
-      // Initialize real-time data based on device type
+      // Demo data - in production this would come from actual device APIs
       const deviceData = {
         'apple_health': { currentHeartRate: 72, todaySteps: 3420, sleepScore: 83 },
         'fitbit_device': { currentHeartRate: 68, todaySteps: 5240, sleepScore: 78 }
@@ -136,7 +140,6 @@ export function FitnessWatchConnector() {
         lastUpdate: new Date()
       });
       
-      // Generate sample sleep data
       generateSampleSleepData(deviceId);
       
     } catch (error) {
@@ -209,6 +212,19 @@ export function FitnessWatchConnector() {
 
   return (
     <div className="space-y-6">
+      {/* Production Integration Requirements */}
+      <Alert className="bg-blue-900/20 border-blue-500/50">
+        <Activity className="h-4 w-4 text-blue-400" />
+        <AlertDescription className="text-blue-300">
+          <div className="font-medium mb-2">Production Integration Requirements:</div>
+          <div className="text-sm space-y-1">
+            <div><strong>Fitbit:</strong> OAuth 2.0 with Client ID/Secret from Fitbit Developer Console</div>
+            <div><strong>Apple Health:</strong> HealthKit JavaScript API (iOS Safari only)</div>
+            <div>Current version uses demo data for interface testing</div>
+          </div>
+        </AlertDescription>
+      </Alert>
+
       {/* Connection Status */}
       <Card className="bg-gray-900 border-gray-700">
         <CardHeader>
@@ -218,10 +234,10 @@ export function FitnessWatchConnector() {
             ) : (
               <WifiOff className="h-5 w-5 text-gray-500" />
             )}
-            Fitness Device Connection
+            Fitness Device Connection (Demo)
           </CardTitle>
           <CardDescription className="text-gray-400">
-            Connect your fitness tracker to sync sleep and health data
+            Demo fitness tracker integration with simulated data
           </CardDescription>
         </CardHeader>
         <CardContent>
