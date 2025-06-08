@@ -397,21 +397,48 @@ export function DreamJournal() {
 
 
 
-              {/* Original Dream Text - Always Expanded */}
+              {/* Original Dream Text with Expand/Collapse */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-gray-900">
                     Original Dream
                   </h3>
-                  <EnhancedVoiceButton 
-                    text={selectedDream.content}
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 border-red-300 hover:bg-red-50"
-                  />
+                  <div className="flex items-center gap-2">
+                    <EnhancedVoiceButton 
+                      text={selectedDream.content}
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 border-red-300 hover:bg-red-50"
+                    />
+                    {selectedDream.content.length > 200 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsDreamTextExpanded(!isDreamTextExpanded)}
+                        className="text-gray-600 hover:text-gray-800 flex items-center"
+                      >
+                        {isDreamTextExpanded ? (
+                          <>
+                            <ChevronUp className="w-4 h-4 mr-1" />
+                            Collapse
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-4 h-4 mr-1" />
+                            Expand
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <div className="bg-gradient-to-br from-red-50 via-yellow-50 to-red-100 rounded-lg p-4 border-2 border-red-200 shadow-lg">
-                  <p className="text-gray-800 leading-relaxed font-medium">{selectedDream.content}</p>
+                  <p className="text-gray-800 leading-relaxed font-medium">
+                    {selectedDream.content.length > 200 && !isDreamTextExpanded 
+                      ? `${selectedDream.content.substring(0, 200)}...`
+                      : selectedDream.content
+                    }
+                  </p>
                 </div>
               </div>
 
