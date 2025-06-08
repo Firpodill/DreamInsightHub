@@ -406,7 +406,7 @@ export function DreamJournal() {
                     DREAMSCAPE
                   </h3>
                   <div className="mb-2">
-                    <p className="text-sm font-medium text-purple-600 italic">
+                    <p className="text-sm font-medium text-yellow-600 italic">
                       {generateDreamscapeTitle(selectedDream)}
                     </p>
                   </div>
@@ -577,7 +577,11 @@ export function DreamJournal() {
 
           {/* Yearly Calendar Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {Array.from({ length: 12 }, (_, monthIndex) => renderCalendarMonth(monthIndex))}
+            {Array.from({ length: 12 }, (_, monthIndex) => (
+              <div key={`month-${monthIndex}`}>
+                {renderCalendarMonth(monthIndex)}
+              </div>
+            ))}
           </div>
 
           {/* Legend */}
