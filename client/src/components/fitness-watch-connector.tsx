@@ -324,7 +324,7 @@ export function FitnessWatchConnector() {
       }
       
       // Construct OAuth URL - must match registered redirect URI exactly
-      const redirectUri = encodeURIComponent('https://b6e2195d-9d45-47f1-97d6-70f86c4eff86-00-12k1zs8jp9eml.riker.replit.dev/fitbit-callback');
+      const redirectUri = 'https://b6e2195d-9d45-47f1-97d6-70f86c4eff86-00-12k1zs8jp9eml.riker.replit.dev/fitbit-callback';
       const scope = 'activity heartrate sleep';
       const responseType = 'code';
       const state = Math.random().toString(36).substring(2, 15);
@@ -335,9 +335,21 @@ export function FitnessWatchConnector() {
       const authUrl = `https://www.fitbit.com/oauth2/authorize?` +
         `response_type=${responseType}&` +
         `client_id=${clientId}&` +
-        `redirect_uri=${redirectUri}&` +
+        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
         `scope=${scope}&` +
         `state=${state}`;
+      
+      console.log('Fitbit OAuth URL:', authUrl);
+      console.log('Redirect URI:', redirectUri);
+      
+      // Test if we can reach Fitbit OAuth first
+      const testResponse = await fetch(`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}`, { 
+        method: 'HEAD',
+        mode: 'no-cors'
+      }).catch(e => {
+        console.log('Fitbit connectivity test failed:', e);
+        return null;
+      });
       
       // Open OAuth flow
       window.location.href = authUrl;
@@ -430,8 +442,8 @@ export function FitnessWatchConnector() {
           <div className="font-medium mb-2">Integration Status:</div>
           <div className="text-sm space-y-1">
             <div><strong>Apple Health:</strong> ✅ HealthKit API implemented (requires iOS Safari)</div>
-            <div><strong>Fitbit:</strong> ✅ OAuth 2.0 integration active - redirect URL configured</div>
-            <div>Ready to connect with your real Fitbit account data</div>
+            <div><strong>Fitbit:</strong> ⚠️ Client ID verification needed (current: 23QKL9)</div>
+            <div>Please verify complete Client ID from Fitbit Developer Console</div>
           </div>
         </AlertDescription>
       </Alert>
