@@ -513,7 +513,7 @@ export function DreamJournal() {
                       <Badge 
                         key={`${selectedDream.id}-symbol-${index}`}
                         variant="outline" 
-                        className="border-2 border-red-500 text-red-700 hover:bg-red-50 cursor-pointer transition-colors px-3 py-1 text-sm font-semibold"
+                        className="border-2 border-green-500 text-green-700 hover:bg-green-50 cursor-pointer transition-colors px-3 py-1 text-sm font-semibold rounded-full"
                         onClick={() => openSymbolModal(symbol, 'symbol')}
                       >
                         {symbol}
