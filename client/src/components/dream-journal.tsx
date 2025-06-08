@@ -39,8 +39,18 @@ export function DreamJournal() {
     }
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string, format: 'relative' | 'full' = 'relative') => {
     const date = new Date(dateString);
+    
+    if (format === 'full') {
+      return date.toLocaleDateString('en-US', { 
+        weekday: 'long',
+        month: 'long', 
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+    
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -92,6 +102,25 @@ export function DreamJournal() {
 
   const getFirstDayOfMonth = (year: number, month: number) => {
     return new Date(year, month, 1).getDay();
+  };
+
+  const generateDreamscapeTitle = (dream: Dream) => {
+    const symbols = dream.symbols || [];
+    const archetypes = dream.archetypes || [];
+    
+    const titleTemplates = [
+      `${symbols[0] || 'Mystic'} ${archetypes[0] || 'Vision'} Chronicles`,
+      `The ${symbols[0] || 'Hidden'} ${archetypes[0] || 'Journey'} Saga`,
+      `${archetypes[0] || 'Dream'} of the ${symbols[0] || 'Unknown'} Realm`,
+      `${symbols[0] || 'Cosmic'} ${archetypes[0] || 'Adventure'} Tapestry`,
+      `The ${symbols[0] || 'Secret'} ${archetypes[0] || 'Quest'} Unveiled`,
+      `${archetypes[0] || 'Ethereal'} ${symbols[0] || 'Mystery'} Expedition`,
+      `${symbols[0] || 'Enchanted'} ${archetypes[0] || 'Odyssey'} Dreamwork`,
+      `The ${symbols[0] || 'Magical'} ${archetypes[0] || 'Path'} Awakening`
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * titleTemplates.length);
+    return titleTemplates[randomIndex];
   };
 
   const renderCalendarMonth = (monthIndex: number) => {
@@ -346,7 +375,7 @@ export function DreamJournal() {
                   <h2 className="text-xl font-semibold text-gray-800">{selectedDream.title}</h2>
                   <p className="text-sm text-gray-500 flex items-center mt-1">
                     <Calendar className="w-3 h-3 mr-1" />
-                    {formatDate(selectedDream.createdAt.toString())}
+                    {formatDate(selectedDream.createdAt.toString(), 'full')}
                   </p>
                 </div>
                 <Button 
@@ -362,7 +391,12 @@ export function DreamJournal() {
               {/* Generated Image */}
               {selectedDream.imageUrl && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">AI-Generated Visualization</h3>
+                  <h3 className="font-medium text-gray-800 mb-2">Dreamscape</h3>
+                  <div className="mb-2">
+                    <p className="text-sm font-medium text-purple-600 italic">
+                      {generateDreamscapeTitle(selectedDream)}
+                    </p>
+                  </div>
                   <img 
                     src={selectedDream.imageUrl} 
                     alt="AI-generated dream visualization"
