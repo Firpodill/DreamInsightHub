@@ -128,21 +128,32 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         throw new Error(`Failed to synthesize speech: ${response.status}`);
       }
 
-      // Create audio blob and play
+      // Create audio blob and play immediately
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
       setCurrentAudio(audio);
 
+      // Preload and play as soon as possible
+      audio.preload = 'auto';
+      audio.load();
+
       // Handle audio events
-      audio.onloadeddata = () => {
+      const playAudio = () => {
         audio.play().catch(err => {
           console.error('Audio play error:', err);
           setError('Failed to play audio');
           setIsPlaying(false);
         });
       };
+
+      // Try to play immediately, or wait for canplay event
+      if (audio.readyState >= 2) { // HAVE_CURRENT_DATA
+        playAudio();
+      } else {
+        audio.oncanplay = playAudio;
+      }
 
       audio.onended = () => {
         setIsPlaying(false);

@@ -45,7 +45,8 @@ export function EnhancedVoiceButton({
     try {
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-        await elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
+        // Start playback immediately without awaiting
+        elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
       } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
         console.log('Using system voice:', selectedVoice.voice.name);
         systemVoice.setVoice(selectedVoice.voice);
@@ -56,11 +57,12 @@ export function EnhancedVoiceButton({
       }
     } catch (error) {
       console.error('Voice playback failed:', error);
+      setIsPlaying(false);
     }
     
     // Reset playing state after estimated duration
-    const estimatedDuration = text.length * 50; // Rough estimate
-    setTimeout(() => setIsPlaying(false), Math.min(estimatedDuration, 10000));
+    const estimatedDuration = Math.max(text.length * 40, 2000); // More responsive estimate
+    setTimeout(() => setIsPlaying(false), Math.min(estimatedDuration, 8000));
   };
 
   const handleStop = () => {

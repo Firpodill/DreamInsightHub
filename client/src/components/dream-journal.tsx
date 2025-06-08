@@ -463,14 +463,13 @@ export function DreamJournal() {
 
               {/* Actions */}
               <div className="flex gap-3 pt-4 border-t border-gray-200">
-                <Button 
-                  variant="outline" 
-                  onClick={() => playDreamText(selectedDream.content)}
-                  className="flex-1"
-                >
-                  <Volume2 className="w-4 h-4 mr-2" />
-                  {isPlaying ? 'Stop' : 'Listen'}
-                </Button>
+                <div className="flex-1">
+                  <EnhancedVoiceButton 
+                    text={selectedDream.content}
+                    variant="outline"
+                    className="w-full justify-center"
+                  />
+                </div>
                 <Button 
                   onClick={() => setSelectedDream(null)}
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white"
