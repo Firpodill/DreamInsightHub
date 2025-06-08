@@ -410,8 +410,13 @@ export function DreamJournal() {
               {/* Jungian Dream Analysis */}
               {selectedDream.analysis && (
                 <div className="mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-gray-800">Jungian Dream Analysis</h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-bold text-gray-900">
+                      Jungian Dream Analysis
+                      <span className="text-sm font-normal text-gray-500 ml-2">
+                        (AI-powered psychological interpretation)
+                      </span>
+                    </h3>
                     <EnhancedVoiceButton 
                       text={selectedDream.analysis}
                       variant="outline"
