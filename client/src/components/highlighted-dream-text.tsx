@@ -27,11 +27,12 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     /\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?/g,  // Capitalized names (2+ chars to avoid single letters)
   ];
   
-  // Jung and Campbell archetypes to detect
+  // Jung and Campbell archetypes to detect (ordered by specificity)
   const archetypes = [
-    'Hero', 'Shadow', 'Anima', 'Animus', 'Self', 'Wise Old Man', 'Great Mother', 'Trickster', 
-    'The Hero', 'The Shadow', 'The Lover', 'The Sage', 'The Ruler', 'The Father', 'The Mother',
-    'The Innocent', 'The Anima/Animus', 'Mother', 'Father', 'Lover', 'Sage', 'Ruler', 'Innocent'
+    'The Anima/Animus', 'The Hero', 'The Shadow', 'The Lover', 'The Sage', 'The Ruler', 
+    'The Father', 'The Mother', 'The Innocent', 'The Trickster', 'The Self',
+    'Wise Old Man', 'Great Mother', 'Hero', 'Shadow', 'Anima', 'Animus', 'Self', 'Trickster',
+    'Mother', 'Father', 'Lover', 'Sage', 'Ruler', 'Innocent'
   ];
 
   // Common proper names and famous people to specifically catch
@@ -74,19 +75,6 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     /\bTarget\b/gi
   ];
   
-  // Find places
-  placePatterns.forEach(pattern => {
-    let match: RegExpExecArray | null;
-    while ((match = pattern.exec(text)) !== null) {
-      terms.push({
-        term: match[0],
-        start: match.index,
-        end: match.index + match[0].length,
-        type: 'place'
-      });
-    }
-  });
-  
   // Find archetypes first (highest priority)
   archetypes.forEach(archetype => {
     const regex = new RegExp(`\\b${archetype}\\b`, 'gi');
@@ -98,6 +86,25 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
         end: match.index + match[0].length,
         type: 'archetype'
       });
+    }
+  });
+
+  // Find places (check for overlaps with archetypes)
+  placePatterns.forEach(pattern => {
+    let match: RegExpExecArray | null;
+    while ((match = pattern.exec(text)) !== null) {
+      // Check if this overlaps with existing archetype terms
+      const overlaps = terms.some(term => 
+        match!.index < term.end && match!.index + match![0].length > term.start
+      );
+      if (!overlaps) {
+        terms.push({
+          term: match[0],
+          start: match.index,
+          end: match.index + match[0].length,
+          type: 'place'
+        });
+      }
     }
   });
 
