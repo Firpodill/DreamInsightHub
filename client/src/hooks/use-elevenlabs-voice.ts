@@ -76,7 +76,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     };
 
     loadVoices();
-  }, [currentVoice]);
+  }, []);
 
   const speak = useCallback(async (
     text: string, 
