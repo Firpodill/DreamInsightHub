@@ -97,6 +97,16 @@ const archetypeDatabase: Record<string, ArchetypeData> = {
     individuationRole: "Represents the goal of individuation - wholeness",
     frequency: 0,
     dreamExamples: ["Mandala symbols", "Divine figures", "Perfect balance", "Unity"]
+  },
+  "The Trickster": {
+    name: "The Trickster",
+    description: "Represents transformation through humor, chaos, and boundary crossing.",
+    icon: Star,
+    color: "#f97316",
+    shadowAspect: "Destructive chaos, malicious mischief, or avoiding responsibility",
+    individuationRole: "Breaks rigid patterns and enables creative transformation",
+    frequency: 0,
+    dreamExamples: ["Pranks", "Shape-shifting", "Rule breaking", "Unexpected events"]
   }
 };
 
@@ -111,10 +121,12 @@ export function ArchetypeVisualization() {
       const data = insights.data;
       setTotalDreams(data.totalDreams);
       
-      // Process archetype frequencies
+      // Process archetype frequencies with proper name mapping
       const processedArchetypes = Object.values(archetypeDatabase).map(archetype => {
+        // Map API archetype names to frontend database names
+        const apiName = archetype.name.replace('The ', '').replace('/Animus', '');
         const frequency = data.archetypeFrequencies.find(
-          (freq: any) => freq.archetype === archetype.name
+          (freq: any) => freq.archetype === apiName || freq.archetype === archetype.name
         );
         return {
           ...archetype,
