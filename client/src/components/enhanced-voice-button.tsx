@@ -34,6 +34,7 @@ export function EnhancedVoiceButton({
   const [isLoading, setIsLoading] = useState(false);
   const [showVoiceSelector, setShowVoiceSelector] = useState(false);
   const [showVoiceHint, setShowVoiceHint] = useState(false);
+  const [audioTimeout, setAudioTimeout] = useState<NodeJS.Timeout | null>(null);
   
   const systemVoice = useNaturalVoice();
   const elevenLabsVoice = useElevenLabsVoice();
@@ -46,9 +47,21 @@ export function EnhancedVoiceButton({
       systemVoice.stop();
       elevenLabsVoice.stop();
       setIsPlaying(false);
+      setIsLoading(false);
+      if (audioTimeout) {
+        clearTimeout(audioTimeout);
+        setAudioTimeout(null);
+      }
     };
     audioManager.registerAudio(stopAll);
-  }, []);
+    
+    // Cleanup timeout on unmount
+    return () => {
+      if (audioTimeout) {
+        clearTimeout(audioTimeout);
+      }
+    };
+  }, [audioTimeout]);
 
   // Show voice hint on first render if not dismissed
   useEffect(() => {
@@ -77,32 +90,67 @@ export function EnhancedVoiceButton({
     const isCurrentlyBusy = isPlaying || isLoading || systemVoice.isPlaying || elevenLabsVoice.isPlaying || elevenLabsVoice.isLoading;
     
     if (isCurrentlyBusy) {
-      // Stop current audio
+      // Stop current audio - be more aggressive about stopping
+      console.log('Stopping audio playback');
       systemVoice.stop();
       elevenLabsVoice.stop();
+      
+      // Clear any existing timeout
+      if (audioTimeout) {
+        clearTimeout(audioTimeout);
+        setAudioTimeout(null);
+      }
+      
+      // Force clear all states immediately
       setIsPlaying(false);
       setIsLoading(false);
       audioManager.setPlaying(false);
-    } else {
-      // Start playing
-      if (!text.trim()) return;
-
-      console.log('Playing with selected voice:', selectedVoice);
       
-      audioManager.setPlaying(true);
+      // Additional cleanup - stop any HTML5 audio elements
+      const audioElements = document.querySelectorAll('audio');
+      audioElements.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+      });
       
-      if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
-        console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-        elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
-      } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
-        console.log('Using system voice:', selectedVoice.voice.name);
-        systemVoice.setVoice(selectedVoice.voice);
-        systemVoice.speak(text);
-      } else {
-        console.log('Using default system voice');
-        systemVoice.speak(text);
-      }
+      return; // Early return to prevent any restart
     }
+    
+    // Start playing only if we're not busy
+    if (!text.trim()) return;
+
+    console.log('Starting audio playback with selected voice:', selectedVoice);
+    
+    // Clear any existing states first
+    setIsPlaying(false);
+    setIsLoading(false);
+    
+    audioManager.setPlaying(true);
+    
+    if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
+      console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
+      elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
+    } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
+      console.log('Using system voice:', selectedVoice.voice.name);
+      systemVoice.setVoice(selectedVoice.voice);
+      systemVoice.speak(text);
+    } else {
+      console.log('Using default system voice');
+      systemVoice.speak(text);
+    }
+    
+    // Set auto-stop timeout to prevent infinite playing
+    const timeout = setTimeout(() => {
+      console.log('Auto-stopping audio after timeout');
+      setIsPlaying(false);
+      setIsLoading(false);
+      audioManager.setPlaying(false);
+      systemVoice.stop();
+      elevenLabsVoice.stop();
+      setAudioTimeout(null);
+    }, Math.max(text.length * 80, 10000)); // 80ms per character, minimum 10 seconds
+    
+    setAudioTimeout(timeout);
   };
 
   const handleStop = () => {
