@@ -101,10 +101,18 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-gray-900 border-gray-700">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center">
-            <Volume2 className="w-5 h-5 mr-2" />
-            Choose Your Voice
+          <DialogTitle className="text-white flex items-center justify-between">
+            <div className="flex items-center">
+              <Volume2 className="w-5 h-5 mr-2" />
+              Choose Your Voice
+            </div>
+            <Badge variant="outline" className="text-xs border-blue-400 text-blue-400">
+              {voiceOptions.length}+ Available
+            </Badge>
           </DialogTitle>
+          <p className="text-gray-400 text-sm mt-2">
+            Select from premium AI voices and system voices. Click any voice to preview it.
+          </p>
         </DialogHeader>
         
         <div className="space-y-6">

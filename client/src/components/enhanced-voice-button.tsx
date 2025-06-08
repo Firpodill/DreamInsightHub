@@ -96,9 +96,9 @@ export function EnhancedVoiceButton({
       <Button
         variant="ghost"
         size="icon"
-        className="w-8 h-8"
+        className="w-8 h-8 border border-dashed border-gray-500 hover:border-gray-400"
         onClick={() => setShowVoiceSelector(true)}
-        title="Choose voice"
+        title="Choose Voice - Click to select from 37+ AI voices"
       >
         <Settings className="w-3 h-3" />
       </Button>

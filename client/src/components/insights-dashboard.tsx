@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Brain, Mountain, Key, Eye, TrendingUp, Crown, BarChart3 } from 'lucide-react';
 import { useDreamInsights, useDreams } from '@/hooks/use-dreams';
 import { ArchetypeVisualization } from './archetype-visualization';
+import { EnhancedVoiceButton } from './enhanced-voice-button';
 import type { ArchetypeFrequency, RecentPattern } from '@/types/dream';
 
 export function InsightsDashboard() {
@@ -102,7 +103,17 @@ export function InsightsDashboard() {
           <div className="space-y-4">
             {/* Header with Today's Analysis */}
             <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-              <h2 className="text-xl font-semibold text-white mb-2">Your Dream Insights</h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-semibold text-white">Your Dream Insights</h2>
+                {todaysAnalysis?.analysis && typeof todaysAnalysis.analysis === 'string' && (
+                  <EnhancedVoiceButton 
+                    text={todaysAnalysis.analysis}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
+                )}
+              </div>
               {todaysAnalysis ? (
                 <div className="bg-gradient-to-r from-red-900/30 to-yellow-900/30 rounded-lg p-3 mt-3 border border-red-700/30">
                   <div className="flex items-center mb-2">
