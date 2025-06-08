@@ -121,34 +121,23 @@ export function EnhancedVoiceButton({
           <Settings className="w-3 h-3" />
         </Button>
         
-        {/* Always visible hint */}
-        <div className="absolute -top-8 -right-2 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none">
-          <div className="flex items-center space-x-1">
-            <span className="text-xs font-medium text-gray-600 bg-yellow-100 px-2 py-1 rounded shadow-sm border whitespace-nowrap">
-              👆 Change Voice
-            </span>
-          </div>
-        </div>
-
-        {/* First-time prominent callout */}
+        {/* Compact voice hint */}
         {showVoiceHint && (
-          <div className="absolute -top-16 -right-8 z-50 animate-bounce">
-            <div className="bg-red-600 text-white p-3 rounded-lg shadow-lg border-2 border-red-700 relative">
+          <div className="absolute -top-10 -right-4 z-50">
+            <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs shadow-md relative">
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute -top-2 -right-2 w-5 h-5 bg-white text-red-600 hover:bg-gray-100 rounded-full"
+                className="absolute -top-1 -right-1 w-4 h-4 bg-white text-blue-500 hover:bg-gray-100 rounded-full"
                 onClick={dismissVoiceHint}
               >
-                <X className="w-3 h-3" />
+                <X className="w-2 h-2" />
               </Button>
-              <div className="pr-4">
-                <div className="text-xs font-bold mb-1">🎙️ Voice Options!</div>
-                <div className="text-xs">Click here for 38+ AI voices</div>
-                <div className="text-xs opacity-90">Including Chessie V3!</div>
+              <div className="pr-3">
+                <div className="whitespace-nowrap">Voice options available</div>
               </div>
-              {/* Arrow pointing down */}
-              <div className="absolute -bottom-2 right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-red-600"></div>
+              {/* Small arrow pointing down */}
+              <div className="absolute -bottom-1 right-2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-l-transparent border-r-transparent border-t-blue-500"></div>
             </div>
           </div>
         )}
