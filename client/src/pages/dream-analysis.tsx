@@ -298,18 +298,35 @@ export default function DreamAnalysis() {
                       </div>
                       <div className="flex gap-2">
                         <Button 
-                          onClick={() => {
-                            const link = document.createElement('a');
-                            link.href = generatedImage!;
-                            link.download = `dream-image-${new Date().toISOString().split('T')[0]}.png`;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
+                          onClick={async () => {
+                            try {
+                              // Fetch the image as a blob
+                              const response = await fetch(generatedImage!);
+                              const blob = await response.blob();
+                              
+                              // Create object URL
+                              const url = URL.createObjectURL(blob);
+                              
+                              // Create download link with proper filename
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = `dream-image-${new Date().toISOString().split('T')[0]}.png`;
+                              
+                              // Trigger save dialog
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                              
+                              // Clean up object URL
+                              URL.revokeObjectURL(url);
+                            } catch (error) {
+                              console.error('Failed to save image:', error);
+                            }
                           }}
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                         >
                           <Palette className="w-4 h-4 mr-2" />
-                          Download Image
+                          Save Image
                         </Button>
                         <Button 
                           onClick={handleGenerateVisionBoard}
