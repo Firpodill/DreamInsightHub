@@ -301,13 +301,13 @@ export default function DreamChat() {
               <MessageCircle className="w-3 h-3 mr-1" />
               Chat
             </TabsTrigger>
-            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <Brain className="w-3 h-3 mr-1" />
-              Insights
-            </TabsTrigger>
             <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Brain className="w-3 h-3 mr-1" />
               Analysis
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Brain className="w-3 h-3 mr-1" />
+              Insights
             </TabsTrigger>
             <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <BookOpen className="w-3 h-3 mr-1" />
