@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Palette, Clock, Trash2 } from 'lucide-react';
+import { MessageCircle, BookOpen, Brain, Moon, User, Camera, Book, Clock } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ChatInterface } from '@/components/chat-interface';
 import { DreamJournal } from '@/components/dream-journal';
@@ -23,7 +23,6 @@ export default function DreamChat() {
   const [isMilitaryTime, setIsMilitaryTime] = useState(localStorage.getItem('militaryTime') === 'true');
   const [location, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState('chat');
-  const [savedBoards, setSavedBoards] = useState<any[]>([]);
 
 
 
@@ -31,24 +30,14 @@ export default function DreamChat() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
-    if (tabParam && ['chat', 'journal', 'sleep', 'insights', 'vision'].includes(tabParam)) {
+    if (tabParam && ['chat', 'journal', 'sleep', 'insights'].includes(tabParam)) {
       setActiveTab(tabParam);
       // Clear the URL parameter after setting the tab
       window.history.replaceState({}, '', '/');
     }
   }, []);
 
-  // Load saved vision boards
-  useEffect(() => {
-    const boards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
-    setSavedBoards(boards);
-  }, [activeTab]); // Reload when switching to vision tab
 
-  const deleteVisionBoard = (boardId: string) => {
-    const updatedBoards = savedBoards.filter(board => board.id !== boardId);
-    setSavedBoards(updatedBoards);
-    localStorage.setItem('dreamVisionBoards', JSON.stringify(updatedBoards));
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -307,23 +296,20 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-6 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
+          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <MessageCircle className="w-3 h-3 mr-1" />
               Chat
-            </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <BookOpen className="w-3 h-3 mr-1" />
-              Journal Logs
             </TabsTrigger>
             <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Brain className="w-3 h-3 mr-1" />
               Insights
             </TabsTrigger>
-            <TabsTrigger value="vision" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <Palette className="w-3 h-3 mr-1" />
-              Visions
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <BookOpen className="w-3 h-3 mr-1" />
+              Journal Logs
             </TabsTrigger>
+
             <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Clock className="w-3 h-3 mr-1" />
               Sleep
@@ -348,74 +334,7 @@ export default function DreamChat() {
           
 
           
-          <TabsContent value="vision" className="mt-6">
-            <div className="space-y-4">
-              <div className="p-6 bg-gray-900 rounded-lg border border-gray-700">
-                <Palette className="w-12 h-12 mx-auto mb-4 text-purple-400" />
-                <h3 className="text-xl font-bold mb-2 text-center">Dream Vision Board Creator</h3>
-                <p className="text-gray-400 mb-4 text-center">
-                  Create visual collages of your dreams with AI-generated imagery
-                </p>
-                <Button 
-                  onClick={() => navigate('/vision-board')}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Create New Vision Board
-                </Button>
-              </div>
 
-              {savedBoards.length > 0 && (
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-white">Your Vision Boards</h4>
-                  {savedBoards.slice(0, 3).map((board) => (
-                    <div key={board.id} className="p-4 bg-gray-800 rounded-lg border border-gray-600">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h5 className="font-medium text-white">{board.title}</h5>
-                          <p className="text-sm text-gray-400 mt-1">{board.description}</p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(board.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                        {board.items?.[0]?.imageUrl && (
-                          <img 
-                            src={board.items[0].imageUrl} 
-                            alt="Vision board preview"
-                            className="w-16 h-16 object-cover rounded-lg ml-3"
-                          />
-                        )}
-                        <Button
-                          onClick={() => deleteVisionBoard(board.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="ml-2 text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                      <Button 
-                        onClick={() => navigate('/vision-board')}
-                        variant="outline"
-                        size="sm"
-                        className="w-full mt-3 border-purple-600 text-purple-300 hover:bg-purple-800"
-                      >
-                        View and Edit Vision Board
-                      </Button>
-                    </div>
-                  ))}
-                  {savedBoards.length > 3 && (
-                    <Button 
-                      onClick={() => navigate('/vision-board')}
-                      variant="ghost"
-                      className="w-full text-purple-400 hover:text-purple-300"
-                    >
-                      View All Vision Boards ({savedBoards.length})
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          </TabsContent>
 
 
         </Tabs>
