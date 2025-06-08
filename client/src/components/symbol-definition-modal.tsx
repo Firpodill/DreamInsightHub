@@ -115,8 +115,8 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             />
           </div>
 
-          {/* Dictionary Definition Section - if available */}
-          {dictionaryResult.definition && (
+          {/* Dictionary Definition Section - if available and not an archetype */}
+          {dictionaryResult.definition && type !== 'archetype' && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 border border-green-200">
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="outline" className="text-sm bg-white text-black">
@@ -157,8 +157,8 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             </div>
           )}
 
-          {/* Famous Person Information */}
-          {isFamousPerson && (
+          {/* Famous Person Information - Only for non-archetype symbols */}
+          {isFamousPerson && type !== 'archetype' && (
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-6 border border-orange-200">
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="outline" className="text-sm bg-white text-black">
@@ -210,8 +210,8 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             </div>
           )}
 
-          {/* Geographic Location Information */}
-          {isPlace && (
+          {/* Geographic Location Information - Only for non-archetype symbols */}
+          {isPlace && type !== 'archetype' && (
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-6 border border-orange-200">
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="outline" className="text-sm bg-white text-black">
