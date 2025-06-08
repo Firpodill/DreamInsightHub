@@ -454,19 +454,17 @@ export function DreamJournal() {
               )}
 
               {/* Actions */}
-              <div className="flex justify-center gap-4 pt-6 border-t border-red-200">
+              <div className="flex justify-center pt-6 border-t border-red-200">
                 <Button 
                   onClick={() => setLocation('/analysis')}
-                  variant="outline"
-                  className="text-red-600 border-red-500 hover:bg-red-50 font-bold px-8 py-3 text-lg"
+                  className="relative bg-red-600 hover:bg-red-700 text-white px-12 py-4 text-xl font-bold rounded-lg shadow-lg transition-all duration-300 animate-pulse"
+                  style={{
+                    boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3), 0 0 60px rgba(220, 38, 38, 0.1)',
+                    animation: 'glow 2s ease-in-out infinite alternate'
+                  }}
                 >
+                  <Brain className="w-6 h-6 mr-3" />
                   Back to Analysis
-                </Button>
-                <Button 
-                  onClick={() => setSelectedDream(null)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-bold"
-                >
-                  Close
                 </Button>
               </div>
             </div>
