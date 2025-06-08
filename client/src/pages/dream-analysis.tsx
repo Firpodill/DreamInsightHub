@@ -167,15 +167,15 @@ export default function DreamAnalysis() {
                 </p>
                 <div className="mb-4">
                   <h4 className="text-white font-semibold mb-2">Individuation Stage:</h4>
-                  <div className="inline-block px-3 py-1 text-xs rounded-full border border-yellow-400 text-yellow-400 bg-yellow-400/10">
+                  <span className="text-yellow-400 text-sm">
                     {analysis.individuationStage}
-                  </div>
+                  </span>
                 </div>
                 <div>
                   <h4 className="text-white font-semibold mb-2">Emotional Tone:</h4>
-                  <Badge variant="outline" className="text-blue-400 border-blue-400">
+                  <span className="text-blue-400 text-sm">
                     {analysis.emotionalTone}
-                  </Badge>
+                  </span>
                 </div>
               </CardContent>
             </Card>
