@@ -382,14 +382,24 @@ export function DreamJournal() {
                     {formatDate(selectedDream.createdAt.toString(), 'full')}
                   </p>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setSelectedDream(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="w-5 h-5" />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setLocation('/analysis')}
+                    className="text-red-600 border-red-600 hover:bg-red-50"
+                  >
+                    Back to Analysis
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setSelectedDream(null)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
               </div>
 
               {/* Generated Image */}
