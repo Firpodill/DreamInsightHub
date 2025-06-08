@@ -248,27 +248,16 @@ export function DreamJournal() {
   );
 
   const getArchetypeColor = (archetype: string) => {
-    const colors = {
-      'Hero': 'bg-primary/10 text-primary',
-      'Shadow': 'bg-gray-600/10 text-gray-700',
-      'Self': 'bg-yellow-500/10 text-yellow-700',
-      'Anima': 'bg-pink-500/10 text-pink-700',
-      'Animus': 'bg-blue-500/10 text-blue-700',
-      'Wise Old Man': 'bg-purple-500/10 text-purple-700',
-      'Mother': 'bg-green-500/10 text-green-700',
-      'Trickster': 'bg-orange-500/10 text-orange-700',
-      'default': 'bg-gray-100 text-gray-700'
-    };
-    return colors[archetype as keyof typeof colors] || colors.default;
+    return 'bg-black text-yellow-400 border border-yellow-400';
   };
 
   const renderDreamEntry = (dream: Dream) => (
-    <Card key={dream.id} className="overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
+    <Card key={dream.id} className="overflow-hidden border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all bg-gradient-to-br from-white to-yellow-50">
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="font-medium text-gray-800 line-clamp-1">{dream.title}</h3>
-            <p className="text-xs text-gray-500 flex items-center mt-1">
+            <h3 className="font-bold text-gray-900 line-clamp-1">{dream.title}</h3>
+            <p className="text-xs text-gray-600 flex items-center mt-1 font-medium">
               <Calendar className="w-3 h-3 mr-1" />
               {formatDate(dream.createdAt.toString())}
             </p>
@@ -417,75 +406,36 @@ export function DreamJournal() {
                 </div>
               )}
 
-              {/* Jungian Dream Analysis */}
-              {selectedDream.analysis && (
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Jungian Dream Analysis
-                      <span className="text-sm font-normal text-gray-500 ml-2">
-                        (AI-powered psychological interpretation)
-                      </span>
-                    </h3>
-                    <EnhancedVoiceButton 
-                      text={selectedDream.analysis}
-                      variant="outline"
-                      size="sm"
-                      className="text-gray-600 border-gray-300 hover:bg-gray-50"
-                    />
-                  </div>
-                  <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-4 border border-red-200">
-                    <p className="text-gray-700 leading-relaxed">{selectedDream.analysis}</p>
-                  </div>
-                </div>
-              )}
 
-              {/* Original Dream Text - Collapsible */}
+
+              {/* Original Dream Text - Always Expanded */}
               <div className="mb-6">
-                <Button
-                  variant="ghost"
-                  onClick={() => setIsDreamTextExpanded(!isDreamTextExpanded)}
-                  className="flex items-center w-full justify-between p-0 h-auto hover:bg-transparent"
-                >
+                <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-gray-900">
-                    Original Dream Text 
-                    <span className="text-sm font-normal text-gray-500 ml-2">
-                      (Tap to {isDreamTextExpanded ? 'collapse' : 'expand'} & read full entry)
-                    </span>
+                    Original Dream
                   </h3>
-                  {isDreamTextExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-gray-600" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-600" />
-                  )}
-                </Button>
-                {isDreamTextExpanded && (
-                  <div className="mt-3 space-y-3">
-                    <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                      <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
-                    </div>
-                    <div className="flex justify-end">
-                      <EnhancedVoiceButton 
-                        text={selectedDream.content}
-                        variant="outline"
-                        size="sm"
-                        className="text-gray-600 border-gray-300 hover:bg-gray-50"
-                      />
-                    </div>
-                  </div>
-                )}
+                  <EnhancedVoiceButton 
+                    text={selectedDream.content}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                  />
+                </div>
+                <div className="bg-gradient-to-br from-red-50 via-yellow-50 to-red-100 rounded-lg p-4 border-2 border-red-200 shadow-lg">
+                  <p className="text-gray-800 leading-relaxed font-medium">{selectedDream.content}</p>
+                </div>
               </div>
 
               {/* Archetypes */}
               {selectedDream.archetypes && selectedDream.archetypes.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">Archetypes</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="font-bold text-gray-900 mb-3">Archetypes</h3>
+                  <div className="flex flex-wrap gap-3">
                     {selectedDream.archetypes.map((archetype, index) => (
                       <Badge 
                         key={`${selectedDream.id}-archetype-${index}`}
                         variant="secondary" 
-                        className={`${getArchetypeColor(archetype)} text-white cursor-pointer hover:opacity-80 transition-opacity`}
+                        className="bg-black text-yellow-400 hover:bg-gray-800 cursor-pointer transition-colors px-3 py-1 text-sm font-semibold border-2 border-yellow-400"
                         onClick={() => openSymbolModal(archetype, 'archetype')}
                       >
                         {archetype}
@@ -498,13 +448,13 @@ export function DreamJournal() {
               {/* Symbols */}
               {selectedDream.symbols && selectedDream.symbols.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">Symbols</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="font-bold text-gray-900 mb-3">Symbols</h3>
+                  <div className="flex flex-wrap gap-3">
                     {selectedDream.symbols.map((symbol, index) => (
                       <Badge 
                         key={`${selectedDream.id}-symbol-${index}`}
                         variant="outline" 
-                        className="border-purple-300 text-purple-700 cursor-pointer hover:bg-purple-50 transition-colors"
+                        className="border-2 border-red-500 text-red-700 hover:bg-red-50 cursor-pointer transition-colors px-3 py-1 text-sm font-semibold"
                         onClick={() => openSymbolModal(symbol, 'symbol')}
                       >
                         {symbol}
