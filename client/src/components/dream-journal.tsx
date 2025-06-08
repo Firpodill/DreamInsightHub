@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
+import { Search, Brain, Image as ImageIcon, Calendar, ChevronLeft, ChevronRight, Volume2, X } from 'lucide-react';
 import { useDreams, useSearchDreams } from '@/hooks/use-dreams';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
@@ -315,7 +315,15 @@ export function DreamJournal() {
               <Volume2 size={14} className="mr-1" />
               {isPlaying ? 'Stop' : 'Listen'}
             </Button>
-            <Button variant="ghost" size="sm" className="text-primary text-sm font-medium h-auto p-0">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-red-600 hover:text-red-700 hover:bg-red-50 text-sm font-medium h-auto p-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedDream(dream);
+              }}
+            >
               View Details
             </Button>
           </div>
@@ -326,6 +334,115 @@ export function DreamJournal() {
 
   return (
     <div className="p-4 space-y-4">
+      {/* Dream Details Modal */}
+      {selectedDream && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800">{selectedDream.title}</h2>
+                  <p className="text-sm text-gray-500 flex items-center mt-1">
+                    <Calendar className="w-3 h-3 mr-1" />
+                    {formatDate(selectedDream.createdAt.toString())}
+                  </p>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setSelectedDream(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+
+              {/* Dream Content */}
+              <div className="mb-6">
+                <h3 className="font-medium text-gray-800 mb-2">Dream Description</h3>
+                <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
+              </div>
+
+              {/* Generated Image */}
+              {selectedDream.imageUrl && (
+                <div className="mb-6">
+                  <h3 className="font-medium text-gray-800 mb-2">AI-Generated Visualization</h3>
+                  <img 
+                    src={selectedDream.imageUrl} 
+                    alt="AI-generated dream visualization"
+                    className="w-full rounded-lg border border-gray-200"
+                  />
+                </div>
+              )}
+
+              {/* AI Analysis */}
+              {selectedDream.analysis && (
+                <div className="mb-6">
+                  <h3 className="font-medium text-gray-800 mb-2">AI Analysis</h3>
+                  <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-4 border border-red-200">
+                    <p className="text-gray-700 leading-relaxed">{selectedDream.analysis}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Archetypes */}
+              {selectedDream.archetypes && selectedDream.archetypes.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="font-medium text-gray-800 mb-2">Archetypes</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedDream.archetypes.map((archetype) => (
+                      <Badge 
+                        key={archetype} 
+                        variant="secondary" 
+                        className={`${getArchetypeColor(archetype)} text-white`}
+                      >
+                        {archetype}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Symbols */}
+              {selectedDream.symbols && selectedDream.symbols.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="font-medium text-gray-800 mb-2">Symbols</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedDream.symbols.map((symbol) => (
+                      <Badge 
+                        key={symbol} 
+                        variant="outline" 
+                        className="text-gray-600"
+                      >
+                        {symbol}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <Button 
+                  variant="outline" 
+                  onClick={() => playDreamText(selectedDream.content)}
+                  className="flex-1"
+                >
+                  <Volume2 className="w-4 h-4 mr-2" />
+                  {isPlaying ? 'Stop' : 'Listen'}
+                </Button>
+                <Button 
+                  onClick={() => setSelectedDream(null)}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Date Filter */}
       {selectedDate && viewMode === 'list' && (
         <div className="flex items-center justify-center mb-4">
