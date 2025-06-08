@@ -49,16 +49,16 @@ export function EnhancedVoiceButton({
     audioManager.registerAudio(stopAll);
   }, []);
 
-  // Show voice hint on first render if not dismissed - only once globally
+  // Show voice hint on first render if not dismissed
   useEffect(() => {
     const hintDismissed = localStorage.getItem('voice-notifications-disabled');
-    const hintAlreadyShown = localStorage.getItem('voice-hint-shown-session');
+    const hintAlreadyShown = sessionStorage.getItem('voice-hint-shown');
     
     if (!hintDismissed && !hintAlreadyShown) {
       const timer = setTimeout(() => {
         setShowVoiceHint(true);
-        localStorage.setItem('voice-hint-shown-session', 'true');
-      }, 2000);
+        sessionStorage.setItem('voice-hint-shown', 'true');
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -72,16 +72,22 @@ export function EnhancedVoiceButton({
     localStorage.setItem('voice-notifications-disabled', 'true');
   };
 
-  const handlePlay = async () => {
-    if (!text.trim()) return;
+  const handleToggle = () => {
+    if (isPlaying) {
+      // Stop current audio
+      systemVoice.stop();
+      elevenLabsVoice.stop();
+      setIsPlaying(false);
+      audioManager.setPlaying(false);
+    } else {
+      // Start playing
+      if (!text.trim()) return;
 
-    console.log('Playing with selected voice:', selectedVoice);
-    
-    // Stop all other audio and set this as playing
-    audioManager.setPlaying(true);
-    setIsPlaying(true);
-    
-    try {
+      console.log('Playing with selected voice:', selectedVoice);
+      
+      audioManager.setPlaying(true);
+      setIsPlaying(true);
+      
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
         elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
@@ -93,17 +99,13 @@ export function EnhancedVoiceButton({
         console.log('Using default system voice');
         systemVoice.speak(text);
       }
-    } catch (error) {
-      console.error('Voice playback failed:', error);
-      setIsPlaying(false);
-      audioManager.setPlaying(false);
+      
+      // Auto-stop after estimated duration
+      setTimeout(() => {
+        setIsPlaying(false);
+        audioManager.setPlaying(false);
+      }, Math.max(text.length * 60, 3000));
     }
-    
-    // Auto-stop after estimated duration
-    setTimeout(() => {
-      setIsPlaying(false);
-      audioManager.setPlaying(false);
-    }, Math.max(text.length * 60, 3000));
   };
 
   const handleStop = () => {
@@ -125,7 +127,7 @@ export function EnhancedVoiceButton({
       <Button
         variant={variant}
         size={size}
-        onClick={isPlaying ? handleStop : handlePlay}
+        onClick={handleToggle}
         className={className}
         disabled={elevenLabsVoice.isLoading}
         data-voice-control
