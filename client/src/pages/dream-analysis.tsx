@@ -48,7 +48,7 @@ export default function DreamAnalysis() {
     try {
       const symbols = analyzeDream.data.analysis.symbols?.join(', ') || '';
       const archetypes = analyzeDream.data.analysis.archetypes?.join(', ') || '';
-      const prompt = `Pop art comic book style collage composition inspired by dream symbols like ${symbols} and archetypes of ${archetypes}. Multiple panels and elements arranged in a dynamic collage layout, bold colors, halftone patterns, thick black outlines, Ben-Day dots, speech bubbles, vintage comic aesthetic with dramatic lighting. Retro superhero comic book collage art style with overlapping panels and mixed compositions.`;
+      const prompt = `Pop art comic book style collage composition inspired by dream symbols like ${symbols} and archetypes of ${archetypes}. Multiple panels and elements arranged in a dynamic collage layout, bold colors, halftone patterns, thick black outlines, Ben-Day dots, vintage comic aesthetic with dramatic lighting. Retro superhero comic book collage art style with overlapping panels and mixed compositions. NO TEXT OR WORDS in the image.`;
       
       const result = await generateImage.mutateAsync({ prompt });
       
@@ -300,27 +300,52 @@ export default function DreamAnalysis() {
                         <Button 
                           onClick={async () => {
                             try {
-                              // Fetch the image as a blob
-                              const response = await fetch(generatedImage!);
-                              const blob = await response.blob();
+                              // For mobile devices, try to use the Web Share API first
+                              if (navigator.share && navigator.canShare) {
+                                const response = await fetch(generatedImage!);
+                                const blob = await response.blob();
+                                const file = new File([blob], `dream-image-${new Date().toISOString().split('T')[0]}.png`, { type: 'image/png' });
+                                
+                                if (navigator.canShare({ files: [file] })) {
+                                  await navigator.share({
+                                    files: [file],
+                                    title: 'Dream Visualization',
+                                    text: 'AI-generated dream image'
+                                  });
+                                  return;
+                                }
+                              }
                               
-                              // Create object URL
+                              // Fallback to traditional download
+                              const response = await fetch(generatedImage!, {
+                                mode: 'cors',
+                                credentials: 'omit'
+                              });
+                              
+                              if (!response.ok) {
+                                throw new Error('Failed to fetch image');
+                              }
+                              
+                              const blob = await response.blob();
                               const url = URL.createObjectURL(blob);
                               
-                              // Create download link with proper filename
                               const link = document.createElement('a');
                               link.href = url;
                               link.download = `dream-image-${new Date().toISOString().split('T')[0]}.png`;
+                              link.style.display = 'none';
                               
-                              // Trigger save dialog
                               document.body.appendChild(link);
                               link.click();
-                              document.body.removeChild(link);
                               
-                              // Clean up object URL
-                              URL.revokeObjectURL(url);
+                              setTimeout(() => {
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(url);
+                              }, 100);
+                              
                             } catch (error) {
                               console.error('Failed to save image:', error);
+                              // Fallback: open image in new tab
+                              window.open(generatedImage!, '_blank');
                             }
                           }}
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
