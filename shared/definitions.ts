@@ -492,8 +492,12 @@ function generateContextualDefinition(term: string): Definition {
     return commonSymbols[term.toLowerCase()];
   }
   
-  // Don't return any definitions - force dictionary lookup or search
-  return null;
+  // For highlighted dream text words, don't return synthetic definitions
+  // Force dictionary lookup or authentic search sources instead
+  return {
+    definition: `Use the search options below to find authentic information about "${term}".`,
+    jungianMeaning: `Real definitions and sources are available through the search links.`
+  };
 }
 
 function isLikelyPlace(term: string): boolean {
