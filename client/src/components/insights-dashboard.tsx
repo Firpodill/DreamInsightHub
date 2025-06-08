@@ -264,7 +264,16 @@ export function InsightsDashboard() {
                   <h3 className="font-medium text-white mb-4">Recurring Symbols</h3>
                   <div className="flex flex-wrap gap-2">
                     {insights.symbolFrequencies.slice(0, 10).map((symbol) => (
-                      <Badge key={symbol.symbol} variant="outline" className="text-xs text-green-400 border-green-400">
+                      <Badge 
+                        key={symbol.symbol} 
+                        variant="outline" 
+                        className="text-xs text-green-400 border-green-400 cursor-pointer hover:bg-green-400/20 transition-colors"
+                        onClick={() => {
+                          setSelectedSymbol(symbol.symbol);
+                          setSymbolType('symbol');
+                          setSymbolModalOpen(true);
+                        }}
+                      >
                         {symbol.symbol} ({symbol.count})
                       </Badge>
                     ))}
