@@ -191,21 +191,23 @@ export function EnhancedVoiceButton({
   return (
     <div className="flex items-center space-x-1 relative group" data-voice-control>
       <Button
-        variant={variant}
+        variant="default"
         size={size}
         onClick={handleToggle}
-        className={`bg-black text-white hover:bg-gray-800 border-black ${className}`}
+        className={`!bg-black !text-white hover:!bg-gray-800 !border-black [&>*]:!text-white ${className}`}
         disabled={false}
         data-voice-control
       >
         {isCurrentlyLoading ? (
-          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+          <Loader2 className="w-4 h-4 mr-1 animate-spin text-white" />
         ) : isCurrentlyPlaying ? (
-          <VolumeX className="w-4 h-4 mr-1" />
+          <VolumeX className="w-4 h-4 mr-1 text-white" />
         ) : (
-          <Volume2 className="w-4 h-4 mr-1" />
+          <Volume2 className="w-4 h-4 mr-1 text-white" />
         )}
-        {isCurrentlyLoading ? 'Loading...' : isCurrentlyPlaying ? 'Stop' : 'Listen'}
+        <span className="text-white">
+          {isCurrentlyLoading ? 'Loading...' : isCurrentlyPlaying ? 'Stop' : 'Listen'}
+        </span>
       </Button>
       
       <div className="relative">
