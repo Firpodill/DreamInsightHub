@@ -307,10 +307,6 @@ export default function DreamChat() {
               <Brain className="w-3 h-3 mr-1" />
               Insights
             </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
-              <BookOpen className="w-3 h-3 mr-1" />
-              Journal Logs
-            </TabsTrigger>
             <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Brain className="w-3 h-3 mr-1" />
               Analysis
@@ -318,6 +314,10 @@ export default function DreamChat() {
             <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Clock className="w-3 h-3 mr-1" />
               Sleep
+            </TabsTrigger>
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <BookOpen className="w-3 h-3 mr-1" />
+              Journal Logs
             </TabsTrigger>
           </TabsList>
           
