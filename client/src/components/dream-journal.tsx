@@ -395,7 +395,15 @@ export function DreamJournal() {
               {/* AI Analysis */}
               {selectedDream.analysis && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">AI Analysis</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-medium text-gray-800">AI Analysis</h3>
+                    <EnhancedVoiceButton 
+                      text={selectedDream.analysis}
+                      variant="outline"
+                      size="sm"
+                      className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                    />
+                  </div>
                   <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-4 border border-red-200">
                     <p className="text-gray-700 leading-relaxed">{selectedDream.analysis}</p>
                   </div>
