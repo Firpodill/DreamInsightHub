@@ -208,12 +208,11 @@ export default function DreamAnalysis() {
                       return (
                         <Badge 
                           key={`inline-${index}`} 
-                          variant="outline" 
-                          className="text-xs"
+                          className="text-xs px-3 py-1 rounded-full font-medium"
                           style={{
                             color: color,
-                            borderColor: color,
-                            backgroundColor: `${color}15`
+                            backgroundColor: `${color}20`,
+                            border: `1px solid ${color}60`
                           }}
                         >
                           {archetype}
