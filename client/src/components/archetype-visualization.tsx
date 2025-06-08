@@ -221,7 +221,10 @@ export function ArchetypeVisualization() {
                   borderColor: archetype.color + '40',
                   backgroundColor: archetype.color + '10'
                 }}
-                onClick={() => setSelectedArchetype(archetype.name)}
+                onClick={() => {
+                  setModalArchetype(archetype.name);
+                  setModalOpen(true);
+                }}
               >
                 <div className="flex items-center space-x-3">
                   <div 
@@ -416,6 +419,14 @@ export function ArchetypeVisualization() {
           </CardContent>
         </Card>
       )}
+
+      {/* Symbol Definition Modal */}
+      <SymbolDefinitionModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        symbol={modalArchetype}
+        type="archetype"
+      />
     </div>
   );
 }
