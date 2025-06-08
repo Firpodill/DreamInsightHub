@@ -70,13 +70,21 @@ export function useGlobalVoicePreference() {
         const savedType = localStorage.getItem('dreamspeak-voice-type');
         
         if (savedId && savedName && savedType) {
-          // We'll reconstruct the voice when we have access to the voice lists
-          console.log('Found saved voice preference:', savedName, savedType);
+          // If user had Chessie V3, update to Christopher Drag
+          if (savedName === 'Chessie V3') {
+            localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
+            localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
+            localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
+            console.log('Updated saved preference from Chessie V3 to Christopher Drag');
+          } else {
+            console.log('Found saved voice preference:', savedName, savedType);
+          }
         } else {
-          // Set default to Chessie V3 if no preference saved
-          localStorage.setItem('dreamspeak-voice-name', 'Chessie V3');
+          // Set default to Christopher Drag if no preference saved
+          localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
           localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
-          console.log('Set default voice to Chessie V3');
+          localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
+          console.log('Set default voice to Christopher Drag');
         }
       } catch (error) {
         console.error('Failed to load voice preference:', error);

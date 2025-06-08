@@ -62,13 +62,13 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
 
     setVoiceOptions(options);
     
-    // Set Chessie V3 as default selection if available
+    // Set Christopher Drag as default selection if available
     if (!selectedVoice && options.length > 0) {
-      const chessieV3Voice = options.find(option => 
-        option.type === 'elevenlabs' && option.name === 'Chessie V3'
+      const christopherDragVoice = options.find(option => 
+        option.type === 'elevenlabs' && option.name === 'Christopher Drag (Premium AI)'
       );
-      if (chessieV3Voice) {
-        setSelectedVoice(chessieV3Voice);
+      if (christopherDragVoice) {
+        setSelectedVoice(christopherDragVoice);
       }
     }
   }, [systemVoice.availableVoices, elevenLabsVoice.availableVoices]);

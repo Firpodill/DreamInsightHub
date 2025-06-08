@@ -120,6 +120,26 @@ export function EnhancedVoiceButton({
     console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
+  // Auto-select Christopher Drag when voices load
+  useEffect(() => {
+    if (!selectedVoice && elevenLabsVoice.availableVoices.length > 0) {
+      const christopherDrag = elevenLabsVoice.availableVoices.find(voice => 
+        voice.voice_id === 'AaT5D3dkm5RYlH6AMYYI'
+      );
+      
+      if (christopherDrag) {
+        const voiceOption: VoiceOption = {
+          id: `elevenlabs-${christopherDrag.voice_id}`,
+          name: 'Christopher Drag (Premium AI)',
+          type: 'elevenlabs',
+          elevenLabsVoice: christopherDrag,
+        };
+        setSelectedVoice(voiceOption);
+        console.log('Auto-selected Christopher Drag as default voice');
+      }
+    }
+  }, [elevenLabsVoice.availableVoices, selectedVoice, setSelectedVoice]);
+
   const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
 
   return (
