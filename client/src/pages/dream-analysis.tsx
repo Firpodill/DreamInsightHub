@@ -48,7 +48,7 @@ export default function DreamAnalysis() {
     try {
       const symbols = analyzeDream.data.analysis.symbols?.join(', ') || '';
       const archetypes = analyzeDream.data.analysis.archetypes?.join(', ') || '';
-      const prompt = `Peaceful artistic vision board inspired by symbols like ${symbols} and themes of ${archetypes}. Colorful, inspiring, abstract collage with geometric shapes and positive imagery.`;
+      const prompt = `Pop art comic book style illustration inspired by dream symbols like ${symbols} and archetypes of ${archetypes}. Bold colors, halftone patterns, thick black outlines, vintage comic aesthetic with Ben-Day dots and dramatic lighting. Retro superhero comic book art style.`;
       
       const result = await generateImage.mutateAsync({ prompt });
       
