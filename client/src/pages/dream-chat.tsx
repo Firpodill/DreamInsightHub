@@ -11,6 +11,7 @@ import { DreamJournal } from '@/components/dream-journal';
 import { InsightsDashboard } from '@/components/insights-dashboard';
 import { SleepCycleTracker } from '@/components/sleep-cycle-tracker';
 import { DreamNotificationSystem } from '@/components/dream-notification-system';
+import DreamAnalysis from '@/pages/dream-analysis';
 
 
 
@@ -30,7 +31,7 @@ export default function DreamChat() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get('tab');
-    if (tabParam && ['chat', 'journal', 'sleep', 'insights'].includes(tabParam)) {
+    if (tabParam && ['chat', 'journal', 'sleep', 'insights', 'analysis'].includes(tabParam)) {
       setActiveTab(tabParam);
       // Clear the URL parameter after setting the tab
       window.history.replaceState({}, '', '/');
@@ -108,6 +109,7 @@ export default function DreamChat() {
           journal: 180,
           sleep: 160,
           insights: 270,
+          analysis: 240,
           symbols: 150,
           vision: 200
         };
@@ -296,7 +298,7 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-4 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900 border border-gray-700">
             <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <MessageCircle className="w-3 h-3 mr-1" />
               Chat
@@ -308,6 +310,10 @@ export default function DreamChat() {
             <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <BookOpen className="w-3 h-3 mr-1" />
               Journal Logs
+            </TabsTrigger>
+            <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Brain className="w-3 h-3 mr-1" />
+              Analysis
             </TabsTrigger>
             <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
               <Clock className="w-3 h-3 mr-1" />
