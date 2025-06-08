@@ -107,7 +107,7 @@ export function InsightsDashboard() {
                 <div className="bg-gradient-to-r from-red-900/30 to-yellow-900/30 rounded-lg p-3 mt-3 border border-red-700/30">
                   <div className="flex items-center mb-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                    <span className="text-sm font-semibold text-white">Today's AI Analysis</span>
+                    <span className="text-sm font-semibold text-white">Today's Jungian Dream Analysis</span>
                   </div>
                   <p className="text-sm text-gray-300 leading-relaxed">
                     {todaysAnalysis.analysis}
