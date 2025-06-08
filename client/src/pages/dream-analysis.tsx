@@ -208,11 +208,16 @@ export default function DreamAnalysis() {
                       return (
                         <Badge 
                           key={`inline-${index}`} 
-                          className="text-xs px-3 py-1 rounded-full font-medium"
+                          className="text-xs px-3 py-1 rounded-full font-medium cursor-pointer hover:opacity-80 transition-opacity"
                           style={{
                             color: color,
                             backgroundColor: `${color}20`,
                             border: `1px solid ${color}60`
+                          }}
+                          onClick={() => {
+                            setSelectedSymbol(archetype);
+                            setModalType('archetype');
+                            setModalOpen(true);
                           }}
                         >
                           {archetype}
