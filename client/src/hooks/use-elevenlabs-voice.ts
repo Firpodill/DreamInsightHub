@@ -182,6 +182,14 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       };
 
     } catch (err) {
+      // Don't show error if request was aborted intentionally
+      if (err instanceof Error && err.name === 'AbortError') {
+        console.log('Speech synthesis aborted');
+        setIsPlaying(false);
+        setIsLoading(false);
+        return;
+      }
+      
       console.error('Speech synthesis error:', err);
       setError(err instanceof Error ? err.message : 'Speech synthesis failed');
       setIsPlaying(false);
