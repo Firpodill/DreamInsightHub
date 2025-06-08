@@ -4,6 +4,7 @@ import { Volume2, VolumeX, Settings, X } from 'lucide-react';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useElevenLabsVoice } from '@/hooks/use-elevenlabs-voice';
 import { useGlobalVoicePreference } from '@/hooks/use-voice-preference';
+import { useGlobalAudioManager } from '@/hooks/use-global-audio-manager';
 import { VoiceSelector } from './voice-selector';
 
 interface EnhancedVoiceButtonProps {
@@ -36,6 +37,17 @@ export function EnhancedVoiceButton({
   const systemVoice = useNaturalVoice();
   const elevenLabsVoice = useElevenLabsVoice();
   const { selectedVoice, setSelectedVoice } = useGlobalVoicePreference();
+  const audioManager = useGlobalAudioManager(`voice-button-${text.substring(0, 20)}`);
+
+  // Register stop functions with global audio manager
+  useEffect(() => {
+    const stopAll = () => {
+      systemVoice.stop();
+      elevenLabsVoice.stop();
+      setIsPlaying(false);
+    };
+    audioManager.registerAudio(stopAll);
+  }, [audioManager, systemVoice, elevenLabsVoice]);
 
   // Show voice hint on first render if not dismissed - only once globally
   useEffect(() => {
@@ -64,6 +76,9 @@ export function EnhancedVoiceButton({
     if (!text.trim()) return;
 
     console.log('Playing with selected voice:', selectedVoice);
+    
+    // Stop all other audio first
+    audioManager.setPlaying(true);
     setIsPlaying(true);
     
     try {
@@ -82,17 +97,22 @@ export function EnhancedVoiceButton({
     } catch (error) {
       console.error('Voice playback failed:', error);
       setIsPlaying(false);
+      audioManager.setPlaying(false);
     }
     
     // Reset playing state after estimated duration
     const estimatedDuration = Math.max(text.length * 40, 2000); // More responsive estimate
-    setTimeout(() => setIsPlaying(false), Math.min(estimatedDuration, 8000));
+    setTimeout(() => {
+      setIsPlaying(false);
+      audioManager.setPlaying(false);
+    }, Math.min(estimatedDuration, 8000));
   };
 
   const handleStop = () => {
     systemVoice.stop();
     elevenLabsVoice.stop();
     setIsPlaying(false);
+    audioManager.setPlaying(false);
   };
 
   const handleVoiceSelect = (voiceOption: VoiceOption) => {
@@ -103,13 +123,14 @@ export function EnhancedVoiceButton({
   const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
 
   return (
-    <div className="flex items-center space-x-1 relative group">
+    <div className="flex items-center space-x-1 relative group" data-voice-control>
       <Button
         variant={variant}
         size={size}
         onClick={isAnyPlaying ? handleStop : handlePlay}
         className={className}
         disabled={elevenLabsVoice.isLoading}
+        data-voice-control
       >
         {isAnyPlaying ? (
           <VolumeX className="w-4 h-4 mr-1" />
@@ -126,6 +147,7 @@ export function EnhancedVoiceButton({
           className="w-8 h-8 border border-dashed border-gray-500 hover:border-gray-400 relative animate-pulse"
           onClick={() => setShowVoiceSelector(true)}
           title="Choose Voice - Click to select from 37+ AI voices"
+          data-voice-control
         >
           <Settings className="w-3 h-3" />
         </Button>
