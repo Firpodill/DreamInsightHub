@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Volume2, VolumeX, Settings } from 'lucide-react';
 import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useElevenLabsVoice } from '@/hooks/use-elevenlabs-voice';
+import { useGlobalVoicePreference } from '@/hooks/use-voice-preference';
 import { VoiceSelector } from './voice-selector';
 
 interface EnhancedVoiceButtonProps {
@@ -18,6 +19,8 @@ interface VoiceOption {
   type: 'system' | 'elevenlabs';
   voice?: SpeechSynthesisVoice;
   elevenLabsVoice?: any;
+  preview?: string;
+  category?: string;
 }
 
 export function EnhancedVoiceButton({ 
@@ -31,36 +34,7 @@ export function EnhancedVoiceButton({
   
   const systemVoice = useNaturalVoice();
   const elevenLabsVoice = useElevenLabsVoice();
-
-  // Load saved voice preference from localStorage
-  const [selectedVoice, setSelectedVoice] = useState<VoiceOption | null>(null);
-
-  // Load voice preference on component mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('dreamspeak-selected-voice');
-      if (saved) {
-        const voiceData = JSON.parse(saved);
-        
-        if (voiceData.type === 'system') {
-          // Reconstruct system voice by finding it in available voices
-          const voices = speechSynthesis.getVoices();
-          const matchingVoice = voices.find(v => v.name === voiceData.name);
-          if (matchingVoice) {
-            setSelectedVoice({
-              ...voiceData,
-              voice: matchingVoice
-            });
-          }
-        } else if (voiceData.type === 'elevenlabs') {
-          // ElevenLabs voices can be reconstructed directly
-          setSelectedVoice(voiceData);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load voice preference:', error);
-    }
-  }, []);
+  const { selectedVoice, setSelectedVoice } = useGlobalVoicePreference();
 
   const handlePlay = async () => {
     if (!text.trim()) return;
@@ -97,51 +71,37 @@ export function EnhancedVoiceButton({
 
   const handleVoiceSelect = (voiceOption: VoiceOption) => {
     setSelectedVoice(voiceOption);
-    // Save voice preference to localStorage (exclude non-serializable voice object)
-    try {
-      const voiceToSave = {
-        id: voiceOption.id,
-        name: voiceOption.name,
-        type: voiceOption.type,
-        category: voiceOption.category,
-        elevenLabsVoice: voiceOption.elevenLabsVoice
-      };
-      localStorage.setItem('dreamspeak-selected-voice', JSON.stringify(voiceToSave));
-    } catch (error) {
-      console.error('Failed to save voice preference:', error);
-    }
+    console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
   const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
 
   return (
-    <>
-      <div className="flex items-center space-x-1">
-        <Button
-          variant={variant}
-          size={size}
-          onClick={isAnyPlaying ? handleStop : handlePlay}
-          className={className}
-          disabled={elevenLabsVoice.isLoading}
-        >
-          {isAnyPlaying ? (
-            <VolumeX className="w-4 h-4 mr-1" />
-          ) : (
-            <Volume2 className="w-4 h-4 mr-1" />
-          )}
-          {isAnyPlaying ? 'Stop' : 'Listen'}
-        </Button>
-        
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-8 h-8"
-          onClick={() => setShowVoiceSelector(true)}
-          title="Choose voice"
-        >
-          <Settings className="w-3 h-3" />
-        </Button>
-      </div>
+    <div className="flex items-center space-x-1">
+      <Button
+        variant={variant}
+        size={size}
+        onClick={isAnyPlaying ? handleStop : handlePlay}
+        className={className}
+        disabled={elevenLabsVoice.isLoading}
+      >
+        {isAnyPlaying ? (
+          <VolumeX className="w-4 h-4 mr-1" />
+        ) : (
+          <Volume2 className="w-4 h-4 mr-1" />
+        )}
+        {isAnyPlaying ? 'Stop' : 'Listen'}
+      </Button>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        className="w-8 h-8"
+        onClick={() => setShowVoiceSelector(true)}
+        title="Choose voice"
+      >
+        <Settings className="w-3 h-3" />
+      </Button>
 
       <VoiceSelector
         open={showVoiceSelector}
@@ -149,6 +109,6 @@ export function EnhancedVoiceButton({
         onVoiceSelect={handleVoiceSelect}
         text={text}
       />
-    </>
+    </div>
   );
 }
