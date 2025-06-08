@@ -50,13 +50,15 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
     elevenLabsVoice.availableVoices.forEach((voice) => {
       options.push({
         id: `elevenlabs-${voice.voice_id}`,
-        name: voice.name,
+        name: `${voice.name} (Premium AI)`,
         type: 'elevenlabs',
         elevenLabsVoice: voice,
         preview: voice.preview_url,
-        category: voice.category || 'ElevenLabs Custom'
+        category: 'ElevenLabs Premium AI'
       });
     });
+
+    console.log(`Loaded ${elevenLabsVoice.availableVoices.length} ElevenLabs voices and ${systemVoice.availableVoices.length} system voices`);
 
     setVoiceOptions(options);
   }, [systemVoice.availableVoices, elevenLabsVoice.availableVoices]);
@@ -112,7 +114,10 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
             </div>
           )}
           
-          {Object.entries(groupedVoices).map(([category, voices]) => (
+          {/* Show ElevenLabs voices first */}
+          {Object.entries(groupedVoices)
+            .sort(([a], [b]) => a.includes('ElevenLabs') ? -1 : b.includes('ElevenLabs') ? 1 : 0)
+            .map(([category, voices]) => (
             <div key={category}>
               <h3 className="text-white font-medium mb-3 flex items-center">
                 {category}
@@ -121,6 +126,7 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
                     Premium AI
                   </Badge>
                 )}
+                <span className="ml-2 text-sm text-gray-400">({voices.length} voices)</span>
               </h3>
               
               <div className="grid grid-cols-1 gap-2">
