@@ -20,15 +20,18 @@ export const archetypeDefinitions: Record<string, Definition> = {
   },
   'Anima': {
     definition: 'The feminine aspect within the male psyche, representing emotion, intuition, and the unconscious.',
-    jungianMeaning: 'The bridge between conscious and unconscious, guiding men toward psychological completeness.'
+    jungianMeaning: 'The bridge between conscious and unconscious, guiding men toward psychological completeness.',
+    campbellMeaning: 'The goddess or sacred feminine who calls the hero into deeper spiritual awareness, often appearing as the inspiration for the quest or the treasure to be won.'
   },
   'Animus': {
     definition: 'The masculine aspect within the female psyche, representing logic, reason, and spiritual guidance.',
-    jungianMeaning: 'Provides women with access to rational thinking and spiritual wisdom for psychological integration.'
+    jungianMeaning: 'Provides women with access to rational thinking and spiritual wisdom for psychological integration.',
+    campbellMeaning: 'The divine masculine or spiritual guide who leads the heroine toward higher consciousness and provides the rational strength needed for transformation.'
   },
   'Self': {
     definition: 'The unified totality of the psyche, encompassing both conscious and unconscious elements.',
-    jungianMeaning: 'The ultimate goal of individuation - achieving harmony between all aspects of personality.'
+    jungianMeaning: 'The ultimate goal of individuation - achieving harmony between all aspects of personality.',
+    campbellMeaning: 'The sacred center or divine essence that represents the hero\'s ultimate treasure - the realization of one\'s true nature and cosmic purpose.'
   },
   'Wise Old Man': {
     definition: 'The archetype of wisdom, knowledge, and spiritual guidance, often appearing as a mentor figure.',
@@ -70,23 +73,28 @@ export const archetypeDefinitions: Record<string, Definition> = {
 export const symbolDefinitions: Record<string, Definition> = {
   'water': {
     definition: 'The universal symbol of life, purification, renewal, and the flow of emotions.',
-    jungianMeaning: 'Represents the unconscious mind, emotional depths, and the cleansing process of psychological transformation.'
+    jungianMeaning: 'Represents the unconscious mind, emotional depths, and the cleansing process of psychological transformation.',
+    campbellMeaning: 'The primordial waters of creation and dissolution, representing the source of all life and the cleansing that prepares the hero for rebirth.'
   },
   'ocean': {
     definition: 'Vast body of water representing the infinite, the unknown, and emotional depths.',
-    jungianMeaning: 'Symbolizes the collective unconscious and the vast reservoir of human experience and wisdom.'
+    jungianMeaning: 'Symbolizes the collective unconscious and the vast reservoir of human experience and wisdom.',
+    campbellMeaning: 'The cosmic waters that surround all existence, representing the infinite mystery from which all heroes emerge and to which they return transformed.'
   },
   'forest': {
     definition: 'Dense woodland representing mystery, the unknown, and the journey into the unconscious.',
-    jungianMeaning: 'The threshold between conscious and unconscious realms where shadow work and self-discovery occur.'
+    jungianMeaning: 'The threshold between conscious and unconscious realms where shadow work and self-discovery occur.',
+    campbellMeaning: 'The dark wood or enchanted forest where the hero encounters trials, magical helpers, and must face their deepest fears to gain wisdom.'
   },
   'key': {
     definition: 'An instrument that unlocks doors, representing access, secrets, and solutions.',
-    jungianMeaning: 'Symbolizes the potential for unlocking unconscious wisdom and accessing deeper levels of self-understanding.'
+    jungianMeaning: 'Symbolizes the potential for unlocking unconscious wisdom and accessing deeper levels of self-understanding.',
+    campbellMeaning: 'The magical object or knowledge that grants the hero access to forbidden realms, hidden treasures, or sacred wisdom necessary for completing the quest.'
   },
   'fire': {
     definition: 'The element of transformation, passion, destruction, and renewal through burning away the old.',
-    jungianMeaning: 'Symbolizes the transformative power of consciousness and the purifying process of individuation.'
+    jungianMeaning: 'Symbolizes the transformative power of consciousness and the purifying process of individuation.',
+    campbellMeaning: 'The sacred flame that represents divine knowledge, the spark of inspiration, and the transformative power that burns away illusion to reveal truth.'
   },
   'bridge': {
     definition: 'A structure that connects two separate places, representing transition and connection.',
