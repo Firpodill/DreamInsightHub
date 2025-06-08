@@ -124,16 +124,19 @@ export function useGlobalClickHandler() {
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       
-      // Don't stop audio if clicking on voice-related buttons or controls
+      // Don't stop audio if clicking on voice-related controls
       if (target.closest('[data-voice-control]') || 
-          target.closest('button[class*="voice"]') ||
-          target.closest('[class*="voice-selector"]') ||
-          target.textContent?.includes('Listen') ||
-          target.textContent?.includes('Stop')) {
+          target.closest('.voice-selector') ||
+          target.closest('[role="dialog"]') ||
+          target.tagName === 'BUTTON' && (
+            target.textContent?.includes('Listen') ||
+            target.textContent?.includes('Stop') ||
+            target.querySelector('[class*="volume"]')
+          )) {
         return;
       }
       
-      // Stop all audio for other clicks
+      // Stop all audio for clicks outside voice controls
       manager.stopAll();
     };
 
