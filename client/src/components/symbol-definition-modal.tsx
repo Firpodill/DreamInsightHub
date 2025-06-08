@@ -69,8 +69,28 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
   const isPerson = isLikelyPersonName(symbol);
   const mapUrl = isPlace ? generateMapUrl(symbol) : null;
   
-  // Get real dictionary definition for ALL words (prioritize real definitions)
-  const shouldUseDictionary = type !== 'archetype' && symbol.length > 2 && /^[a-zA-Z\s]+$/.test(symbol);
+  // Check if it's a famous person who needs biographical information
+  const famousPeople = [
+    'Willie Nelson', 'Elvis Presley', 'Johnny Cash', 'Dolly Parton', 'Bob Dylan', 'Madonna', 'Prince',
+    'Michael Jackson', 'Beatles', 'Rolling Stones', 'Taylor Swift', 'Beyonce', 'Jay-Z', 'Kanye West',
+    'Lady Gaga', 'Adele', 'Ed Sheeran', 'Bruno Mars', 'Justin Bieber', 'Ariana Grande',
+    'Tom Hanks', 'Brad Pitt', 'Leonardo DiCaprio', 'Meryl Streep', 'Jennifer Lawrence', 'Will Smith',
+    'Denzel Washington', 'Morgan Freeman', 'Robert De Niro', 'Al Pacino', 'Scarlett Johansson',
+    'Barack Obama', 'Donald Trump', 'Joe Biden', 'Hillary Clinton', 'Bill Gates', 'Elon Musk',
+    'Steve Jobs', 'Mark Zuckerberg', 'Jeff Bezos', 'Warren Buffett', 'Oprah Winfrey',
+    'Albert Einstein', 'Isaac Newton', 'Marie Curie', 'Charles Darwin', 'Stephen Hawking',
+    'Martin Luther King', 'Gandhi', 'Nelson Mandela', 'John F Kennedy', 'Abraham Lincoln'
+  ];
+  const isFamousPerson = famousPeople.some(name => 
+    name.toLowerCase() === symbol.toLowerCase() || 
+    symbol.toLowerCase().includes(name.toLowerCase()) ||
+    name.toLowerCase().includes(symbol.toLowerCase())
+  );
+  
+  // Get real dictionary definition for regular words (not places or famous people)
+  const shouldUseDictionary = type !== 'archetype' && !isPlace && !isFamousPerson && 
+    symbol.length > 2 && /^[a-zA-Z\s]+$/.test(symbol) && 
+    !symbol.match(/^[A-Z][a-z]+ [A-Z][a-z]+$/); // Skip full names
   const dictionaryResult = useDictionary(shouldUseDictionary ? symbol : null);
   
   const filteredDefinitions = Object.entries(definitions).filter(([key, value]) =>
@@ -150,7 +170,7 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
           )}
 
           {/* Search for Real Information Section */}
-          {!dictionaryResult.definition && !isPlace && !isPerson && (
+          {!dictionaryResult.definition && !isPlace && !isFamousPerson && (
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-6 border border-orange-200">
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="outline" className="text-sm bg-white">
@@ -172,6 +192,15 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                   >
                     <Book className="w-4 h-4" />
                     Merriam-Webster
+                  </Button>
+                  <Button
+                    onClick={() => window.open(`https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Book className="w-4 h-4" />
+                    Cambridge
                   </Button>
                   <Button
                     onClick={() => window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(symbol)}`, '_blank')}
@@ -199,6 +228,15 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                   >
                     <Book className="w-4 h-4" />
                     Britannica
+                  </Button>
+                  <Button
+                    onClick={() => window.open(`https://www.etymonline.com/search?q=${encodeURIComponent(symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Etymology
                   </Button>
                 </div>
               </div>
@@ -263,8 +301,59 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                     </div>
                   )}
 
-                  {/* Person Name Enhancement */}
-                  {isPerson && (
+                  {/* Famous Person Enhancement */}
+                  {isFamousPerson && (
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <User className="w-4 h-4 text-purple-600" />
+                        <h4 className="font-semibold text-purple-800">Famous Person</h4>
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                        {symbol} is a well-known public figure. Get biographical information and details:
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          onClick={() => window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(symbol)}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <Book className="w-4 h-4" />
+                          Biography
+                        </Button>
+                        <Button
+                          onClick={() => window.open(`https://www.britannica.com/search?query=${encodeURIComponent(symbol)}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Britannica
+                        </Button>
+                        <Button
+                          onClick={() => window.open(`https://www.imdb.com/find?q=${encodeURIComponent(symbol)}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <Search className="w-4 h-4" />
+                          IMDB
+                        </Button>
+                        <Button
+                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(symbol + " biography facts")}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <Search className="w-4 h-4" />
+                          Bio Search
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Regular Person Name Enhancement */}
+                  {isPerson && !isFamousPerson && (
                     <div className="bg-white/60 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-3">
                         <User className="w-4 h-4 text-indigo-600" />

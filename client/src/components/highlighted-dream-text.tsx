@@ -27,12 +27,25 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     /\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?/g,  // Capitalized names (2+ chars to avoid single letters)
   ];
   
-  // Common proper names to specifically catch
+  // Common proper names and famous people to specifically catch
   const commonNames = [
     'Angie', 'Angela', 'Christopher', 'Michael', 'Sarah', 'David', 'Lisa', 'Emily', 'James', 'Mary', 
     'Robert', 'Patricia', 'William', 'Jennifer', 'Richard', 'Elizabeth', 'John', 'Jane', 'Maria', 
     'Daniel', 'Susan', 'Mark', 'Linda', 'Paul', 'Barbara', 'Steven', 'Jessica', 'Kenneth', 'Nancy',
     'Joshua', 'Betty', 'Kevin', 'Helen', 'Brian', 'Sandra', 'George', 'Donna', 'Edward', 'Carol'
+  ];
+
+  // Famous people and celebrities
+  const famousPeople = [
+    'Willie Nelson', 'Elvis Presley', 'Johnny Cash', 'Dolly Parton', 'Bob Dylan', 'Madonna', 'Prince',
+    'Michael Jackson', 'Beatles', 'Rolling Stones', 'Taylor Swift', 'Beyonce', 'Jay-Z', 'Kanye West',
+    'Lady Gaga', 'Adele', 'Ed Sheeran', 'Bruno Mars', 'Justin Bieber', 'Ariana Grande',
+    'Tom Hanks', 'Brad Pitt', 'Leonardo DiCaprio', 'Meryl Streep', 'Jennifer Lawrence', 'Will Smith',
+    'Denzel Washington', 'Morgan Freeman', 'Robert De Niro', 'Al Pacino', 'Scarlett Johansson',
+    'Barack Obama', 'Donald Trump', 'Joe Biden', 'Hillary Clinton', 'Bill Gates', 'Elon Musk',
+    'Steve Jobs', 'Mark Zuckerberg', 'Jeff Bezos', 'Warren Buffett', 'Oprah Winfrey',
+    'Albert Einstein', 'Isaac Newton', 'Marie Curie', 'Charles Darwin', 'Stephen Hawking',
+    'Martin Luther King', 'Gandhi', 'Nelson Mandela', 'John F Kennedy', 'Abraham Lincoln'
   ];
   
   // Brand names and entities
@@ -67,6 +80,20 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
     }
   });
   
+  // Find famous people first (priority over common names)
+  famousPeople.forEach(name => {
+    const regex = new RegExp(`\\b${name}\\b`, 'gi');
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+      terms.push({
+        term: match[0],
+        start: match.index,
+        end: match.index + match[0].length,
+        type: 'person'
+      });
+    }
+  });
+
   // Find common names specifically
   commonNames.forEach(name => {
     const regex = new RegExp(`\\b${name}\\b`, 'gi');
