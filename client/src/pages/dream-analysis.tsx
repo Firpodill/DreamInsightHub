@@ -9,6 +9,40 @@ import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
 
+// Archetype color mapping from Complete Archetype Spectrum
+const archetypeColors: Record<string, string> = {
+  "The Hero": "#dc2626",
+  "Hero": "#dc2626",
+  "The Ruler": "#7c2d12", 
+  "Ruler": "#7c2d12",
+  "The Lover": "#be185d",
+  "Lover": "#be185d", 
+  "The Sage": "#1e40af",
+  "Sage": "#1e40af",
+  "The Shadow": "#6b7280",
+  "Shadow": "#6b7280",
+  "The Innocent": "#eab308",
+  "Innocent": "#eab308",
+  "The Anima": "#8b5cf6",
+  "Anima": "#8b5cf6",
+  "The Animus": "#8b5cf6",
+  "Animus": "#8b5cf6",
+  "The Self": "#22d3ee",
+  "Self": "#22d3ee",
+  "The Trickster": "#f97316",
+  "Trickster": "#f97316",
+  "The Mother": "#ec4899",
+  "Mother": "#ec4899",
+  "The Wise Old Man": "#1e40af",
+  "Wise Old Man": "#1e40af",
+  "The Wise Old Woman": "#1e40af",
+  "Wise Old Woman": "#1e40af"
+};
+
+const getArchetypeColor = (archetype: string): string => {
+  return archetypeColors[archetype] || "#6b7280";
+};
+
 export default function DreamAnalysis() {
   const [location, navigate] = useLocation();
   const [dreamText, setDreamText] = useState('');
@@ -188,20 +222,34 @@ export default function DreamAnalysis() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {(analysis.archetypes || []).map((archetype: string, index: number) => (
-                      <Badge 
-                        key={index} 
-                        variant="outline" 
-                        className="text-red-400 border-red-400 text-xs cursor-pointer hover:bg-red-400/20 transition-colors"
-                        onClick={() => {
-                          setSelectedSymbol(archetype);
-                          setModalType('archetype');
-                          setModalOpen(true);
-                        }}
-                      >
-                        {archetype}
-                      </Badge>
-                    ))}
+                    {(analysis.archetypes || []).map((archetype: string, index: number) => {
+                      const color = getArchetypeColor(archetype);
+                      return (
+                        <Badge 
+                          key={index} 
+                          variant="outline" 
+                          className="text-xs cursor-pointer transition-colors"
+                          style={{
+                            color: color,
+                            borderColor: color,
+                            backgroundColor: `${color}10`
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = `${color}20`;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = `${color}10`;
+                          }}
+                          onClick={() => {
+                            setSelectedSymbol(archetype);
+                            setModalType('archetype');
+                            setModalOpen(true);
+                          }}
+                        >
+                          {archetype}
+                        </Badge>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
