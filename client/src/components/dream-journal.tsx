@@ -441,9 +441,9 @@ export function DreamJournal() {
           ) : (
             <>
               {/* Vision Boards */}
-              {filteredVisionBoards.map(renderVisionBoardEntry)}
+              {filteredVisionBoards.map((board) => renderVisionBoardEntry(board))}
               {/* Dreams */}
-              {filteredDreams.map(renderDreamEntry)}
+              {filteredDreams.map((dream) => renderDreamEntry(dream))}
             </>
           )}
         </div>

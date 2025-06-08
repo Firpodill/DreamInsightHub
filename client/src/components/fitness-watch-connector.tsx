@@ -159,14 +159,6 @@ export function FitnessWatchConnector() {
   const checkAvailableDevices = () => {
     const availableDevices: FitnessDevice[] = [
       {
-        id: 'apple_health',
-        name: 'Apple Health',
-        type: 'apple_watch',
-        connected: false,
-        lastSync: null,
-        capabilities: ['sleep_tracking', 'heart_rate', 'activity']
-      },
-      {
         id: 'fitbit_device',
         name: 'Fitbit Device',
         type: 'fitbit',
@@ -196,114 +188,7 @@ export function FitnessWatchConnector() {
     }
   };
 
-  const connectToAppleHealth = async () => {
-    console.log('Apple Health connect button clicked');
-    setConnectionStatus('connecting');
-    
-    try {
-      const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      
-      if (isIOSSafari) {
-        // Request permission using iOS HealthKit API
-        if ('HealthKit' in window) {
-          const healthKit = (window as any).HealthKit;
-          
-          const result = await healthKit.requestAuthorization({
-            read: [
-              'HKQuantityTypeIdentifierStepCount',
-              'HKQuantityTypeIdentifierHeartRate',
-              'HKCategoryTypeIdentifierSleepAnalysis'
-            ]
-          });
-          
-          if (result.success) {
-            const healthData = await fetchAppleHealthData();
-            
-            setDevices(prev => prev.map(device => 
-              device.id === 'apple_health' 
-                ? { ...device, connected: true, lastSync: new Date() }
-                : { ...device, connected: false }
-            ));
-            
-            setConnectionStatus('connected');
-            setLastSyncTime(new Date());
-            setRealTimeData(healthData);
-          } else {
-            throw new Error('HealthKit authorization denied');
-          }
-        } else {
-          throw new Error('HealthKit not available - iOS 16+ required');
-        }
-      } else {
-        throw new Error('Apple Health requires Safari on iOS device');
-      }
-      
-    } catch (error) {
-      console.error('Apple Health connection failed:', error);
-      await connectToDeviceDemo('apple_health');
-    }
-  };
 
-  const fetchAppleHealthData = async () => {
-    if ('HealthKit' in window) {
-      const healthKit = (window as any).HealthKit;
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      
-      try {
-        const stepsData = await healthKit.querySamples('HKQuantityTypeIdentifierStepCount', {
-          startDate: yesterday,
-          endDate: today
-        });
-        
-        const heartRateData = await healthKit.querySamples('HKQuantityTypeIdentifierHeartRate', {
-          startDate: yesterday,
-          endDate: today,
-          limit: 1
-        });
-        
-        const sleepData = await healthKit.querySamples('HKCategoryTypeIdentifierSleepAnalysis', {
-          startDate: yesterday,
-          endDate: today
-        });
-        
-        const totalSteps = stepsData.reduce((sum: number, sample: any) => sum + sample.quantity, 0);
-        const latestHeartRate = heartRateData.length > 0 ? heartRateData[0].quantity : 72;
-        const sleepDuration = sleepData.reduce((total: number, sample: any) => {
-          if (sample.value === 'HKCategoryValueSleepAnalysisAsleep') {
-            return total + (sample.endDate - sample.startDate) / (1000 * 60 * 60);
-          }
-          return total;
-        }, 0);
-        
-        const sleepScore = Math.min(100, Math.max(50, (sleepDuration / 8) * 100));
-        
-        return {
-          currentHeartRate: Math.round(latestHeartRate),
-          todaySteps: Math.round(totalSteps),
-          sleepScore: Math.round(sleepScore),
-          lastUpdate: new Date()
-        };
-        
-      } catch (error) {
-        console.error('Error fetching Apple Health data:', error);
-        return {
-          currentHeartRate: 72,
-          todaySteps: 3420,
-          sleepScore: 83,
-          lastUpdate: new Date()
-        };
-      }
-    }
-    
-    return {
-      currentHeartRate: 72,
-      todaySteps: 3420,
-      sleepScore: 83,
-      lastUpdate: new Date()
-    };
-  };
 
   const connectToFitbit = async () => {
     console.log('Fitbit connect button clicked');
@@ -362,9 +247,7 @@ export function FitnessWatchConnector() {
   };
 
   const connectToDevice = async (deviceId: string) => {
-    if (deviceId === 'apple_health') {
-      await connectToAppleHealth();
-    } else if (deviceId === 'fitbit_device') {
+    if (deviceId === 'fitbit_device') {
       await connectToFitbit();
     } else {
       await connectToDeviceDemo(deviceId);
@@ -454,7 +337,6 @@ export function FitnessWatchConnector() {
         <AlertDescription className="text-blue-300">
           <div className="font-medium mb-2">Integration Status:</div>
           <div className="text-sm space-y-1">
-            <div><strong>Apple Health:</strong> ✅ HealthKit API implemented (requires iOS Safari)</div>
             <div><strong>Fitbit:</strong> ✅ OAuth 2.0 integration active with real data access</div>
             <div>Successfully connected to authentic fitness tracker data</div>
           </div>
