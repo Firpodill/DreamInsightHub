@@ -19,8 +19,13 @@ export default function SimpleDreamAnalyzer() {
     if (!dreamText.trim()) return;
     
     try {
-      const result = await analyzeDream.mutateAsync(dreamText);
-      setAnalysis(result.analysis);
+      if (isOnline) {
+        const result = await analyzeDream.mutateAsync(dreamText);
+        setAnalysis(result.analysis);
+      } else {
+        // Store dream offline when no internet connection
+        await storeDreamOffline.mutateAsync(dreamText);
+      }
     } catch (error) {
       console.error('Analysis failed:', error);
     }
@@ -62,9 +67,29 @@ export default function SimpleDreamAnalyzer() {
         {/* Dream Input */}
         <Card className="mb-6 bg-white/10 backdrop-blur-sm border-purple-500/30">
           <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Brain className="w-6 h-6 mr-2" />
-              Tell me about your dream
+            <CardTitle className="text-white flex items-center justify-between">
+              <div className="flex items-center">
+                <Brain className="w-6 h-6 mr-2" />
+                Tell me about your dream
+              </div>
+              <div className="flex items-center gap-2">
+                {isOnline ? (
+                  <Badge variant="outline" className="text-green-400 border-green-400">
+                    <Wifi className="w-3 h-3 mr-1" />
+                    Online
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+                    <WifiOff className="w-3 h-3 mr-1" />
+                    Offline
+                  </Badge>
+                )}
+                {offlineCount > 0 && (
+                  <Badge variant="secondary" className="text-xs">
+                    {offlineCount} pending sync
+                  </Badge>
+                )}
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -77,18 +102,18 @@ export default function SimpleDreamAnalyzer() {
             />
             <Button
               onClick={handleAnalyze}
-              disabled={!dreamText.trim() || analyzeDream.isPending}
+              disabled={!dreamText.trim() || analyzeDream.isPending || storeDreamOffline.isPending}
               className="mt-4 bg-purple-600 hover:bg-purple-700 text-white"
             >
-              {analyzeDream.isPending ? (
+              {(analyzeDream.isPending || storeDreamOffline.isPending) ? (
                 <>
                   <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                  Analyzing...
+                  {isOnline ? 'Analyzing...' : 'Saving Offline...'}
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 mr-2" />
-                  Decode My Dream
+                  {isOnline ? 'Decode My Dream' : 'Save Dream Offline'}
                 </>
               )}
             </Button>
