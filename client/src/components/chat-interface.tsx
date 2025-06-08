@@ -66,26 +66,16 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
   const handleDecodeClick = async () => {
     if (!dreamText.trim()) return;
     
-    setIsDecoding(true);
+    // Save dream text to localStorage for the analysis page
+    localStorage.setItem('currentDreamText', dreamText);
+    localStorage.setItem('shouldAutoAnalyze', 'true');
     
-    try {
-      // Save dream text to localStorage for the analysis page
-      localStorage.setItem('currentDreamText', dreamText);
-      
-      // Analyze the dream
-      await analyzeDream.mutateAsync(dreamText);
-      
-      // Call the callback to switch to Analysis tab
-      if (onDecodeComplete) {
-        onDecodeComplete();
-      } else {
-        // Fallback to navigation if no callback provided
-        navigate('/analysis');
-      }
-    } catch (error) {
-      console.error('Dream analysis failed:', error);
-    } finally {
-      setIsDecoding(false);
+    // Immediately switch to Analysis tab to start analysis
+    if (onDecodeComplete) {
+      onDecodeComplete();
+    } else {
+      // Fallback to navigation if no callback provided
+      navigate('/analysis');
     }
   };
 

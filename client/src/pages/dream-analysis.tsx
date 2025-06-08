@@ -26,13 +26,22 @@ export default function DreamAnalysis() {
     const urlParams = new URLSearchParams(window.location.search);
     const dreamFromUrl = urlParams.get('dream');
     const dreamFromStorage = localStorage.getItem('currentDreamText');
+    const shouldAutoAnalyze = localStorage.getItem('shouldAutoAnalyze') === 'true';
     
     const text = dreamFromUrl || dreamFromStorage || '';
     setDreamText(text);
     
-    if (text && !analyzeDream.data && !analyzeDream.isPending) {
-      // Try to analyze, but if it fails, we'll show a demo
+    if (text && (!analyzeDream.data && !analyzeDream.isPending)) {
+      // Auto-analyze if coming from decode button or if no previous analysis
       analyzeDream.mutate(text);
+    } else if (text && shouldAutoAnalyze) {
+      // Force new analysis if explicitly requested from decode button
+      analyzeDream.mutate(text);
+    }
+    
+    // Clean up the auto-analyze flag
+    if (shouldAutoAnalyze) {
+      localStorage.removeItem('shouldAutoAnalyze');
     }
   }, []);
 
