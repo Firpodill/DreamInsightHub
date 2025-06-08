@@ -257,7 +257,7 @@ export default function DreamAnalysis() {
 
             {/* Dream Image Generation Option */}
             {showVisionBoardOption && (
-              <Card className="bg-yellow-900 border-yellow-700">
+              <Card className="bg-red-900 border-red-700">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center">
                     <Palette className="w-5 h-5 mr-2" />
@@ -265,7 +265,7 @@ export default function DreamAnalysis() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-yellow-200 text-sm mb-4">
+                  <p className="text-white text-sm mb-4">
                     Transform your dream analysis into a visual representation with AI-generated imagery
                   </p>
                   
@@ -273,7 +273,7 @@ export default function DreamAnalysis() {
                     <Button 
                       onClick={handleGenerateVisionBoard}
                       disabled={generateImage.isPending}
-                      className="w-full bg-yellow-600 hover:bg-yellow-700 text-white"
+                      className="w-full bg-red-600 hover:bg-red-700 text-white"
                     >
                       {generateImage.isPending ? (
                         <>
@@ -315,7 +315,7 @@ export default function DreamAnalysis() {
                           onClick={handleGenerateVisionBoard}
                           disabled={generateImage.isPending}
                           variant="outline"
-                          className="border-yellow-600 text-yellow-300 hover:bg-yellow-800"
+                          className="border-red-600 text-white hover:bg-red-800"
                         >
                           <Sparkles className="w-4 h-4" />
                         </Button>
