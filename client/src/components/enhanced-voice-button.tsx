@@ -134,7 +134,12 @@ export function EnhancedVoiceButton({
     
     if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
       console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-      elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
+      // Set up fallback to system voice if ElevenLabs fails
+      const fallbackToSystem = () => {
+        console.log('ElevenLabs failed, falling back to system voice');
+        systemVoice.speak(text);
+      };
+      elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id, fallbackToSystem);
     } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
       console.log('Using system voice:', selectedVoice.voice.name);
       systemVoice.setVoice(selectedVoice.voice);

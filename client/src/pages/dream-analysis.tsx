@@ -9,7 +9,6 @@ import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { DreamMemoryCapsule } from '@/components/dream-memory-capsule';
 import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
 import { HighlightedDreamText } from '@/components/highlighted-dream-text';
-import { EmailDreamAnalysis } from '@/components/email-dream-analysis';
 
 // Archetype color mapping from Complete Archetype Spectrum
 const archetypeColors: Record<string, string> = {
@@ -184,18 +183,12 @@ export default function DreamAnalysis() {
                     <Brain className="w-5 h-5 mr-2" />
                     Dream Summary
                   </div>
-                  <div className="flex items-center gap-2">
-                    <EmailDreamAnalysis 
-                      dream={analyzeDream.data?.dream!} 
-                      analysis={analysis} 
-                    />
-                    <EnhancedVoiceButton 
-                      text={analysis.summary}
-                      variant="outline"
-                      size="sm"
-                      className="text-gray-300 border-gray-600 hover:bg-gray-800"
-                    />
-                  </div>
+                  <EnhancedVoiceButton 
+                    text={analysis.summary}
+                    variant="outline"
+                    size="sm"
+                    className="text-gray-300 border-gray-600 hover:bg-gray-800"
+                  />
                 </CardTitle>
               </CardHeader>
               <CardContent>

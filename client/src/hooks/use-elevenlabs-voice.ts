@@ -21,7 +21,7 @@ interface VoiceSettings {
 }
 
 interface UseElevenLabsVoiceReturn {
-  speak: (text: string, voiceId?: string, settings?: VoiceSettings) => Promise<void>;
+  speak: (text: string, voiceId?: string, fallbackCallback?: () => void, settings?: VoiceSettings) => Promise<void>;
   stop: () => void;
   isPlaying: boolean;
   isLoading: boolean;
@@ -88,6 +88,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   const speak = useCallback(async (
     text: string, 
     voiceId?: string, 
+    fallbackCallback?: () => void,
     settings?: VoiceSettings
   ): Promise<void> => {
     if (!text.trim()) return;
@@ -144,6 +145,14 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       });
 
       if (!response.ok) {
+        // If it's a 401 error and we have a fallback, use it
+        if (response.status === 401 && fallbackCallback) {
+          console.log('ElevenLabs API authentication failed, using fallback');
+          setIsLoading(false);
+          setIsPlaying(false);
+          fallbackCallback();
+          return;
+        }
         throw new Error(`Failed to synthesize speech: ${response.status}`);
       }
 
