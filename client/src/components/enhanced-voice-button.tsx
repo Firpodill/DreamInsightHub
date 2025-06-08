@@ -164,12 +164,12 @@ export function EnhancedVoiceButton({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 border border-dashed border-gray-700 hover:border-gray-600 relative animate-pulse bg-gray-100 hover:bg-gray-200"
+          className="w-8 h-8 border border-dashed border-black hover:border-gray-800 relative animate-pulse bg-black text-white hover:bg-gray-800"
           onClick={() => setShowVoiceSelector(true)}
           title="Choose Voice - Click to select from 37+ AI voices"
           data-voice-control
         >
-          <Settings className="w-3 h-3" />
+          <Settings className="w-3 h-3 text-white" />
         </Button>
         
 
