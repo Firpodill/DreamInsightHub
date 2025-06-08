@@ -9,6 +9,7 @@ import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useLocation } from 'wouter';
 import { SymbolDefinitionModal } from '@/components/symbol-definition-modal';
 import { EnhancedVoiceButton } from '@/components/enhanced-voice-button';
+import { HighlightedDreamText } from '@/components/highlighted-dream-text';
 import type { Dream } from '@shared/schema';
 
 export function DreamJournal() {
@@ -463,12 +464,13 @@ export function DreamJournal() {
                   </div>
                 </div>
                 <div className="bg-gradient-to-br from-red-50 via-yellow-50 to-red-100 rounded-lg p-4 border-2 border-red-200 shadow-lg">
-                  <p className="text-gray-800 leading-relaxed font-medium">
-                    {selectedDream.content.length > 200 && !isDreamTextExpanded 
+                  <HighlightedDreamText 
+                    text={selectedDream.content.length > 200 && !isDreamTextExpanded 
                       ? `${selectedDream.content.substring(0, 200)}...`
                       : selectedDream.content
                     }
-                  </p>
+                    className="text-gray-800 leading-relaxed font-medium"
+                  />
                 </div>
               </div>
 
