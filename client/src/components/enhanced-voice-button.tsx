@@ -194,7 +194,7 @@ export function EnhancedVoiceButton({
         variant={variant}
         size={size}
         onClick={handleToggle}
-        className={className}
+        className={`bg-black text-white hover:bg-gray-800 border-black ${className}`}
         disabled={false}
         data-voice-control
       >
