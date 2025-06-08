@@ -498,10 +498,10 @@ function generateContextualDefinition(term: string): Definition {
     };
   }
   
-  // Generate contextual definition based on symbol patterns
+  // Return basic info directing to search for real definitions
   return {
-    definition: `A significant element appearing in dreams, representing personal meaning and symbolic importance. This symbol carries emotional resonance and appears as part of the unconscious mind's processing of experiences.`,
-    jungianMeaning: `Represents an aspect of the psyche seeking integration and understanding. The appearance of this symbol suggests it holds particular significance for psychological development and the individuation process.`
+    definition: `Search for real definition and information about "${term}" using the links below.`,
+    jungianMeaning: `For authentic information about this term, use the search options provided.`
   };
 }
 

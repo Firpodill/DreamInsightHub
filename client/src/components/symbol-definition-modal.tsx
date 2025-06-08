@@ -69,9 +69,8 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
   const isPerson = isLikelyPersonName(symbol);
   const mapUrl = isPlace ? generateMapUrl(symbol) : null;
   
-  // Get real dictionary definition for common words
-  const shouldUseDictionary = !isPlace && !isPerson && type !== 'archetype' && 
-    !definitions[symbol.toLowerCase()] && symbol.length > 2 && /^[a-zA-Z]+$/.test(symbol);
+  // Get real dictionary definition for ALL words (prioritize real definitions)
+  const shouldUseDictionary = type !== 'archetype' && symbol.length > 2 && /^[a-zA-Z\s]+$/.test(symbol);
   const dictionaryResult = useDictionary(shouldUseDictionary ? symbol : null);
   
   const filteredDefinitions = Object.entries(definitions).filter(([key, value]) =>
@@ -150,23 +149,77 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             </div>
           )}
 
-          {/* Current Definition */}
-          {currentDefinition && (
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
+          {/* Search for Real Information Section */}
+          {!dictionaryResult.definition && !isPlace && !isPerson && (
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-6 border border-orange-200">
               <div className="flex items-center gap-2 mb-4">
-                <Badge variant={type === 'archetype' ? 'default' : 'secondary'} className="text-sm">
-                  {type === 'archetype' ? 'Archetype' : dictionaryResult.definition ? 'Dream Symbol' : 'Symbol'}
+                <Badge variant="outline" className="text-sm bg-white">
+                  Search Real Information
                 </Badge>
                 <h3 className="text-xl font-bold text-gray-800 capitalize">{symbol}</h3>
               </div>
               
               <div className="space-y-4">
-                {!dictionaryResult.definition && (
-                  <div>
-                    <h4 className="font-semibold text-gray-700 mb-2">General Definition</h4>
-                    <p className="text-gray-600 leading-relaxed">{currentDefinition.definition}</p>
-                  </div>
-                )}
+                <p className="text-gray-700 text-sm mb-3">
+                  Find authentic definitions and information about "{symbol}":
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    onClick={() => window.open(`https://www.merriam-webster.com/dictionary/${encodeURIComponent(symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Book className="w-4 h-4" />
+                    Merriam-Webster
+                  </Button>
+                  <Button
+                    onClick={() => window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Wikipedia
+                  </Button>
+                  <Button
+                    onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent("define " + symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Search className="w-4 h-4" />
+                    Google Define
+                  </Button>
+                  <Button
+                    onClick={() => window.open(`https://www.britannica.com/search?query=${encodeURIComponent(symbol)}`, '_blank')}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Book className="w-4 h-4" />
+                    Britannica
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Factual Definition Section */}
+          {currentDefinition && !dictionaryResult.definition && !isPlace && !isPerson && currentDefinition.definition.includes(symbol) && (
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="secondary" className="text-sm">
+                  Factual Information
+                </Badge>
+                <h3 className="text-xl font-bold text-gray-800 capitalize">{symbol}</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-gray-700 mb-2">Information</h4>
+                  <p className="text-gray-600 leading-relaxed">{currentDefinition.definition}</p>
+                </div>
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="bg-white/60 rounded-lg p-4">
@@ -217,9 +270,29 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                         <User className="w-4 h-4 text-indigo-600" />
                         <h4 className="font-semibold text-indigo-800">Person Name</h4>
                       </div>
-                      <p className="text-gray-700 text-sm leading-relaxed">
-                        {symbol} is a person's name. This individual appears in your dream and may represent someone from your personal life, relationships, or social connections.
+                      <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                        {symbol} is a person's name. Search for more information about this name or person:
                       </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(symbol + " name meaning origin")}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <Search className="w-4 h-4" />
+                          Name Origin
+                        </Button>
+                        <Button
+                          onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(symbol)}`, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center gap-2"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Google Search
+                        </Button>
+                      </div>
                     </div>
                   )}
                   
