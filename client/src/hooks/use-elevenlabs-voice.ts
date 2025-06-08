@@ -183,12 +183,26 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   }, [currentVoice, currentAudio]);
 
   const stop = useCallback(() => {
+    // Stop current audio if exists
     if (currentAudio) {
       currentAudio.pause();
       currentAudio.currentTime = 0;
       setIsPlaying(false);
       setIsLoading(false);
     }
+    
+    // Also stop all audio elements globally as a fallback
+    const allAudio = document.querySelectorAll('audio');
+    allAudio.forEach(audio => {
+      if (!audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+    
+    // Force state reset
+    setIsPlaying(false);
+    setIsLoading(false);
   }, [currentAudio]);
 
   const setVoice = useCallback((voice: ElevenLabsVoice) => {

@@ -86,33 +86,40 @@ export function EnhancedVoiceButton({
     localStorage.setItem('voice-notifications-disabled', 'true');
   };
 
+  const stopAllAudio = () => {
+    console.log('Stopping all audio playback');
+    
+    // Stop voice synthesis hooks
+    systemVoice.stop();
+    elevenLabsVoice.stop();
+    
+    // Clear timeout
+    if (audioTimeout) {
+      clearTimeout(audioTimeout);
+      setAudioTimeout(null);
+    }
+    
+    // Force clear component states
+    setIsPlaying(false);
+    setIsLoading(false);
+    audioManager.setPlaying(false);
+    
+    // Stop all HTML5 audio elements globally
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+      if (!audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.remove(); // Remove from DOM to prevent restart
+      }
+    });
+  };
+
   const handleToggle = () => {
     const isCurrentlyBusy = isPlaying || isLoading || systemVoice.isPlaying || elevenLabsVoice.isPlaying || elevenLabsVoice.isLoading;
     
     if (isCurrentlyBusy) {
-      // Stop current audio - be more aggressive about stopping
-      console.log('Stopping audio playback');
-      systemVoice.stop();
-      elevenLabsVoice.stop();
-      
-      // Clear any existing timeout
-      if (audioTimeout) {
-        clearTimeout(audioTimeout);
-        setAudioTimeout(null);
-      }
-      
-      // Force clear all states immediately
-      setIsPlaying(false);
-      setIsLoading(false);
-      audioManager.setPlaying(false);
-      
-      // Additional cleanup - stop any HTML5 audio elements
-      const audioElements = document.querySelectorAll('audio');
-      audioElements.forEach(audio => {
-        audio.pause();
-        audio.currentTime = 0;
-      });
-      
+      stopAllAudio();
       return; // Early return to prevent any restart
     }
     
@@ -142,12 +149,7 @@ export function EnhancedVoiceButton({
     // Set auto-stop timeout to prevent infinite playing
     const timeout = setTimeout(() => {
       console.log('Auto-stopping audio after timeout');
-      setIsPlaying(false);
-      setIsLoading(false);
-      audioManager.setPlaying(false);
-      systemVoice.stop();
-      elevenLabsVoice.stop();
-      setAudioTimeout(null);
+      stopAllAudio();
     }, Math.max(text.length * 80, 10000)); // 80ms per character, minimum 10 seconds
     
     setAudioTimeout(timeout);
