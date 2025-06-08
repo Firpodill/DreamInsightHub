@@ -17,6 +17,40 @@ export function InsightsDashboard() {
   const [selectedSymbol, setSelectedSymbol] = useState('');
   const [symbolType, setSymbolType] = useState<'archetype' | 'symbol'>('archetype');
 
+  // Archetype color mapping from Complete Archetype Spectrum
+  const archetypeColors: Record<string, string> = {
+    "The Hero": "#dc2626",
+    "Hero": "#dc2626",
+    "The Ruler": "#7c2d12", 
+    "Ruler": "#7c2d12",
+    "The Lover": "#be185d",
+    "Lover": "#be185d", 
+    "The Sage": "#1e40af",
+    "Sage": "#1e40af",
+    "The Shadow": "#6b7280",
+    "Shadow": "#6b7280",
+    "The Innocent": "#eab308",
+    "Innocent": "#eab308",
+    "The Anima": "#8b5cf6",
+    "Anima": "#8b5cf6",
+    "The Animus": "#8b5cf6",
+    "Animus": "#8b5cf6",
+    "The Self": "#22d3ee",
+    "Self": "#22d3ee",
+    "The Trickster": "#f97316",
+    "Trickster": "#f97316",
+    "The Mother": "#ec4899",
+    "Mother": "#ec4899",
+    "The Wise Old Man": "#1e40af",
+    "Wise Old Man": "#1e40af",
+    "The Wise Old Woman": "#1e40af",
+    "Wise Old Woman": "#1e40af"
+  };
+
+  const getArchetypeColor = (archetype: string): string => {
+    return archetypeColors[archetype] || "#6b7280";
+  };
+
   const getPatternIcon = (iconName: string) => {
     const icons = {
       mountain: Mountain,
@@ -28,20 +62,7 @@ export function InsightsDashboard() {
     return <IconComponent className="w-4 h-4" />;
   };
 
-  const getArchetypeColor = (archetype: string) => {
-    const colors = {
-      'Hero': 'bg-red-600',
-      'Shadow': 'bg-gray-600',
-      'Self': 'bg-yellow-500',
-      'Anima': 'bg-pink-500',
-      'Animus': 'bg-blue-500',
-      'Wise Old Man': 'bg-purple-500',
-      'Mother': 'bg-green-500',
-      'Trickster': 'bg-orange-500',
-      'default': 'bg-gray-400'
-    };
-    return colors[archetype as keyof typeof colors] || colors.default;
-  };
+
 
   // Get today's dream analysis
   const getTodaysAnalysis = () => {
@@ -129,20 +150,27 @@ export function InsightsDashboard() {
                     {todaysAnalysis.analysis}
                   </p>
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {todaysAnalysis.archetypes?.slice(0, 3).map((archetype) => (
-                      <Badge 
-                        key={archetype} 
-                        variant="secondary" 
-                        className={`text-xs ${getArchetypeColor(archetype)} text-white border-0 cursor-pointer hover:opacity-80 transition-opacity`}
-                        onClick={() => {
-                          setSelectedSymbol(archetype);
-                          setSymbolType('archetype');
-                          setSymbolModalOpen(true);
-                        }}
-                      >
-                        {archetype}
-                      </Badge>
-                    ))}
+                    {todaysAnalysis.archetypes?.slice(0, 3).map((archetype) => {
+                      const color = getArchetypeColor(archetype);
+                      return (
+                        <Badge 
+                          key={archetype} 
+                          className="text-xs border-0 cursor-pointer hover:opacity-80 transition-opacity px-3 py-1 rounded-full font-medium"
+                          style={{
+                            color: color,
+                            backgroundColor: `${color}30`,
+                            border: `1px solid ${color}60`
+                          }}
+                          onClick={() => {
+                            setSelectedSymbol(archetype);
+                            setSymbolType('archetype');
+                            setSymbolModalOpen(true);
+                          }}
+                        >
+                          {archetype}
+                        </Badge>
+                      );
+                    })}
                   </div>
                 </div>
               ) : (
