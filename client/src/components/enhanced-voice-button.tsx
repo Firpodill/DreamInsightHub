@@ -47,7 +47,7 @@ export function EnhancedVoiceButton({
       setIsPlaying(false);
     };
     audioManager.registerAudio(stopAll);
-  }, []);
+  }, [audioManager]);
 
   // Show voice hint on first render if not dismissed - only once globally
   useEffect(() => {
@@ -77,14 +77,14 @@ export function EnhancedVoiceButton({
 
     console.log('Playing with selected voice:', selectedVoice);
     
-    // Stop all other audio first, then start this one
+    // Stop all other audio first
     audioManager.setPlaying(true);
     setIsPlaying(true);
     
     try {
       if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
         console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-        elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
+        await elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
       } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
         console.log('Using system voice:', selectedVoice.voice.name);
         systemVoice.setVoice(selectedVoice.voice);
@@ -95,16 +95,13 @@ export function EnhancedVoiceButton({
       }
     } catch (error) {
       console.error('Voice playback failed:', error);
-      handleStop();
     }
     
-    // Reset playing state after estimated duration with more accurate timing
-    const estimatedDuration = Math.max(text.length * 50, 3000);
+    // Auto-stop after estimated duration
     setTimeout(() => {
-      if (isPlaying) { // Only stop if still playing
-        handleStop();
-      }
-    }, Math.min(estimatedDuration, 10000));
+      setIsPlaying(false);
+      audioManager.setPlaying(false);
+    }, Math.max(text.length * 60, 3000));
   };
 
   const handleStop = () => {
@@ -114,24 +111,12 @@ export function EnhancedVoiceButton({
     audioManager.setPlaying(false);
   };
 
-  // Listen for global audio stop events
-  useEffect(() => {
-    const handleGlobalStop = () => {
-      setIsPlaying(false);
-    };
-    
-    // Reset playing state when other audio starts or stops
-    if (!audioManager.isAnyPlaying && isPlaying) {
-      setIsPlaying(false);
-    }
-  }, [audioManager.isAnyPlaying, isPlaying]);
-
   const handleVoiceSelect = (voiceOption: VoiceOption) => {
     setSelectedVoice(voiceOption);
     console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
-  const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying || audioManager.isAnyPlaying;
+  const isAnyPlaying = isPlaying || systemVoice.isPlaying || elevenLabsVoice.isPlaying;
 
   return (
     <div className="flex items-center space-x-1 relative group" data-voice-control>
