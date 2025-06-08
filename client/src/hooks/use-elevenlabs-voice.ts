@@ -97,6 +97,9 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       const requestId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
       currentRequestIdRef.current = requestId;
       
+      // Reset global audio stop to allow new audio
+      globalAudioManager.allowAudio();
+      
       setIsStopping(false); // Clear stopping flag when starting new speech
       setIsLoading(true);
       setIsPlaying(false);
@@ -182,6 +185,20 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
 
       // Handle audio events
       const playAudio = () => {
+        // Final check before playing - ensure request is still valid
+        if (currentRequestIdRef.current !== requestId) {
+          console.log('Request cancelled before audio play - aborting');
+          audio.pause();
+          return;
+        }
+        
+        // Check global audio stop one more time
+        if (!globalAudioManager.canPlayAudio()) {
+          console.log('Global audio stop active before play - aborting');
+          audio.pause();
+          return;
+        }
+
         audio.play().catch(err => {
           console.error('Audio play error:', err);
           setError('Failed to play audio');
