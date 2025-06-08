@@ -328,12 +328,6 @@ export function DreamJournal() {
             </span>
           </div>
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <EnhancedVoiceButton 
-              text={dream.content}
-              variant="outline"
-              size="sm"
-              className="text-gray-600 border-gray-300 hover:bg-gray-50"
-            />
             <Button 
               variant="ghost" 
               size="sm" 
@@ -355,8 +349,14 @@ export function DreamJournal() {
     <div className="p-4 space-y-4">
       {/* Dream Details Modal */}
       {selectedDream && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedDream(null)}
+        >
+          <div 
+            className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
@@ -395,15 +395,7 @@ export function DreamJournal() {
               {/* AI Analysis */}
               {selectedDream.analysis && (
                 <div className="mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-gray-800">AI Analysis</h3>
-                    <EnhancedVoiceButton 
-                      text={selectedDream.analysis}
-                      variant="outline"
-                      size="sm"
-                      className="text-gray-600 border-gray-300 hover:bg-gray-50"
-                    />
-                  </div>
+                  <h3 className="font-medium text-gray-800 mb-2">AI Analysis</h3>
                   <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-4 border border-red-200">
                     <p className="text-gray-700 leading-relaxed">{selectedDream.analysis}</p>
                   </div>
