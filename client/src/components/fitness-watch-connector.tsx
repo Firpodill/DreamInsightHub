@@ -313,51 +313,30 @@ export function FitnessWatchConnector() {
   };
 
   const connectToFitbit = async () => {
+    console.log('Fitbit connect button clicked');
     setConnectionStatus('connecting');
     
     try {
       // Use configured Fitbit client ID
       const clientId = "23QKL9";
       
-      if (!clientId) {
-        throw new Error('Fitbit credentials not configured');
-      }
-      
-      // Construct OAuth URL - must match registered redirect URI exactly
+      // Construct OAuth URL
       const redirectUri = 'https://b6e2195d-9d45-47f1-97d6-70f86c4eff86-00-12k1zs8jp9eml.riker.replit.dev/fitbit-callback';
       const scope = 'activity heartrate sleep';
-      const responseType = 'code';
       const state = Math.random().toString(36).substring(2, 15);
       
-      // Store state for verification
       localStorage.setItem('fitbit_oauth_state', state);
       
-      const authUrl = `https://www.fitbit.com/oauth2/authorize?` +
-        `response_type=${responseType}&` +
-        `client_id=${clientId}&` +
-        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-        `scope=${scope}&` +
-        `state=${state}`;
+      const authUrl = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}`;
       
-      console.log('Fitbit OAuth URL:', authUrl);
-      console.log('Redirect URI:', redirectUri);
+      console.log('Redirecting to:', authUrl);
       
-      // Test if we can reach Fitbit OAuth first
-      const testResponse = await fetch(`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${clientId}`, { 
-        method: 'HEAD',
-        mode: 'no-cors'
-      }).catch(e => {
-        console.log('Fitbit connectivity test failed:', e);
-        return null;
-      });
-      
-      // Open OAuth flow
+      // Immediate redirect
       window.location.href = authUrl;
       
     } catch (error) {
-      console.error('Fitbit connection failed:', error);
-      // Fall back to demo mode
-      await connectToDeviceDemo('fitbit_device');
+      console.error('Fitbit connection error:', error);
+      setConnectionStatus('disconnected');
     }
   };
 
@@ -442,8 +421,8 @@ export function FitnessWatchConnector() {
           <div className="font-medium mb-2">Integration Status:</div>
           <div className="text-sm space-y-1">
             <div><strong>Apple Health:</strong> ✅ HealthKit API implemented (requires iOS Safari)</div>
-            <div><strong>Fitbit:</strong> ⚠️ Client ID verification needed (current: 23QKL9)</div>
-            <div>Please verify complete Client ID from Fitbit Developer Console</div>
+            <div><strong>Fitbit:</strong> ⚠️ Testing connection with Client ID: 23QKL9</div>
+            <div>Check browser console for redirect URL debugging</div>
           </div>
         </AlertDescription>
       </Alert>
