@@ -312,6 +312,130 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(path.join(process.cwd(), "qr-visual.html"));
   });
 
+  // Fitbit OAuth endpoints
+  app.post("/api/fitbit/token", async (req, res) => {
+    try {
+      const { code, redirectUri } = req.body;
+      
+      const clientId = "23QKL9";
+      const clientSecret = "81317506fe0611e04dd8fe79883c4b6b";
+      
+      // Exchange authorization code for access token
+      const tokenResponse = await fetch("https://api.fitbit.com/oauth2/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`
+        },
+        body: new URLSearchParams({
+          client_id: clientId,
+          grant_type: "authorization_code",
+          redirect_uri: redirectUri,
+          code: code
+        })
+      });
+
+      if (!tokenResponse.ok) {
+        const error = await tokenResponse.text();
+        throw new Error(`Fitbit API error: ${error}`);
+      }
+
+      const tokenData = await tokenResponse.json();
+      res.json(tokenData);
+      
+    } catch (error) {
+      console.error("Fitbit token exchange error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Token exchange failed" });
+    }
+  });
+
+  app.get("/api/fitbit/profile", async (req, res) => {
+    try {
+      const accessToken = req.headers.authorization?.replace("Bearer ", "");
+      
+      if (!accessToken) {
+        return res.status(401).json({ error: "Access token required" });
+      }
+
+      const profileResponse = await fetch("https://api.fitbit.com/1/user/-/profile.json", {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+
+      if (!profileResponse.ok) {
+        throw new Error("Failed to fetch Fitbit profile");
+      }
+
+      const profileData = await profileResponse.json();
+      res.json(profileData);
+      
+    } catch (error) {
+      console.error("Fitbit profile error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Profile fetch failed" });
+    }
+  });
+
+  app.get("/api/fitbit/activities", async (req, res) => {
+    try {
+      const accessToken = req.headers.authorization?.replace("Bearer ", "");
+      
+      if (!accessToken) {
+        return res.status(401).json({ error: "Access token required" });
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Fetch today's activities
+      const activitiesResponse = await fetch(`https://api.fitbit.com/1/user/-/activities/date/${today}.json`, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+
+      if (!activitiesResponse.ok) {
+        throw new Error("Failed to fetch Fitbit activities");
+      }
+
+      const activitiesData = await activitiesResponse.json();
+      res.json(activitiesData);
+      
+    } catch (error) {
+      console.error("Fitbit activities error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Activities fetch failed" });
+    }
+  });
+
+  app.get("/api/fitbit/sleep", async (req, res) => {
+    try {
+      const accessToken = req.headers.authorization?.replace("Bearer ", "");
+      
+      if (!accessToken) {
+        return res.status(401).json({ error: "Access token required" });
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Fetch today's sleep data
+      const sleepResponse = await fetch(`https://api.fitbit.com/1.2/user/-/sleep/date/${today}.json`, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+
+      if (!sleepResponse.ok) {
+        throw new Error("Failed to fetch Fitbit sleep data");
+      }
+
+      const sleepData = await sleepResponse.json();
+      res.json(sleepData);
+      
+    } catch (error) {
+      console.error("Fitbit sleep error:", error);
+      res.status(500).json({ error: error instanceof Error ? error.message : "Sleep fetch failed" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
