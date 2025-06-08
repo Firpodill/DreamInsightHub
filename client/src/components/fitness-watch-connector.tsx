@@ -246,9 +246,48 @@ export function FitnessWatchConnector() {
     }
   };
 
+  const connectToFitbit = async () => {
+    setConnectionStatus('connecting');
+    
+    try {
+      // Check if Fitbit credentials are available
+      const clientId = import.meta.env.VITE_FITBIT_CLIENT_ID;
+      
+      if (!clientId) {
+        throw new Error('Fitbit credentials not configured');
+      }
+      
+      // Construct OAuth URL
+      const redirectUri = encodeURIComponent(window.location.origin + '/fitbit-callback');
+      const scope = 'activity heartrate sleep';
+      const responseType = 'code';
+      const state = Math.random().toString(36).substring(2, 15);
+      
+      // Store state for verification
+      localStorage.setItem('fitbit_oauth_state', state);
+      
+      const authUrl = `https://www.fitbit.com/oauth2/authorize?` +
+        `response_type=${responseType}&` +
+        `client_id=${clientId}&` +
+        `redirect_uri=${redirectUri}&` +
+        `scope=${scope}&` +
+        `state=${state}`;
+      
+      // Open OAuth flow
+      window.location.href = authUrl;
+      
+    } catch (error) {
+      console.error('Fitbit connection failed:', error);
+      // Fall back to demo mode
+      await connectToDeviceDemo('fitbit_device');
+    }
+  };
+
   const connectToDevice = async (deviceId: string) => {
     if (deviceId === 'apple_health') {
       await connectToAppleHealth();
+    } else if (deviceId === 'fitbit_device') {
+      await connectToFitbit();
     } else {
       await connectToDeviceDemo(deviceId);
     }
