@@ -40,6 +40,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [isStopping, setIsStopping] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const currentRequestIdRef = useRef<string | null>(null);
 
 
   // Load available voices on mount
@@ -92,6 +93,10 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
     if (!text.trim()) return;
 
     try {
+      // Generate unique request ID
+      const requestId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+      currentRequestIdRef.current = requestId;
+      
       setIsStopping(false); // Clear stopping flag when starting new speech
       setIsLoading(true);
       setIsPlaying(false);
@@ -140,6 +145,13 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       }
 
       setIsLoading(false);
+
+      // Check if this request is still valid (not cancelled)
+      if (currentRequestIdRef.current !== requestId) {
+        console.log('Request cancelled - not playing audio');
+        setIsLoading(false);
+        return;
+      }
 
       // Check if global audio stop is active before creating audio
       if (!globalAudioManager.canPlayAudio()) {
@@ -217,6 +229,9 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   }, [currentVoice, currentAudio]);
 
   const stop = useCallback(() => {
+    // Cancel current request by clearing the request ID
+    currentRequestIdRef.current = null;
+    
     // Abort any ongoing network request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
