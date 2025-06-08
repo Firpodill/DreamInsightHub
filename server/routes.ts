@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { analyzeDream, generateDreamVisualization, generateImage } from "./openai";
+import { elevenLabsService } from "./elevenlabs";
 import { insertDreamSchema, insertChatMessageSchema } from "@shared/schema";
 import { z } from "zod";
 import path from "path";
@@ -332,6 +333,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Insights error:', error);
       res.status(500).json({ error: "Failed to generate insights" });
+    }
+  });
+
+  // ElevenLabs Voice API endpoints
+  app.get("/api/elevenlabs/voices", async (req, res) => {
+    try {
+      const voices = await elevenLabsService.getVoices();
+      res.json(voices);
+    } catch (error) {
+      console.error('ElevenLabs voices error:', error);
+      res.status(500).json({ error: "Failed to fetch ElevenLabs voices" });
+    }
+  });
+
+  app.post("/api/elevenlabs/synthesize", async (req, res) => {
+    try {
+      const { text, voice_id, voice_settings } = req.body;
+      
+      if (!text || !voice_id) {
+        return res.status(400).json({ error: "Text and voice_id are required" });
+      }
+
+      const audioBuffer = await elevenLabsService.synthesizeSpeech({
+        text,
+        voice_id,
+        voice_settings
+      });
+
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.length.toString(),
+      });
+      
+      res.send(audioBuffer);
+    } catch (error) {
+      console.error('ElevenLabs synthesis error:', error);
+      res.status(500).json({ error: "Failed to synthesize speech" });
     }
   });
 
