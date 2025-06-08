@@ -6,11 +6,16 @@ import { Brain, Mountain, Key, Eye, TrendingUp, Crown, BarChart3 } from 'lucide-
 import { useDreamInsights, useDreams } from '@/hooks/use-dreams';
 import { ArchetypeVisualization } from './archetype-visualization';
 import { EnhancedVoiceButton } from './enhanced-voice-button';
+import { SymbolDefinitionModal } from './symbol-definition-modal';
+import { useState } from 'react';
 import type { ArchetypeFrequency, RecentPattern } from '@/types/dream';
 
 export function InsightsDashboard() {
   const { data: insights, isLoading } = useDreamInsights();
   const { data: dreams = [] } = useDreams();
+  const [symbolModalOpen, setSymbolModalOpen] = useState(false);
+  const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [symbolType, setSymbolType] = useState<'archetype' | 'symbol'>('archetype');
 
   const getPatternIcon = (iconName: string) => {
     const icons = {
@@ -128,7 +133,12 @@ export function InsightsDashboard() {
                       <Badge 
                         key={archetype} 
                         variant="secondary" 
-                        className={`text-xs ${getArchetypeColor(archetype)} text-white border-0`}
+                        className={`text-xs ${getArchetypeColor(archetype)} text-white border-0 cursor-pointer hover:opacity-80 transition-opacity`}
+                        onClick={() => {
+                          setSelectedSymbol(archetype);
+                          setSymbolType('archetype');
+                          setSymbolModalOpen(true);
+                        }}
                       >
                         {archetype}
                       </Badge>
@@ -169,7 +179,15 @@ export function InsightsDashboard() {
                 <h3 className="font-medium text-white mb-4">Archetype Frequency</h3>
                 <div className="space-y-3">
                   {insights.archetypeFrequencies.slice(0, 5).map((item: ArchetypeFrequency) => (
-                    <div key={item.archetype} className="flex items-center justify-between">
+                    <div 
+                      key={item.archetype} 
+                      className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 rounded p-2 transition-colors"
+                      onClick={() => {
+                        setSelectedSymbol(item.archetype);
+                        setSymbolType('archetype');
+                        setSymbolModalOpen(true);
+                      }}
+                    >
                       <div className="flex items-center space-x-3">
                         <div className={`w-4 h-4 ${getArchetypeColor(item.archetype)} rounded`}></div>
                         <span className="text-sm font-medium text-white">{item.archetype}</span>
@@ -233,6 +251,14 @@ export function InsightsDashboard() {
           <ArchetypeVisualization />
         </TabsContent>
       </Tabs>
+
+      {/* Symbol Definition Modal */}
+      <SymbolDefinitionModal 
+        open={symbolModalOpen}
+        onClose={() => setSymbolModalOpen(false)}
+        symbol={selectedSymbol}
+        type={symbolType}
+      />
     </div>
   );
 }
