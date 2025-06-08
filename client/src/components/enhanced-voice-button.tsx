@@ -5,7 +5,7 @@ import { useNaturalVoice } from '@/hooks/use-natural-voice';
 import { useElevenLabsVoice } from '@/hooks/use-elevenlabs-voice';
 import { useGlobalVoicePreference } from '@/hooks/use-voice-preference';
 import { useGlobalAudioManager } from '@/hooks/use-global-audio-manager';
-import { useGlobalAudioStop } from '@/hooks/use-global-audio-stop';
+import { globalAudioManager } from '@/hooks/use-global-audio-stop';
 import { VoiceSelector } from './voice-selector';
 
 interface EnhancedVoiceButtonProps {
@@ -41,7 +41,7 @@ export function EnhancedVoiceButton({
   const elevenLabsVoice = useElevenLabsVoice();
   const { selectedVoice, setSelectedVoice } = useGlobalVoicePreference();
   const audioManager = useGlobalAudioManager(`voice-button-${text.substring(0, 20)}`);
-  const globalAudioStop = useGlobalAudioStop();
+
 
   // Register stop functions with global audio manager
   useEffect(() => {
@@ -92,7 +92,7 @@ export function EnhancedVoiceButton({
     console.log('Stopping all audio playback');
     
     // Use global audio stop to prevent any new audio
-    globalAudioStop.stopAll();
+    globalAudioManager.stopAll();
     
     // Stop voice synthesis hooks
     systemVoice.stop();
@@ -124,7 +124,7 @@ export function EnhancedVoiceButton({
     console.log('Starting audio playback with selected voice:', selectedVoice);
     
     // Allow audio to play again
-    globalAudioStop.allowAudio();
+    globalAudioManager.allowAudio();
     
     // Clear any existing states first
     setIsPlaying(false);

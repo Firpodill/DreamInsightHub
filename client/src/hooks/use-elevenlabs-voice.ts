@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { apiRequest } from '@/lib/queryClient';
-import { useGlobalAudioStop } from './use-global-audio-stop';
+import { globalAudioManager } from './use-global-audio-stop';
 
 interface ElevenLabsVoice {
   voice_id: string;
@@ -40,7 +40,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [isStopping, setIsStopping] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const globalAudioStop = useGlobalAudioStop();
+
 
   // Load available voices on mount
   useEffect(() => {
@@ -142,7 +142,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       setIsLoading(false);
 
       // Check if global audio stop is active before creating audio
-      if (!globalAudioStop.canPlayAudio()) {
+      if (!globalAudioManager.canPlayAudio()) {
         console.log('Global audio stop is active - not playing audio');
         setIsLoading(false);
         return;
@@ -160,7 +160,7 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       const audio = new Audio(audioUrl);
       
       // Register this audio with global stop manager
-      globalAudioStop.registerAudio(audio);
+      globalAudioManager.registerAudio(audio);
       
       setCurrentAudio(audio);
 
