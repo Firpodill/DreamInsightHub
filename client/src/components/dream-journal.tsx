@@ -108,32 +108,7 @@ export function DreamJournal() {
     return new Date(year, month, 1).getDay();
   };
 
-  const generateDreamscapeTitle = (dream: Dream) => {
-    const symbols = dream.symbols || [];
-    const archetypes = dream.archetypes || [];
-    
-    const wildTitleTemplates = [
-      `Phantasmagorical ${symbols[0] || 'Nebula'} & the ${archetypes[0] || 'Cosmic'} Metamorphosis`,
-      `The Extraordinary ${symbols[0] || 'Kaleidoscope'} Encounters the ${archetypes[0] || 'Interdimensional'} Paradox`,
-      `Surrealistic ${archetypes[0] || 'Quantum'} Adventures in the ${symbols[0] || 'Crystalline'} Multiverse`,
-      `The Magnificent ${symbols[0] || 'Spectral'} & the ${archetypes[0] || 'Transcendental'} Time Spiral`,
-      `Extraordinary Visions of the ${symbols[0] || 'Luminous'} ${archetypes[0] || 'Celestial'} Phenomenon`,
-      `The Incredible ${archetypes[0] || 'Psychedelic'} Journey Through ${symbols[0] || 'Iridescent'} Dimensions`,
-      `Spectacular ${symbols[0] || 'Ethereal'} Chronicles: The ${archetypes[0] || 'Mystical'} Revelation`,
-      `The Amazing ${symbols[0] || 'Prismatic'} & the ${archetypes[0] || 'Supernatural'} Transformation`,
-      `Fantastical ${archetypes[0] || 'Enigmatic'} Encounters in the ${symbols[0] || 'Opalescent'} Dreamscape`,
-      `The Stupendous ${symbols[0] || 'Radiant'} Meets the ${archetypes[0] || 'Otherworldly'} Consciousness`,
-      `Magnificent ${symbols[0] || 'Shimmering'} Odyssey: A ${archetypes[0] || 'Transcendent'} Epic`,
-      `The Phenomenal ${archetypes[0] || 'Metaphysical'} & the ${symbols[0] || 'Incandescent'} Portal`,
-      `Extraordinary ${symbols[0] || 'Holographic'} Visions of the ${archetypes[0] || 'Cosmic'} Awakening`,
-      `The Spectacular ${symbols[0] || 'Fluorescent'} Chronicles: ${archetypes[0] || 'Dimensional'} Revelations`,
-      `Incredible ${archetypes[0] || 'Surreal'} Adventures in the ${symbols[0] || 'Phosphorescent'} Realm`
-    ];
-    
-    // Use dream ID to ensure consistent title for same dream
-    const titleIndex = dream.id % wildTitleTemplates.length;
-    return wildTitleTemplates[titleIndex];
-  };
+
 
   const openSymbolModal = (symbol: string, type: 'archetype' | 'symbol') => {
     setSelectedSymbol(symbol);
@@ -412,25 +387,7 @@ export function DreamJournal() {
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-2 tracking-wide">
                     DREAMSCAPE
                   </h3>
-                  <div className="mb-4">
-                    <div className="bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400 p-4 rounded-lg border-4 border-yellow-300 shadow-lg transform -rotate-1">
-                      <div className="bg-black rounded-lg p-3 border-2 border-yellow-400">
-                        <p className="text-center font-bold text-yellow-300 text-lg tracking-wider leading-tight drop-shadow-lg" 
-                           style={{
-                             fontFamily: 'serif',
-                             textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,0,0.3)',
-                             letterSpacing: '2px'
-                           }}>
-                          ★ {generateDreamscapeTitle(selectedDream).toUpperCase()} ★
-                        </p>
-                        <div className="flex justify-center space-x-1 mt-1">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className="text-yellow-400 text-xs animate-pulse">✦</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   <img 
                     src={selectedDream.imageUrl} 
                     alt="AI-generated dream visualization"
