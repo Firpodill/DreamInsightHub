@@ -446,19 +446,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const today = new Date().toISOString().split('T')[0];
       
-      // Fetch today's heart rate data
-      const heartRateResponse = await fetch(`https://api.fitbit.com/1/user/-/activities/heart/date/${today}/1d.json`, {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        }
-      });
+      // Try multiple Fitbit heart rate endpoints for better data coverage
+      const [heartRateResponse, profileResponse] = await Promise.all([
+        fetch(`https://api.fitbit.com/1/user/-/activities/heart/date/${today}/1d.json`, {
+          headers: { "Authorization": `Bearer ${accessToken}` }
+        }),
+        fetch(`https://api.fitbit.com/1/user/-/profile.json`, {
+          headers: { "Authorization": `Bearer ${accessToken}` }
+        })
+      ]);
 
-      if (!heartRateResponse.ok) {
-        throw new Error("Failed to fetch Fitbit heart rate data");
+      let heartRateData = {};
+      let profileData = {};
+
+      if (heartRateResponse.ok) {
+        heartRateData = await heartRateResponse.json();
       }
 
-      const heartRateData = await heartRateResponse.json();
-      res.json(heartRateData);
+      if (profileResponse.ok) {
+        profileData = await profileResponse.json();
+      }
+
+      // Log the actual response structure for debugging
+      console.log("Fitbit heart rate API response:", JSON.stringify(heartRateData, null, 2));
+      
+      // Combine data from multiple sources
+      const combinedData = {
+        ...heartRateData,
+        profile: profileData
+      };
+
+      res.json(combinedData);
       
     } catch (error) {
       console.error("Fitbit heart rate error:", error);

@@ -117,11 +117,35 @@ export function FitnessWatchConnector() {
 
       if (heartRateResponse && heartRateResponse.ok) {
         const heartData = await heartRateResponse.json();
-        const currentHR = heartData['activities-heart']?.[0]?.value?.heartRateZones?.[0]?.min || 
-                         heartData['activities-heart']?.[0]?.value?.restingHeartRate;
+        console.log('Heart rate API response:', heartData);
         
-        if (currentHR) {
+        // Try multiple ways to extract heart rate from Fitbit API response
+        let currentHR = null;
+        
+        // Method 1: From activities-heart array
+        if (heartData['activities-heart']?.[0]?.value) {
+          const heartValue = heartData['activities-heart'][0].value;
+          currentHR = heartValue.restingHeartRate || 
+                     heartValue.heartRateZones?.[0]?.min ||
+                     heartValue.heartRateZones?.[0]?.max;
+        }
+        
+        // Method 2: Direct from summary
+        if (!currentHR && heartData.summary?.restingHeartRate) {
+          currentHR = heartData.summary.restingHeartRate;
+        }
+        
+        // Method 3: From any heart rate zones data
+        if (!currentHR && heartData['activities-heart-intraday']?.dataset?.length > 0) {
+          const latestReading = heartData['activities-heart-intraday'].dataset.slice(-1)[0];
+          currentHR = latestReading?.value;
+        }
+        
+        if (currentHR && currentHR > 0) {
           updatedData.currentHeartRate = parseInt(currentHR);
+          console.log('Heart rate extracted:', currentHR);
+        } else {
+          console.log('No valid heart rate found in response');
         }
       }
 
