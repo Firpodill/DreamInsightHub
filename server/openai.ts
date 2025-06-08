@@ -94,40 +94,50 @@ Respond with valid JSON in this exact format:
 
 export async function generateDreamVisualization(dreamContent: string, analysis: DreamAnalysis): Promise<{ url: string }> {
   try {
-    // Build comprehensive prompt incorporating symbols and archetypes
+    // Extract key words and themes ONLY from the Jungian analysis
+    const analysisWords = [
+      ...analysis.archetypes,
+      ...analysis.symbols,
+      analysis.predominantSymbol?.name,
+      ...analysis.jungianInterpretation.split(' ').filter(word => word.length > 4),
+      ...analysis.shadowWork.split(' ').filter(word => word.length > 4),
+      ...analysis.summary.split(' ').filter(word => word.length > 4)
+    ].filter(Boolean).slice(0, 15); // Limit to most relevant terms
+
     const archetypeElements = analysis.archetypes.length > 0 
-      ? `Incorporate these Jungian archetypes: ${analysis.archetypes.join(', ')}. ` 
+      ? `Jungian archetypes as visual metaphors: ${analysis.archetypes.join(', ')}. ` 
       : '';
     
     const symbolElements = analysis.symbols.length > 0 
-      ? `Include symbolic elements: ${analysis.symbols.join(', ')}. ` 
+      ? `Psychological symbols: ${analysis.symbols.join(', ')}. ` 
       : '';
     
     const predominantSymbolElement = analysis.predominantSymbol?.name 
-      ? `Center the composition around ${analysis.predominantSymbol.name} as the focal point. ` 
+      ? `Central focal point: ${analysis.predominantSymbol.name} with surreal distortions. ` 
       : '';
     
     const emotionalTone = analysis.emotionalTone 
       ? `Emotional atmosphere: ${analysis.emotionalTone}. ` 
       : '';
 
-    const prompt = `Create a Pop Art Comic Book style collage visualization of: ${analysis.summary}. 
+    const prompt = `Create a surreal Pop Art Comic Book collage using ONLY these analyzed dream elements: ${analysisWords.join(', ')}. 
 
 ${archetypeElements}${symbolElements}${predominantSymbolElement}${emotionalTone}
 
-Style: Bold Pop Art Comic Book aesthetic with vibrant colors, halftone dots, dynamic compositions, and collage elements. Use bright primary colors (red, blue, yellow) with high contrast. Create a layered collage effect combining different visual elements representing the psychological symbols and archetypes.
+Style: Bold surreal Pop Art Comic Book aesthetic with impossible geometries, melting forms, floating objects, distorted perspectives, and dreamlike physics. Use vibrant contrasting colors (red, blue, yellow, magenta) with high saturation. Create a layered collage effect with surreal juxtapositions.
 
-Visual elements to include:
-- Comic book style rendering with bold outlines
-- Halftone dot patterns and Ben-Day dots
-- Vibrant color palette with high saturation
-- Collage-style composition mixing different scenes
-- Roy Lichtenstein inspired aesthetic
-- Andy Warhol style color blocking
-- Dynamic angular compositions
-- No text or speech bubbles
+Surreal elements to emphasize:
+- Objects defying gravity and physics
+- Melting, morphing, or fragmented forms
+- Impossible architectural spaces
+- Scale distortions (tiny/giant objects)
+- Multiple perspectives simultaneously
+- Floating, disconnected elements
+- Comic book halftone dots and bold outlines
+- Roy Lichtenstein meets Salvador Dalí aesthetic
+- No text, words, or speech bubbles whatsoever
 
-Mood: Energetic, psychologically symbolic, visually striking, dreamlike but with bold graphic novel aesthetics.`;
+Mood: Psychologically symbolic, visually striking, dreamlike surrealism with bold graphic novel aesthetics and impossible dream logic.`;
 
     const response = await openai.images.generate({
       model: "dall-e-3",
