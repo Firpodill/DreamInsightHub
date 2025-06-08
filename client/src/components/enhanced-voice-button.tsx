@@ -37,11 +37,16 @@ export function EnhancedVoiceButton({
   const elevenLabsVoice = useElevenLabsVoice();
   const { selectedVoice, setSelectedVoice } = useGlobalVoicePreference();
 
-  // Show voice hint on first render if not dismissed
+  // Show voice hint on first render if not dismissed - only once globally
   useEffect(() => {
     const hintDismissed = localStorage.getItem('voice-notifications-disabled');
-    if (!hintDismissed) {
-      const timer = setTimeout(() => setShowVoiceHint(true), 2000);
+    const hintAlreadyShown = localStorage.getItem('voice-hint-shown-session');
+    
+    if (!hintDismissed && !hintAlreadyShown) {
+      const timer = setTimeout(() => {
+        setShowVoiceHint(true);
+        localStorage.setItem('voice-hint-shown-session', 'true');
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, []);
