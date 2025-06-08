@@ -290,9 +290,9 @@ export function DreamJournal() {
             </p>
           </div>
           <div className="flex flex-wrap gap-1 max-w-[120px]">
-            {dream.archetypes?.slice(0, 2).map((archetype) => (
+            {dream.archetypes?.slice(0, 2).map((archetype, index) => (
               <Badge 
-                key={archetype} 
+                key={`${dream.id}-entry-archetype-${index}`}
                 variant="secondary" 
                 className={`text-xs ${getArchetypeColor(archetype)}`}
               >
@@ -670,6 +670,14 @@ export function DreamJournal() {
           </div>
         </div>
       )}
+      
+      {/* Symbol Definition Modal */}
+      <SymbolDefinitionModal
+        open={symbolModalOpen}
+        onClose={() => setSymbolModalOpen(false)}
+        symbol={selectedSymbol}
+        type={symbolType}
+      />
     </div>
   );
 }
