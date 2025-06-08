@@ -30,7 +30,8 @@ function detectHighlightableTerms(text: string): HighlightableTerm[] {
   // Jung and Campbell archetypes to detect
   const archetypes = [
     'Hero', 'Shadow', 'Anima', 'Animus', 'Self', 'Wise Old Man', 'Great Mother', 'Trickster', 
-    'The Lover', 'The Sage', 'The Ruler', 'The Father', 'Mother', 'Father', 'Mentor', 'Guardian'
+    'The Hero', 'The Shadow', 'The Lover', 'The Sage', 'The Ruler', 'The Father', 'The Mother',
+    'The Innocent', 'The Anima/Animus', 'Mother', 'Father', 'Lover', 'Sage', 'Ruler', 'Innocent'
   ];
 
   // Common proper names and famous people to specifically catch

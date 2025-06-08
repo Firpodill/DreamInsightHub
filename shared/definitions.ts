@@ -67,6 +67,21 @@ export const archetypeDefinitions: Record<string, Definition> = {
     definition: 'The paternal principle that provides structure, guidance, and moral authority while protecting and teaching the young.',
     jungianMeaning: 'Represents the masculine principle of logos - rational order, discipline, and spiritual law. Embodies the protective and educative functions that initiate growth through challenge.',
     campbellMeaning: 'The sky father or divine patriarch who establishes cosmic law and provides the framework within which heroic development can occur.'
+  },
+  'The Innocent': {
+    definition: 'The archetype of purity, optimism, and trust that seeks happiness and harmony while maintaining faith in goodness.',
+    jungianMeaning: 'Represents the original state of wholeness before the fall into consciousness. Embodies the positive mother complex and the desire to return to paradisiacal unity.',
+    campbellMeaning: 'The pure soul who begins the hero\'s journey from a state of grace, representing the initial call to adventure and the innocent trust required to embark on transformation.'
+  },
+  'The Mother': {
+    definition: 'The archetypal feminine principle of nurturing, protection, unconditional love, and life-giving force.',
+    jungianMeaning: 'Embodies both the positive and negative aspects of the maternal archetype - the nourishing, protective mother and the devouring, possessive mother. Central to the development of the psyche.',
+    campbellMeaning: 'The Great Goddess who represents the source of all life, the protector of the hero, and the cosmic womb from which all creation emerges and to which it returns.'
+  },
+  'The Anima/Animus': {
+    definition: 'The contrasexual archetype representing the feminine aspect in men (Anima) and the masculine aspect in women (Animus).',
+    jungianMeaning: 'The bridge between conscious and unconscious, facilitating psychological wholeness through integration of opposite-gender qualities. Essential for individuation and healthy relationships.',
+    campbellMeaning: 'The divine feminine/masculine that calls the hero into deeper spiritual awareness, often appearing as the sacred marriage or the union of opposites that completes the heroic transformation.'
   }
 };
 
