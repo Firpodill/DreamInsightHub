@@ -166,10 +166,8 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
                       </div>
                     </div>
                     
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-400 hover:text-white"
+                    <div
+                      className="flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-white hover:bg-gray-600 transition-colors cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
                         handlePreview(voiceOption);
@@ -180,7 +178,7 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
                       ) : (
                         <Play className="w-4 h-4" />
                       )}
-                    </Button>
+                    </div>
                   </Button>
                 ))}
               </div>

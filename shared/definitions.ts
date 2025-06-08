@@ -44,6 +44,26 @@ export const archetypeDefinitions: Record<string, Definition> = {
     definition: 'The playful, chaotic force that disrupts order and brings about transformation through humor and cunning.',
     jungianMeaning: 'Facilitates psychological change by breaking down rigid patterns and introducing new perspectives.',
     campbellMeaning: 'The shapeshifter who breaks rules and boundaries, often serving as catalyst for change and bringing sacred knowledge through transgression.'
+  },
+  'The Lover': {
+    definition: 'The archetype of passion, connection, and emotional bonding that seeks unity and harmony through relationships.',
+    jungianMeaning: 'Represents the drive for intimate connection, beauty, and the integration of feeling values into consciousness. Governs romantic love, aesthetic appreciation, and the soul\'s yearning for union.',
+    campbellMeaning: 'The divine feminine or masculine that calls the hero into deeper relationship with life, often serving as both inspiration and test of devotion.'
+  },
+  'The Sage': {
+    definition: 'The eternal seeker of truth and wisdom who illuminates the path through knowledge, understanding, and philosophical insight.',
+    jungianMeaning: 'Embodies the transcendent function that bridges conscious and unconscious knowledge. Represents the drive toward enlightenment and the integration of universal wisdom.',
+    campbellMeaning: 'The wise counselor who possesses secret knowledge and guides others toward higher understanding through teaching and revelation of hidden truths.'
+  },
+  'The Ruler': {
+    definition: 'The sovereign archetype that establishes order, takes responsibility, and creates stable foundations for growth and prosperity.',
+    jungianMeaning: 'Represents the mature ego that has learned to wield power responsibly. Embodies leadership, authority, and the capacity to create beneficial structures for collective good.',
+    campbellMeaning: 'The rightful king or queen who restores order to the realm through wisdom, justice, and the divine right to govern with cosmic harmony.'
+  },
+  'The Father': {
+    definition: 'The paternal principle that provides structure, guidance, and moral authority while protecting and teaching the young.',
+    jungianMeaning: 'Represents the masculine principle of logos - rational order, discipline, and spiritual law. Embodies the protective and educative functions that initiate growth through challenge.',
+    campbellMeaning: 'The sky father or divine patriarch who establishes cosmic law and provides the framework within which heroic development can occur.'
   }
 };
 
