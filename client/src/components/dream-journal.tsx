@@ -535,21 +535,41 @@ export function DreamJournal() {
         </div>
       )}
 
-      {/* Search Bar */}
-      {viewMode === 'list' && (
-        <div className="space-y-3 mb-4">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Search your dreams..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
-            />
-            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          </div>
+      {/* Search Bar - Always Visible */}
+      <div className="space-y-3 mb-4">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Search your dreams, themes, symbols, or archetypes..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              // Auto-switch to list view when searching
+              if (e.target.value.trim() && viewMode === 'calendar') {
+                setViewMode('list');
+              }
+            }}
+            className="py-3 px-4 pl-10 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary/50"
+          />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
-      )}
+        {searchQuery.trim() && (
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <span>Found {dreams.length} result{dreams.length !== 1 ? 's' : ''} for "{searchQuery}"</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSearchQuery('');
+                setViewMode('calendar');
+              }}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              Clear search
+            </Button>
+          </div>
+        )}
+      </div>
 
       {/* Calendar View */}
       {viewMode === 'calendar' && (
