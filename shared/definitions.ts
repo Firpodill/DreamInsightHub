@@ -427,6 +427,54 @@ function generateContextualDefinition(term: string): Definition {
     'car': {
       definition: 'A vehicle representing personal direction, control over life path, and mobility.',
       jungianMeaning: 'Symbolizes the ego\'s ability to navigate through life and control over destiny.'
+    },
+    'tiktok': {
+      definition: 'TikTok is a social media platform owned by ByteDance, known for short-form videos and viral content.',
+      jungianMeaning: 'May represent modern communication, social validation, or creative expression in contemporary life.'
+    },
+    'facebook': {
+      definition: 'Facebook is a social networking platform owned by Meta, used for connecting with friends and sharing content.',
+      jungianMeaning: 'May symbolize social connections, communication, or the desire for community and belonging.'
+    },
+    'instagram': {
+      definition: 'Instagram is a photo and video sharing social networking service owned by Meta.',
+      jungianMeaning: 'May represent visual self-expression, social image, or the curation of personal identity.'
+    },
+    'youtube': {
+      definition: 'YouTube is a video sharing platform owned by Google, where users upload, share, and watch videos.',
+      jungianMeaning: 'May symbolize learning, entertainment, or the sharing of knowledge and experiences.'
+    },
+    'google': {
+      definition: 'Google is a multinational technology company known for its search engine and various internet services.',
+      jungianMeaning: 'May represent the search for knowledge, information gathering, or problem-solving abilities.'
+    },
+    'apple': {
+      definition: 'Apple Inc. is a technology company known for consumer electronics, software, and online services like iPhone and Mac.',
+      jungianMeaning: 'May symbolize innovation, technology integration, or modern lifestyle and connectivity.'
+    },
+    'starbucks': {
+      definition: 'Starbucks is an American multinational chain of coffeehouses and roastery reserves.',
+      jungianMeaning: 'May represent social gathering places, routine, or modern consumer culture.'
+    },
+    'mount shasta': {
+      definition: 'Mount Shasta is a potentially active volcano at the southern end of the Cascade Range in Northern California. It rises to 14,179 feet and is considered one of the most spiritually significant peaks in North America.',
+      jungianMeaning: 'Mountains often represent spiritual ascension, challenges to overcome, or higher consciousness in dreams.'
+    },
+    'california': {
+      definition: 'California is a state on the West Coast of the United States, known for its diverse geography from beaches to mountains, and major cities like Los Angeles and San Francisco.',
+      jungianMeaning: 'Geographic locations may represent life experiences, journeys, or aspects of personal identity connected to place.'
+    },
+    'los angeles': {
+      definition: 'Los Angeles is the largest city in California and the second-most populous city in the United States, known for entertainment, beaches, and diverse culture.',
+      jungianMeaning: 'Cities in dreams may represent social aspects of life, opportunities, or complex life situations.'
+    },
+    'san francisco': {
+      definition: 'San Francisco is a major city in Northern California known for the Golden Gate Bridge, steep hills, and technological innovation.',
+      jungianMeaning: 'Urban environments may symbolize social connections, professional life, or navigating complex situations.'
+    },
+    'new york': {
+      definition: 'New York is a state in the northeastern United States, home to New York City, the most populous city in the country.',
+      jungianMeaning: 'Major cities may represent ambition, opportunity, or the complexity of modern life.'
     }
   };
   
@@ -437,16 +485,16 @@ function generateContextualDefinition(term: string): Definition {
   // Check if it's a potential place name (contains geographic indicators)
   if (isLikelyPlace(term)) {
     return {
-      definition: `A geographic location appearing in dreams, representing journeys, destinations, or significant places in your life. Places in dreams often symbolize psychological states, life stages, or emotional territories.`,
-      jungianMeaning: `Represents a psychological landscape or state of being. The specific location may hold personal significance or symbolize where you are in your life journey. Consider your associations with this place and what it represents to your psyche.`
+      definition: `${term} is a geographic location. Click the map button below to view its exact location and explore the area.`,
+      jungianMeaning: `Geographic locations in dreams often represent life journeys, destinations, or significant places from your experiences.`
     };
   }
   
   // Check if it's a potential person's name (capitalized, common name patterns)
   if (isLikelyPersonName(term)) {
     return {
-      definition: `A person appearing in dreams, representing relationships, aspects of yourself, or archetypal figures. People in dreams often embody qualities, emotions, or parts of your personality that need attention.`,
-      jungianMeaning: `May represent an aspect of your own psyche projected onto this person, unfinished emotional business, or qualities you associate with them. Consider what this person means to you and what traits they embody.`
+      definition: `${term} is a person's name. This individual may represent someone significant in your life or personal relationships.`,
+      jungianMeaning: `People in dreams often embody qualities, emotions, or relationships that are meaningful to the dreamer.`
     };
   }
   

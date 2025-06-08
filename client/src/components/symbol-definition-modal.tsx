@@ -9,8 +9,9 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Book, Search, User, Users, MapPin, ExternalLink } from 'lucide-react';
+import { Book, Search, User, Users, MapPin, ExternalLink, Volume2 } from 'lucide-react';
 import { archetypeDefinitions, symbolDefinitions, getDefinition, getAllTerms, type Definition } from '@shared/definitions';
+import { useDictionary } from '@/hooks/use-dictionary';
 
 interface SymbolDefinitionModalProps {
   open: boolean;
@@ -68,6 +69,11 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
   const isPerson = isLikelyPersonName(symbol);
   const mapUrl = isPlace ? generateMapUrl(symbol) : null;
   
+  // Get real dictionary definition for common words
+  const shouldUseDictionary = !isPlace && !isPerson && type !== 'archetype' && 
+    !definitions[symbol.toLowerCase()] && symbol.length > 2 && /^[a-zA-Z]+$/.test(symbol);
+  const dictionaryResult = useDictionary(shouldUseDictionary ? symbol : null);
+  
   const filteredDefinitions = Object.entries(definitions).filter(([key, value]) =>
     key.toLowerCase().includes(searchTerm.toLowerCase()) ||
     value.definition.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -108,21 +114,59 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
             />
           </div>
 
+          {/* Dictionary Definition */}
+          {dictionaryResult.definition && (
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200">
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="outline" className="text-sm bg-white">
+                  Dictionary
+                </Badge>
+                <h3 className="text-xl font-bold text-gray-800 capitalize">{symbol}</h3>
+                {dictionaryResult.phonetic && (
+                  <span className="text-sm text-gray-500 italic">{dictionaryResult.phonetic}</span>
+                )}
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h4 className="font-semibold text-gray-700">Definition</h4>
+                    {dictionaryResult.partOfSpeech && (
+                      <Badge variant="outline" className="text-xs">
+                        {dictionaryResult.partOfSpeech}
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-gray-600 leading-relaxed">{dictionaryResult.definition}</p>
+                  {dictionaryResult.example && (
+                    <div className="mt-3 p-3 bg-white/60 rounded border-l-4 border-green-400">
+                      <p className="text-sm text-gray-600 italic">
+                        <strong>Example:</strong> "{dictionaryResult.example}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Current Definition */}
           {currentDefinition && (
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant={type === 'archetype' ? 'default' : 'secondary'} className="text-sm">
-                  {type === 'archetype' ? 'Archetype' : 'Symbol'}
+                  {type === 'archetype' ? 'Archetype' : dictionaryResult.definition ? 'Dream Symbol' : 'Symbol'}
                 </Badge>
                 <h3 className="text-xl font-bold text-gray-800 capitalize">{symbol}</h3>
               </div>
               
               <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-700 mb-2">General Definition</h4>
-                  <p className="text-gray-600 leading-relaxed">{currentDefinition.definition}</p>
-                </div>
+                {!dictionaryResult.definition && (
+                  <div>
+                    <h4 className="font-semibold text-gray-700 mb-2">General Definition</h4>
+                    <p className="text-gray-600 leading-relaxed">{currentDefinition.definition}</p>
+                  </div>
+                )}
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="bg-white/60 rounded-lg p-4">
@@ -141,16 +185,27 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                         <h4 className="font-semibold text-green-800">Location Map</h4>
                       </div>
                       <div className="space-y-2">
-                        <p className="text-gray-700 text-sm">This appears to be a geographic location. View it on a map for additional context:</p>
-                        <Button
-                          onClick={() => window.open(mapUrl, '_blank')}
-                          variant="outline"
-                          size="sm"
-                          className="w-full flex items-center gap-2"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          View "{symbol}" on Google Maps
-                        </Button>
+                        <p className="text-gray-700 text-sm">View this location on an interactive map:</p>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            onClick={() => window.open(mapUrl, '_blank')}
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center gap-2"
+                          >
+                            <MapPin className="w-4 h-4" />
+                            Google Maps
+                          </Button>
+                          <Button
+                            onClick={() => window.open(`https://en.wikipedia.org/wiki/${encodeURIComponent(symbol)}`, '_blank')}
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center gap-2"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Wikipedia
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -160,10 +215,10 @@ export function SymbolDefinitionModal({ open, onClose, symbol, type }: SymbolDef
                     <div className="bg-white/60 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-3">
                         <User className="w-4 h-4 text-indigo-600" />
-                        <h4 className="font-semibold text-indigo-800">Person in Dreams</h4>
+                        <h4 className="font-semibold text-indigo-800">Person Name</h4>
                       </div>
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        When people appear in dreams, they often represent aspects of your own personality, unresolved relationships, or archetypal figures. Consider: What qualities does this person embody? What is your relationship with them? How do you feel about them in waking life?
+                        {symbol} is a person's name. This individual appears in your dream and may represent someone from your personal life, relationships, or social connections.
                       </p>
                     </div>
                   )}
