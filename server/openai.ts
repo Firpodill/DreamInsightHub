@@ -120,24 +120,24 @@ export async function generateDreamVisualization(dreamContent: string, analysis:
       ? `Emotional atmosphere: ${analysis.emotionalTone}. ` 
       : '';
 
-    const prompt = `Create a surreal Pop Art Comic Book collage using ONLY these analyzed dream elements: ${analysisWords.join(', ')}. 
+    const prompt = `Create a Pop Art comic book style collage featuring these dream analysis elements: ${analysisWords.join(', ')}. 
 
 ${archetypeElements}${symbolElements}${predominantSymbolElement}${emotionalTone}
 
-Style: Bold surreal Pop Art Comic Book aesthetic with impossible geometries, melting forms, floating objects, distorted perspectives, and dreamlike physics. Use vibrant contrasting colors (red, blue, yellow, magenta) with high saturation. Create a layered collage effect with surreal juxtapositions.
+Style: Classic Pop Art comic book aesthetic with bold, clean lines and vibrant colors. Create a dynamic collage composition that combines multiple scenes and imagery panels representing the psychological themes from the dream analysis.
 
-Surreal elements to emphasize:
-- Objects defying gravity and physics
-- Melting, morphing, or fragmented forms
-- Impossible architectural spaces
-- Scale distortions (tiny/giant objects)
-- Multiple perspectives simultaneously
-- Floating, disconnected elements
-- Comic book halftone dots and bold outlines
-- Roy Lichtenstein meets Salvador Dalí aesthetic
-- No text, words, or speech bubbles whatsoever
+Visual elements:
+- Bold comic book outlines and clean shapes
+- Bright primary colors (red, blue, yellow) with high contrast
+- Classic halftone dot patterns and Ben-Day dots
+- Multiple panel-like compositions within single image
+- Roy Lichtenstein inspired clean graphic style
+- Andy Warhol style color blocking and repetition
+- Collage effect mixing different visual elements
+- Dynamic angular compositions and bold graphics
+- Absolutely no text, words, letters, or speech bubbles
 
-Mood: Psychologically symbolic, visually striking, dreamlike surrealism with bold graphic novel aesthetics and impossible dream logic.`;
+Composition: Arrange visual elements representing the dream themes in a dynamic collage format, with each psychological symbol and archetype translated into bold graphic imagery. Clean, graphic novel aesthetics with vibrant Pop Art color palette.`;
 
     const response = await openai.images.generate({
       model: "dall-e-3",
