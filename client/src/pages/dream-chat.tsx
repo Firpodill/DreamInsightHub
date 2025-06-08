@@ -296,23 +296,22 @@ export default function DreamChat() {
       {/* Navigation Tabs */}
       <div className="px-4 mb-2 -mt-1">
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700 h-12">
-            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
-              <MessageCircle className="w-3 h-3" />
-              <span className="hidden xs:inline">Chat</span>
+          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
+            <TabsTrigger value="chat" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <MessageCircle className="w-3 h-3 mr-1" />
+              Chat
             </TabsTrigger>
-            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
-              <Brain className="w-3 h-3" />
-              <span className="hidden xs:inline">Insights</span>
+            <TabsTrigger value="insights" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Brain className="w-3 h-3 mr-1" />
+              Insights
             </TabsTrigger>
-            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
-              <BookOpen className="w-3 h-3" />
-              <span className="hidden xs:inline sm:hidden">Logs</span>
-              <span className="hidden sm:inline">Journal Logs</span>
+            <TabsTrigger value="journal" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <BookOpen className="w-3 h-3 mr-1" />
+              Journal Logs
             </TabsTrigger>
-            <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs flex-col gap-1 py-1">
-              <Clock className="w-3 h-3" />
-              <span className="hidden xs:inline">Sleep</span>
+            <TabsTrigger value="sleep" className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white transition-all duration-300 text-xs">
+              <Clock className="w-3 h-3 mr-1" />
+              Sleep
             </TabsTrigger>
           </TabsList>
           
