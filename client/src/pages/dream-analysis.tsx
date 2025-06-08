@@ -255,35 +255,35 @@ export default function DreamAnalysis() {
               </CardContent>
             </Card>
 
-            {/* Vision Board Generation Option */}
+            {/* Dream Image Generation Option */}
             {showVisionBoardOption && (
-              <Card className="bg-purple-900 border-purple-700">
+              <Card className="bg-yellow-900 border-yellow-700">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center">
                     <Palette className="w-5 h-5 mr-2" />
-                    Create Dream Vision Board
+                    Generate Dream Image
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-purple-200 text-sm mb-4">
-                    Transform your dream analysis into a visual collage with AI-generated imagery
+                  <p className="text-yellow-200 text-sm mb-4">
+                    Transform your dream analysis into a visual representation with AI-generated imagery
                   </p>
                   
                   {!generatedImage ? (
                     <Button 
                       onClick={handleGenerateVisionBoard}
                       disabled={generateImage.isPending}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                      className="w-full bg-yellow-600 hover:bg-yellow-700 text-white"
                     >
                       {generateImage.isPending ? (
                         <>
                           <Sparkles className="w-4 h-4 mr-2 animate-spin" />
-                          Generating Vision Board...
+                          Generating Dream Image...
                         </>
                       ) : (
                         <>
                           <Sparkles className="w-4 h-4 mr-2" />
-                          Generate Vision Board
+                          Generate Dream Image
                         </>
                       )}
                     </Button>
@@ -299,41 +299,23 @@ export default function DreamAnalysis() {
                       <div className="flex gap-2">
                         <Button 
                           onClick={() => {
-                            // Save to vision board collection
-                            const visionBoards = JSON.parse(localStorage.getItem('dreamVisionBoards') || '[]');
-                            const newVisionBoard = {
-                              id: Date.now().toString(),
-                              title: `Dream Vision - ${new Date().toLocaleDateString()}`,
-                              description: dreamText.substring(0, 100) + '...',
-                              items: [{
-                                id: '1',
-                                type: 'image',
-                                content: 'Generated Vision',
-                                imageUrl: generatedImage,
-                                position: { x: 50, y: 50 },
-                                size: { width: 300, height: 300 },
-                                rotation: 0,
-                                zIndex: 1
-                              }],
-                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                              createdAt: new Date(),
-                              updatedAt: new Date()
-                            };
-                            visionBoards.push(newVisionBoard);
-                            localStorage.setItem('dreamVisionBoards', JSON.stringify(visionBoards));
-                            // Navigate back to main app with vision tab activated
-                            navigate('/?tab=vision');
+                            const link = document.createElement('a');
+                            link.href = generatedImage!;
+                            link.download = `dream-image-${new Date().toISOString().split('T')[0]}.png`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
                           }}
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                         >
                           <Palette className="w-4 h-4 mr-2" />
-                          Save to Vision Board
+                          Download Image
                         </Button>
                         <Button 
                           onClick={handleGenerateVisionBoard}
                           disabled={generateImage.isPending}
                           variant="outline"
-                          className="border-purple-600 text-purple-300 hover:bg-purple-800"
+                          className="border-yellow-600 text-yellow-300 hover:bg-yellow-800"
                         >
                           <Sparkles className="w-4 h-4" />
                         </Button>
