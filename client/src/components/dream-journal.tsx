@@ -392,33 +392,56 @@ export function DreamJournal() {
                 </div>
               )}
 
-              {/* AI Analysis */}
+              {/* Jungian Dream Analysis */}
               {selectedDream.analysis && (
                 <div className="mb-6">
-                  <h3 className="font-medium text-gray-800 mb-2">AI Analysis</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-medium text-gray-800">Jungian Dream Analysis</h3>
+                    <EnhancedVoiceButton 
+                      text={selectedDream.analysis}
+                      variant="outline"
+                      size="sm"
+                      className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                    />
+                  </div>
                   <div className="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-4 border border-red-200">
                     <p className="text-gray-700 leading-relaxed">{selectedDream.analysis}</p>
                   </div>
                 </div>
               )}
 
-              {/* Dream Content - Collapsible */}
+              {/* Original Dream Text - Collapsible */}
               <div className="mb-6">
                 <Button
                   variant="ghost"
                   onClick={() => setIsDreamTextExpanded(!isDreamTextExpanded)}
-                  className="flex items-center w-full justify-between p-0 h-auto font-medium text-gray-800 hover:bg-transparent"
+                  className="flex items-center w-full justify-between p-0 h-auto hover:bg-transparent"
                 >
-                  <span>Original Dream Text</span>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    Original Dream Text 
+                    <span className="text-sm font-normal text-gray-500 ml-2">
+                      (Tap to {isDreamTextExpanded ? 'collapse' : 'expand'} & read full entry)
+                    </span>
+                  </h3>
                   {isDreamTextExpanded ? (
-                    <ChevronUp className="w-4 h-4" />
+                    <ChevronUp className="w-5 h-5 text-gray-600" />
                   ) : (
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className="w-5 h-5 text-gray-600" />
                   )}
                 </Button>
                 {isDreamTextExpanded && (
-                  <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                    <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
+                  <div className="mt-3 space-y-3">
+                    <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <p className="text-gray-600 leading-relaxed">{selectedDream.content}</p>
+                    </div>
+                    <div className="flex justify-end">
+                      <EnhancedVoiceButton 
+                        text={selectedDream.content}
+                        variant="outline"
+                        size="sm"
+                        className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -462,17 +485,10 @@ export function DreamJournal() {
               )}
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
-                <div className="flex-1">
-                  <EnhancedVoiceButton 
-                    text={selectedDream.content}
-                    variant="outline"
-                    className="w-full justify-center"
-                  />
-                </div>
+              <div className="flex justify-center pt-4 border-t border-gray-200">
                 <Button 
                   onClick={() => setSelectedDream(null)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-red-600 hover:bg-red-700 text-white px-8"
                 >
                   Close
                 </Button>
