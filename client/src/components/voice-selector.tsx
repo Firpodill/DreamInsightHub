@@ -62,13 +62,13 @@ export function VoiceSelector({ open, onClose, onVoiceSelect, text }: VoiceSelec
 
     setVoiceOptions(options);
     
-    // Set Chessie British Character as default selection if available
+    // Set Chessie V3 as default selection if available
     if (!selectedVoice && options.length > 0) {
-      const chessieVoice = options.find(option => 
-        option.type === 'elevenlabs' && option.name === 'Chessie British Character'
+      const chessieV3Voice = options.find(option => 
+        option.type === 'elevenlabs' && option.name === 'Chessie V3'
       );
-      if (chessieVoice) {
-        setSelectedVoice(chessieVoice);
+      if (chessieV3Voice) {
+        setSelectedVoice(chessieV3Voice);
       }
     }
   }, [systemVoice.availableVoices, elevenLabsVoice.availableVoices]);

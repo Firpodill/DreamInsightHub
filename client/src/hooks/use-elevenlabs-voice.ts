@@ -60,10 +60,10 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
         if (Array.isArray(voices)) {
           console.log(`Setting ${voices.length} ElevenLabs voices`);
           setAvailableVoices(voices);
-          // Set default voice to Chessie British Character or first available
+          // Set default voice to Chessie V3 or first available
           if (voices.length > 0 && !currentVoice) {
-            const chessieVoice = voices.find(voice => voice.name === 'Chessie British Character');
-            setCurrentVoice(chessieVoice || voices[0]);
+            const chessieV3Voice = voices.find(voice => voice.name === 'Chessie V3');
+            setCurrentVoice(chessieV3Voice || voices[0]);
           }
         } else {
           console.error('ElevenLabs voices response is not an array:', voices);
