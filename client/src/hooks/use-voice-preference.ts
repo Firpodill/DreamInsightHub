@@ -69,21 +69,18 @@ export function useGlobalVoicePreference() {
         const savedName = localStorage.getItem('dreamspeak-voice-name');
         const savedType = localStorage.getItem('dreamspeak-voice-type');
         
+        // Always force Christopher Drag as default, regardless of saved preference
+        localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
+        localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
+        localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
+        
         if (savedId && savedName && savedType) {
-          // If user had Chessie V3, update to Christopher Drag
-          if (savedName === 'Chessie V3') {
-            localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
-            localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
-            localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
-            console.log('Updated saved preference from Chessie V3 to Christopher Drag');
+          if (savedName !== 'Christopher Drag (Premium AI)') {
+            console.log('Overriding saved preference to Christopher Drag');
           } else {
             console.log('Found saved voice preference:', savedName, savedType);
           }
         } else {
-          // Set default to Christopher Drag if no preference saved
-          localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
-          localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
-          localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
           console.log('Set default voice to Christopher Drag');
         }
       } catch (error) {

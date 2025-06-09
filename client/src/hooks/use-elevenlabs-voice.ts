@@ -248,6 +248,17 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       }
       
       console.error('Speech synthesis error:', err);
+      
+      // If we have a fallback and this looks like an API error, use it
+      if (fallbackCallback && err instanceof Error && 
+          (err.message.includes('401') || err.message.includes('Failed to synthesize'))) {
+        console.log('ElevenLabs failed, using fallback');
+        setIsLoading(false);
+        setIsPlaying(false);
+        fallbackCallback();
+        return;
+      }
+      
       setError(err instanceof Error ? err.message : 'Speech synthesis failed');
       setIsPlaying(false);
       setIsLoading(false);
