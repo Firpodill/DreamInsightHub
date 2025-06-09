@@ -170,14 +170,14 @@ export function EnhancedVoiceButton({
     console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
-  // Always auto-select Christopher Drag when voices load
+  // Set Christopher Drag as default only if no voice is selected
   useEffect(() => {
-    if (elevenLabsVoice.availableVoices.length > 0) {
+    if (elevenLabsVoice.availableVoices.length > 0 && !selectedVoice) {
       const christopherDrag = elevenLabsVoice.availableVoices.find(voice => 
         voice.voice_id === 'AaT5D3dkm5RYlH6AMYYI'
       );
       
-      if (christopherDrag && (!selectedVoice || selectedVoice.name !== 'Christopher Drag (Premium AI)')) {
+      if (christopherDrag) {
         const voiceOption: VoiceOption = {
           id: `elevenlabs-${christopherDrag.voice_id}`,
           name: 'Christopher Drag (Premium AI)',
@@ -185,7 +185,7 @@ export function EnhancedVoiceButton({
           elevenLabsVoice: christopherDrag,
         };
         setSelectedVoice(voiceOption);
-        console.log('Auto-selected Christopher Drag as default voice');
+        console.log('Set Christopher Drag as initial default voice');
       }
     }
   }, [elevenLabsVoice.availableVoices, selectedVoice, setSelectedVoice]);

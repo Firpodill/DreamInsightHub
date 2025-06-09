@@ -61,7 +61,7 @@ export function useGlobalVoicePreference() {
     }
   };
 
-  // Load from localStorage on first use or set default to Chessie V3
+  // Load from localStorage on first use or set default to Christopher Drag
   useEffect(() => {
     if (globalSelectedVoice === null) {
       try {
@@ -69,19 +69,31 @@ export function useGlobalVoicePreference() {
         const savedName = localStorage.getItem('dreamspeak-voice-name');
         const savedType = localStorage.getItem('dreamspeak-voice-type');
         
-        // Always force Christopher Drag as default, regardless of saved preference
-        localStorage.setItem('dreamspeak-voice-name', 'Christopher Drag (Premium AI)');
-        localStorage.setItem('dreamspeak-voice-type', 'elevenlabs');
-        localStorage.setItem('dreamspeak-voice-id', 'elevenlabs-AaT5D3dkm5RYlH6AMYYI');
-        
         if (savedId && savedName && savedType) {
-          if (savedName !== 'Christopher Drag (Premium AI)') {
-            console.log('Overriding saved preference to Christopher Drag');
-          } else {
-            console.log('Found saved voice preference:', savedName, savedType);
+          // Use saved preference
+          console.log('Found saved voice preference:', savedName, savedType);
+          const savedVoice: VoiceOption = {
+            id: savedId,
+            name: savedName,
+            type: savedType as 'system' | 'elevenlabs'
+          };
+          
+          if (savedType === 'elevenlabs') {
+            savedVoice.elevenLabsVoice = { voice_id: savedId.replace('elevenlabs-', '') };
           }
+          
+          globalSelectedVoice = savedVoice;
+          setSelectedVoiceState(savedVoice);
         } else {
-          console.log('Set default voice to Christopher Drag');
+          // Set Christopher Drag as default only if no preference is saved
+          console.log('Setting default voice to Christopher Drag');
+          const defaultVoice: VoiceOption = {
+            id: 'elevenlabs-AaT5D3dkm5RYlH6AMYYI',
+            name: 'Christopher Drag (Premium AI)',
+            type: 'elevenlabs',
+            elevenLabsVoice: { voice_id: 'AaT5D3dkm5RYlH6AMYYI' }
+          };
+          setSelectedVoice(defaultVoice);
         }
       } catch (error) {
         console.error('Failed to load voice preference:', error);
