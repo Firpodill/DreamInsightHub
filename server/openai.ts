@@ -61,7 +61,7 @@ Respond with valid JSON in this exact format:
 
 {
   "summary": "Brief summary of dream themes",
-  "archetypes": ["List ALL detected archetypes using exact names: The Hero, The Shadow, The Anima/Animus, The Self, The Sage, The Innocent, The Ruler, The Lover, The Trickster, The Mother, The Father"],
+  "archetypes": ["List ALL detected archetypes using exact names: The Hero, The Shadow, The Anima/Animus, The Self, The Sage, The Innocent, The Ruler, The Lover, The Trickster, The Mother, The Father, The Shape Shifter"],
   "symbols": ["key", "symbolic", "elements"],
   "predominantSymbol": {
     "name": "The single most psychologically significant symbol",

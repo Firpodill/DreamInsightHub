@@ -5,7 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { useDreamInsights } from '@/hooks/use-dreams';
 import { SymbolDefinitionModal } from './symbol-definition-modal';
-import { Crown, Sword, Heart, Sun, Moon, Star, Shield, Eye } from 'lucide-react';
+import { Crown, Sword, Heart, Sun, Moon, Star, Shield, Eye, Shuffle } from 'lucide-react';
 
 interface ArchetypeData {
   name: string;
@@ -128,6 +128,16 @@ const archetypeDatabase: Record<string, ArchetypeData> = {
     individuationRole: "Establishes structure and moral compass",
     frequency: 0,
     dreamExamples: ["Authority figures", "Rules and order", "Guidance", "Discipline"]
+  },
+  "The Shape Shifter": {
+    name: "The Shape Shifter",
+    description: "Represents transformation, adaptability, and the fluid nature of identity.",
+    icon: Shuffle,
+    color: "#8b5cf6",
+    shadowAspect: "Deception, instability, or lack of authentic identity",
+    individuationRole: "Teaches flexibility and integration of multiple aspects of self",
+    frequency: 0,
+    dreamExamples: ["Changing forms", "Multiple identities", "Transformation", "Illusion"]
   }
 };
 
