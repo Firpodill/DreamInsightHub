@@ -49,9 +49,9 @@ export const archetypeDefinitions: Record<string, Definition> = {
     campbellMeaning: 'The shapeshifter who breaks rules and boundaries, often serving as catalyst for change and bringing sacred knowledge through transgression.'
   },
   'Shape Shifter': {
-    definition: 'The transformative figure who can change forms, identities, or perspectives, representing adaptability and the fluid nature of reality.',
-    jungianMeaning: 'Embodies the dynamic aspect of the psyche that adapts to different situations and relationships, representing the ability to integrate multiple aspects of personality. Often appears when the unconscious is teaching about flexibility and the need to see beyond fixed identities.',
-    campbellMeaning: 'The ally or enemy who changes appearance throughout the hero\'s journey, testing the hero\'s ability to discern truth from illusion. The shapeshifter\'s shifts often reflect the hero\'s inner journey and doubts, representing the threshold guardian who teaches that reality is not fixed and that transformation requires letting go of rigid perceptions.'
+    definition: 'The transformative figure who can change forms, identities, or perspectives, representing adaptability and the fluid nature of reality. This archetype embodies the principle that true power lies in flexibility rather than rigidity.',
+    jungianMeaning: 'Embodies the dynamic aspect of the psyche that adapts to different situations and relationships, representing the ability to integrate multiple aspects of personality. Often appears when the unconscious is teaching about flexibility and the need to see beyond fixed identities. In dreams, signals the integration of opposing forces within the self and the capacity for psychological renewal. Represents the ego\'s ability to transform in response to unconscious demands for growth.',
+    campbellMeaning: 'The ally or enemy who changes appearance throughout the hero\'s journey, testing the hero\'s ability to discern truth from illusion. The shapeshifter\'s shifts often reflect the hero\'s inner journey and doubts, representing the threshold guardian who teaches that reality is not fixed and that transformation requires letting go of rigid perceptions. Serves as a mirror for the hero\'s own potential for change and the necessity of adapting to meet each challenge with renewed wisdom.'
   },
   'The Lover': {
     definition: 'The archetype of passion, connection, and emotional bonding that seeks unity and harmony through relationships.',
