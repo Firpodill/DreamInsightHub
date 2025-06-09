@@ -51,7 +51,7 @@ export const archetypeDefinitions: Record<string, Definition> = {
   'Shape Shifter': {
     definition: 'The transformative figure who can change forms, identities, or perspectives, representing adaptability and the fluid nature of reality.',
     jungianMeaning: 'Embodies the dynamic aspect of the psyche that adapts to different situations and relationships, representing the ability to integrate multiple aspects of personality. Often appears when the unconscious is teaching about flexibility and the need to see beyond fixed identities.',
-    campbellMeaning: 'The ally or enemy who changes appearance throughout the hero\'s journey, testing the hero\'s ability to discern truth from illusion. Represents the threshold guardian who teaches that reality is not fixed and that transformation requires letting go of rigid perceptions.'
+    campbellMeaning: 'The ally or enemy who changes appearance throughout the hero\'s journey, testing the hero\'s ability to discern truth from illusion. The shapeshifter\'s shifts often reflect the hero\'s inner journey and doubts, representing the threshold guardian who teaches that reality is not fixed and that transformation requires letting go of rigid perceptions.'
   },
   'The Lover': {
     definition: 'The archetype of passion, connection, and emotional bonding that seeks unity and harmony through relationships.',
