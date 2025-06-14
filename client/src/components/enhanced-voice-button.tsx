@@ -6,6 +6,7 @@ import { useElevenLabsVoice } from '@/hooks/use-elevenlabs-voice';
 import { useGlobalVoicePreference } from '@/hooks/use-voice-preference';
 import { useGlobalAudioManager } from '@/hooks/use-global-audio-manager';
 import { globalAudioManager } from '@/hooks/use-global-audio-stop';
+import { useMobileAudio } from '@/hooks/use-mobile-audio';
 import { VoiceSelector } from './voice-selector';
 
 interface EnhancedVoiceButtonProps {

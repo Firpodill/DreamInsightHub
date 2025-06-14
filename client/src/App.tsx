@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useGlobalClickHandler } from "@/hooks/use-global-audio-manager";
+import { MobileAudioUnlock } from "@/components/mobile-audio-unlock";
 import DreamChat from "@/pages/dream-chat";
 import DreamAnalysis from "@/pages/dream-analysis";
 import VisionBoard from "@/pages/vision-board";
@@ -28,6 +29,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <MobileAudioUnlock />
         <Toaster />
         <Router />
       </TooltipProvider>
