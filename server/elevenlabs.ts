@@ -64,8 +64,10 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
     }
   }
 
-  if (!response.ok) {
-    throw new Error(`ElevenLabs TTS error: ${response.status}`);
+  if (!response || !response.ok) {
+    const errorText = response ? await response.text() : 'No response';
+    console.log(`ElevenLabs synthesis failed: ${response?.status} - ${errorText}`);
+    throw new Error(`ElevenLabs TTS error: ${response?.status} - Character limit may be exceeded`);
   }
 
   const arrayBuffer = await response.arrayBuffer();
