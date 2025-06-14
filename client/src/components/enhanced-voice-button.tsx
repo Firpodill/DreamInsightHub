@@ -42,6 +42,7 @@ export function EnhancedVoiceButton({
   const elevenLabsVoice = useElevenLabsVoice();
   const { selectedVoice, setSelectedVoice } = useGlobalVoicePreference();
   const audioManager = useGlobalAudioManager(`voice-button-${text.substring(0, 20)}`);
+  const { isAudioUnlocked, unlockAudio, needsUnlock } = useMobileAudio();
 
 
   // Register stop functions with global audio manager
@@ -111,12 +112,21 @@ export function EnhancedVoiceButton({
     audioManager.setPlaying(false);
   };
 
-  const handleToggle = () => {
+  const handleToggle = async () => {
     const isCurrentlyBusy = isPlaying || isLoading || systemVoice.isPlaying || elevenLabsVoice.isPlaying || elevenLabsVoice.isLoading;
     
     if (isCurrentlyBusy) {
       stopAllAudio();
       return; // Early return to prevent any restart
+    }
+    
+    // Check if mobile audio needs to be unlocked first
+    if (needsUnlock && !isAudioUnlocked) {
+      try {
+        await unlockAudio();
+      } catch (error) {
+        console.error('Failed to unlock mobile audio:', error);
+      }
     }
     
     // Start playing only if we're not busy
