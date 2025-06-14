@@ -29,26 +29,34 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
   let truncatedText = text;
   
   if (text.length > maxLength) {
-    // Find the last complete sentence within the limit
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    let result = '';
+    // Try to find a natural break point
+    let breakPoint = maxLength;
     
-    for (let i = 0; i < sentences.length; i++) {
-      const sentence = sentences[i].trim();
-      const testResult = result + (result ? ' ' : '') + sentence + '.';
-      
-      if (testResult.length <= maxLength) {
-        result = testResult;
-      } else {
-        // If even the first sentence is too long, take what we can
-        if (result === '') {
-          result = sentence.substring(0, maxLength - 3) + '...';
-        }
+    // Look for sentence endings near the limit
+    for (let i = maxLength - 50; i <= Math.min(maxLength + 20, text.length); i++) {
+      if (text[i] && /[.!?]/.test(text[i])) {
+        // Found a sentence ending, use it
+        breakPoint = i + 1;
         break;
       }
     }
     
-    truncatedText = result || text.substring(0, maxLength);
+    // If no sentence ending found, look for word boundaries
+    if (breakPoint === maxLength) {
+      for (let i = maxLength; i >= maxLength - 30; i--) {
+        if (text[i] && /\s/.test(text[i])) {
+          breakPoint = i;
+          break;
+        }
+      }
+    }
+    
+    truncatedText = text.substring(0, breakPoint).trim();
+    
+    // Add ellipsis if we truncated
+    if (breakPoint < text.length && !truncatedText.endsWith('.') && !truncatedText.endsWith('!') && !truncatedText.endsWith('?')) {
+      truncatedText += '...';
+    }
   }
   
   console.log(`Text length: ${text.length}, using: ${truncatedText.length} characters`);
