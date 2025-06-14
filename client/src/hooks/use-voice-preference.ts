@@ -85,13 +85,13 @@ export function useGlobalVoicePreference() {
           globalSelectedVoice = savedVoice;
           setSelectedVoiceState(savedVoice);
         } else {
-          // Set Chessie V3 as default only if no preference is saved
-          console.log('Setting default voice to Chessie V3');
+          // Set Aria as default only if no preference is saved
+          console.log('Setting default voice to Aria');
           const defaultVoice: VoiceOption = {
-            id: 'elevenlabs-gXkRl8ChmS6D1XSSjct7',
-            name: 'Chessie V3 (Premium AI)',
+            id: 'elevenlabs-9BWtsMINqrJLrRacOk9x',
+            name: 'Aria (Premium AI)',
             type: 'elevenlabs',
-            elevenLabsVoice: { voice_id: 'gXkRl8ChmS6D1XSSjct7' }
+            elevenLabsVoice: { voice_id: '9BWtsMINqrJLrRacOk9x' }
           };
           setSelectedVoice(defaultVoice);
         }
