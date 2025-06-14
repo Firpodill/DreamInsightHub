@@ -174,13 +174,37 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
       audio.preload = 'auto';
       audio.load();
 
-      // Handle audio events
+      // Handle audio events with mobile compatibility
       const playAudio = () => {
-        audio.play().catch(err => {
-          console.error('Audio play error:', err);
-          setError('Failed to play audio');
-          setIsPlaying(false);
-        });
+        // iOS requires user interaction for audio playback
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          // On mobile, ensure audio can start
+          audio.muted = false;
+          audio.volume = 1.0;
+        }
+        
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('Audio playback started successfully');
+              setIsPlaying(true);
+            })
+            .catch(err => {
+              console.error('Audio play error:', err);
+              // On mobile, if ElevenLabs fails, try system voice fallback
+              if (isMobile && fallbackCallback) {
+                console.log('Mobile audio failed, trying system fallback');
+                fallbackCallback();
+              } else {
+                setError('Audio playback not supported on this device');
+              }
+              setIsPlaying(false);
+            });
+        }
       };
 
       // Try to play immediately, or wait for canplay event
