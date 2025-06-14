@@ -24,8 +24,14 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
   
   console.log('Using API key:', process.env.ELEVENLABS_API_KEY ? process.env.ELEVENLABS_API_KEY.substring(0, 15) + '...' : 'NOT SET');
 
-  // Try different model configurations for compatibility
-  const models = ['eleven_turbo_v2_5', 'eleven_multilingual_v2', 'eleven_monolingual_v1'];
+  // Truncate text to stay within credit limits (roughly 10 characters per credit)
+  const maxLength = 100; // Conservative limit to stay within remaining credits
+  const truncatedText = text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  
+  console.log(`Text length: ${text.length}, using: ${truncatedText.length} characters`);
+
+  // Use most efficient model first
+  const models = ['eleven_monolingual_v1', 'eleven_multilingual_v2', 'eleven_turbo_v2_5'];
   let response;
   let lastError;
 
@@ -39,27 +45,28 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
           'xi-api-key': process.env.ELEVENLABS_API_KEY,
         },
         body: JSON.stringify({
-          text,
+          text: truncatedText,
           model_id: model,
           voice_settings: {
             stability: 0.5,
             similarity_boost: 0.75,
             style: 0.0,
-            use_speaker_boost: true,
+            use_speaker_boost: false, // Disable to save credits
             ...settings,
           },
         }),
       });
 
       if (response.ok) {
-        console.log(`Successfully used model: ${model}`);
+        console.log(`Successfully used model: ${model} with ${truncatedText.length} characters`);
         break;
       } else {
-        lastError = `Model ${model} failed with status ${response.status}`;
+        const errorData = await response.text();
+        lastError = `Model ${model} failed with status ${response.status}: ${errorData}`;
         console.log(lastError);
       }
-    } catch (err) {
-      lastError = `Model ${model} failed: ${err.message}`;
+    } catch (err: any) {
+      lastError = `Model ${model} failed: ${err?.message || 'Unknown error'}`;
       console.log(lastError);
     }
   }
