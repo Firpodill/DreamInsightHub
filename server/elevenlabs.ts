@@ -24,8 +24,8 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
   
   console.log('Using API key:', process.env.ELEVENLABS_API_KEY ? process.env.ELEVENLABS_API_KEY.substring(0, 15) + '...' : 'NOT SET');
 
-  // BETA mode: Limit text for testing to conserve credits
-  const maxLength = 200; // Reasonable limit for testing
+  // BETA mode: Higher limit for analytical content like Jungian interpretations
+  const maxLength = 400; // Increased for meaningful analytical content
   let truncatedText = text;
   
   if (text.length > maxLength) {
