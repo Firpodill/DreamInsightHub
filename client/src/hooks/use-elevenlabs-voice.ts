@@ -158,23 +158,10 @@ export function useElevenLabsVoice(): UseElevenLabsVoiceReturn {
 
       setIsLoading(false);
 
-      // Check if this request is still valid (not cancelled)
-      if (currentRequestIdRef.current !== requestId) {
-        console.log('Request cancelled - not playing audio');
-        setIsLoading(false);
-        return;
-      }
-
-      // Check if global audio stop is active before creating audio
+      // Simplified check - only verify if globally stopped
       if (!globalAudioManager.canPlayAudio()) {
         console.log('Global audio stop is active - not playing audio');
         setIsLoading(false);
-        return;
-      }
-
-      // Check if we should stop before creating audio
-      if (isStopping) {
-        console.log('Synthesis completed but stopping flag is set - not playing audio');
         return;
       }
 

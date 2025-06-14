@@ -126,7 +126,12 @@ export function EnhancedVoiceButton({
     // Allow audio to play again
     globalAudioManager.allowAudio();
     
-    // Clear any existing states first
+    // Clear any existing states and timeouts first
+    if (audioTimeout) {
+      clearTimeout(audioTimeout);
+      setAudioTimeout(null);
+    }
+    
     setIsPlaying(false);
     setIsLoading(false);
     
@@ -134,12 +139,8 @@ export function EnhancedVoiceButton({
     
     if (selectedVoice?.type === 'elevenlabs' && selectedVoice.elevenLabsVoice) {
       console.log('Using ElevenLabs voice:', selectedVoice.elevenLabsVoice.voice_id);
-      // Set up fallback to system voice if ElevenLabs fails
-      const fallbackToSystem = () => {
-        console.log('ElevenLabs failed, falling back to system voice');
-        systemVoice.speak(text);
-      };
-      elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id, fallbackToSystem);
+      // Disable fallback to prevent audio conflicts
+      elevenLabsVoice.speak(text, selectedVoice.elevenLabsVoice.voice_id);
     } else if (selectedVoice?.type === 'system' && selectedVoice.voice) {
       console.log('Using system voice:', selectedVoice.voice.name);
       systemVoice.setVoice(selectedVoice.voice);
@@ -149,13 +150,8 @@ export function EnhancedVoiceButton({
       systemVoice.speak(text);
     }
     
-    // Set auto-stop timeout to prevent infinite playing
-    const timeout = setTimeout(() => {
-      console.log('Auto-stopping audio after timeout');
-      stopAllAudio();
-    }, Math.max(text.length * 80, 10000)); // 80ms per character, minimum 10 seconds
-    
-    setAudioTimeout(timeout);
+    // Remove aggressive timeout that was causing cancellations
+    // Let the audio play naturally without forced interruption
   };
 
   const handleStop = () => {

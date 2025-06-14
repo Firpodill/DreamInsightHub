@@ -4,8 +4,7 @@ let globalAudioInstances: HTMLAudioElement[] = [];
 
 export const globalAudioManager = {
   stopAll: () => {
-    console.log('Setting global audio stop - preventing all new audio');
-    globalAudioStopped = true;
+    console.log('Stopping all audio playback');
     
     // Stop all existing audio instances
     globalAudioInstances.forEach(audio => {
@@ -18,13 +17,12 @@ export const globalAudioManager = {
     // Clear the array
     globalAudioInstances = [];
     
-    // Also stop any audio elements in the DOM
+    // Stop any audio elements in the DOM
     const allAudio = document.querySelectorAll('audio');
     allAudio.forEach(audio => {
       if (!audio.paused) {
         audio.pause();
         audio.currentTime = 0;
-        audio.remove();
       }
     });
   },
