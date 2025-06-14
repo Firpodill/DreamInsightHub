@@ -85,13 +85,13 @@ export function useGlobalVoicePreference() {
           globalSelectedVoice = savedVoice;
           setSelectedVoiceState(savedVoice);
         } else {
-          // Set Christopher Drag as default only if no preference is saved
-          console.log('Setting default voice to Christopher Drag');
+          // Set Chessie V3 as default only if no preference is saved
+          console.log('Setting default voice to Chessie V3');
           const defaultVoice: VoiceOption = {
-            id: 'elevenlabs-AaT5D3dkm5RYlH6AMYYI',
-            name: 'Christopher Drag (Premium AI)',
+            id: 'elevenlabs-gXkRl8ChmS6D1XSSjct7',
+            name: 'Chessie V3 (Premium AI)',
             type: 'elevenlabs',
-            elevenLabsVoice: { voice_id: 'AaT5D3dkm5RYlH6AMYYI' }
+            elevenLabsVoice: { voice_id: 'gXkRl8ChmS6D1XSSjct7' }
           };
           setSelectedVoice(defaultVoice);
         }

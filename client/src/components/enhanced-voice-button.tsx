@@ -170,22 +170,22 @@ export function EnhancedVoiceButton({
     console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
-  // Set Christopher Drag as default only if no voice is selected
+  // Set Chessie V3 as default only if no voice is selected
   useEffect(() => {
     if (elevenLabsVoice.availableVoices.length > 0 && !selectedVoice) {
-      const christopherDrag = elevenLabsVoice.availableVoices.find(voice => 
-        voice.voice_id === 'AaT5D3dkm5RYlH6AMYYI'
+      const chessieV3 = elevenLabsVoice.availableVoices.find(voice => 
+        voice.voice_id === 'gXkRl8ChmS6D1XSSjct7'
       );
       
-      if (christopherDrag) {
+      if (chessieV3) {
         const voiceOption: VoiceOption = {
-          id: `elevenlabs-${christopherDrag.voice_id}`,
-          name: 'Christopher Drag (Premium AI)',
+          id: `elevenlabs-${chessieV3.voice_id}`,
+          name: 'Chessie V3 (Premium AI)',
           type: 'elevenlabs',
-          elevenLabsVoice: christopherDrag,
+          elevenLabsVoice: chessieV3,
         };
         setSelectedVoice(voiceOption);
-        console.log('Set Christopher Drag as initial default voice');
+        console.log('Set Chessie V3 as initial default voice');
       }
     }
   }, [elevenLabsVoice.availableVoices, selectedVoice, setSelectedVoice]);
