@@ -170,22 +170,22 @@ export function EnhancedVoiceButton({
     console.log('Voice selected:', voiceOption.name, voiceOption.type);
   };
 
-  // Set Aria as default only if no voice is selected
+  // Set Chessie V3 as default only if no voice is selected
   useEffect(() => {
     if (elevenLabsVoice.availableVoices.length > 0 && !selectedVoice) {
-      const aria = elevenLabsVoice.availableVoices.find(voice => 
-        voice.voice_id === '9BWtsMINqrJLrRacOk9x'
+      const chessieV3 = elevenLabsVoice.availableVoices.find(voice => 
+        voice.voice_id === 'gXkRl8ChmS6D1XSSjct7'
       );
       
-      if (aria) {
+      if (chessieV3) {
         const voiceOption: VoiceOption = {
-          id: `elevenlabs-${aria.voice_id}`,
-          name: 'Aria (Premium AI)',
+          id: `elevenlabs-${chessieV3.voice_id}`,
+          name: 'Chessie V3 (Premium AI)',
           type: 'elevenlabs',
-          elevenLabsVoice: aria,
+          elevenLabsVoice: chessieV3,
         };
         setSelectedVoice(voiceOption);
-        console.log('Set Aria as initial default voice');
+        console.log('Set Chessie V3 as initial default voice');
       }
     }
   }, [elevenLabsVoice.availableVoices, selectedVoice, setSelectedVoice]);
