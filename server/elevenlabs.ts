@@ -24,40 +24,8 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
   
   console.log('Using API key:', process.env.ELEVENLABS_API_KEY ? process.env.ELEVENLABS_API_KEY.substring(0, 15) + '...' : 'NOT SET');
 
-  // Truncate text to stay within credit limits but preserve sentence integrity
-  const maxLength = 250; // Increased limit for analytical content
+  // Use full text since you have paid for additional credits
   let truncatedText = text;
-  
-  if (text.length > maxLength) {
-    // Try to find a natural break point
-    let breakPoint = maxLength;
-    
-    // Look for sentence endings near the limit
-    for (let i = maxLength - 50; i <= Math.min(maxLength + 20, text.length); i++) {
-      if (text[i] && /[.!?]/.test(text[i])) {
-        // Found a sentence ending, use it
-        breakPoint = i + 1;
-        break;
-      }
-    }
-    
-    // If no sentence ending found, look for word boundaries
-    if (breakPoint === maxLength) {
-      for (let i = maxLength; i >= maxLength - 30; i--) {
-        if (text[i] && /\s/.test(text[i])) {
-          breakPoint = i;
-          break;
-        }
-      }
-    }
-    
-    truncatedText = text.substring(0, breakPoint).trim();
-    
-    // Add ellipsis if we truncated
-    if (breakPoint < text.length && !truncatedText.endsWith('.') && !truncatedText.endsWith('!') && !truncatedText.endsWith('?')) {
-      truncatedText += '...';
-    }
-  }
   
   console.log(`Text length: ${text.length}, using: ${truncatedText.length} characters`);
 
