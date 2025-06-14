@@ -34,6 +34,19 @@ export function useVoicePreference() {
 let globalSelectedVoice: VoiceOption | null = null;
 const listeners: Set<(voice: VoiceOption | null) => void> = new Set();
 
+// Force clear any Chessie preferences immediately
+try {
+  const savedName = localStorage.getItem('dreamspeak-voice-name');
+  if (savedName && savedName.includes('Chessie')) {
+    localStorage.removeItem('dreamspeak-voice-id');
+    localStorage.removeItem('dreamspeak-voice-name');
+    localStorage.removeItem('dreamspeak-voice-type');
+    globalSelectedVoice = null;
+  }
+} catch (error) {
+  console.error('Failed to clear Chessie preferences:', error);
+}
+
 export function useGlobalVoicePreference() {
   const [selectedVoice, setSelectedVoiceState] = useState<VoiceOption | null>(globalSelectedVoice);
 
@@ -61,7 +74,7 @@ export function useGlobalVoicePreference() {
     }
   };
 
-  // Load from localStorage on first use or set default to Christopher Drag
+  // Load from localStorage on first use or set default to Aria
   useEffect(() => {
     if (globalSelectedVoice === null) {
       try {
@@ -69,32 +82,23 @@ export function useGlobalVoicePreference() {
         const savedName = localStorage.getItem('dreamspeak-voice-name');
         const savedType = localStorage.getItem('dreamspeak-voice-type');
         
-        if (savedId && savedName && savedType) {
-          // Use saved preference
-          console.log('Found saved voice preference:', savedName, savedType);
-          const savedVoice: VoiceOption = {
-            id: savedId,
-            name: savedName,
-            type: savedType as 'system' | 'elevenlabs'
-          };
-          
-          if (savedType === 'elevenlabs') {
-            savedVoice.elevenLabsVoice = { voice_id: savedId.replace('elevenlabs-', '') };
-          }
-          
-          globalSelectedVoice = savedVoice;
-          setSelectedVoiceState(savedVoice);
-        } else {
-          // Set Aria as default only if no preference is saved
-          console.log('Setting default voice to Aria');
-          const defaultVoice: VoiceOption = {
-            id: 'elevenlabs-9BWtsMINqrJLrRacOk9x',
-            name: 'Aria (Premium AI)',
-            type: 'elevenlabs',
-            elevenLabsVoice: { voice_id: '9BWtsMINqrJLrRacOk9x' }
-          };
-          setSelectedVoice(defaultVoice);
+        // Clear any Chessie V3 preferences and force Aria as default
+        if (savedName && savedName.includes('Chessie')) {
+          console.log('Clearing Chessie voice preference, switching to Aria');
+          localStorage.removeItem('dreamspeak-voice-id');
+          localStorage.removeItem('dreamspeak-voice-name');
+          localStorage.removeItem('dreamspeak-voice-type');
         }
+        
+        // Always set Aria as default for now
+        console.log('Setting default voice to Aria');
+        const defaultVoice: VoiceOption = {
+          id: 'elevenlabs-9BWtsMINqrJLrRacOk9x',
+          name: 'Aria (Premium AI)',
+          type: 'elevenlabs',
+          elevenLabsVoice: { voice_id: '9BWtsMINqrJLrRacOk9x' }
+        };
+        setSelectedVoice(defaultVoice);
       } catch (error) {
         console.error('Failed to load voice preference:', error);
       }
