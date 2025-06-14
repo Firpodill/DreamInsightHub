@@ -25,19 +25,25 @@ export async function synthesizeElevenLabsSpeech(text: string, voiceId: string, 
   console.log('Using API key:', process.env.ELEVENLABS_API_KEY ? process.env.ELEVENLABS_API_KEY.substring(0, 15) + '...' : 'NOT SET');
 
   // Truncate text to stay within credit limits but preserve sentence integrity
-  const maxLength = 150; // Slightly higher limit for complete sentences
+  const maxLength = 250; // Increased limit for analytical content
   let truncatedText = text;
   
   if (text.length > maxLength) {
     // Find the last complete sentence within the limit
-    const sentences = text.split(/[.!?]+/);
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
     let result = '';
     
-    for (const sentence of sentences) {
-      const testResult = result + sentence + '.';
+    for (let i = 0; i < sentences.length; i++) {
+      const sentence = sentences[i].trim();
+      const testResult = result + (result ? ' ' : '') + sentence + '.';
+      
       if (testResult.length <= maxLength) {
         result = testResult;
       } else {
+        // If even the first sentence is too long, take what we can
+        if (result === '') {
+          result = sentence.substring(0, maxLength - 3) + '...';
+        }
         break;
       }
     }
