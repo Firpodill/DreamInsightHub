@@ -95,7 +95,8 @@ DreamSpeak is a sophisticated dream analysis application that combines Carl Jung
 - **PWA Considerations**: Offline functionality and app-like experience
 
 ## Changelog
-- June 14, 2025. Initial setup
+- June 14, 2025: Initial setup
+- June 14, 2025: Chessie V3 voice successfully implemented as default with BETA credit-saving mode
 
 ## User Preferences
 
