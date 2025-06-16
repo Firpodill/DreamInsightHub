@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Mic, Brain, Keyboard, Info, Volume2 } from "lucide-react";
@@ -24,6 +24,7 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
   const [statusFading, setStatusFading] = useState(false);
   const [location, navigate] = useLocation();
   const analyzeDream = useAnalyzeDream();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const { showTooltip, dismissTooltip, dontShowAgain } = useVoiceInputTooltip();
 
