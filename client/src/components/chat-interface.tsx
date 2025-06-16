@@ -117,7 +117,18 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
                 )}
               </div>
             ) : (
-              <div className="w-full h-full flex flex-col relative">
+              <div 
+                className="w-full h-full flex flex-col relative"
+                onClick={() => {
+                  // When user taps in text mode, ensure textarea gets focus for mobile keyboard
+                  if (inputMode === 'text') {
+                    const textarea = document.querySelector('textarea');
+                    if (textarea) {
+                      textarea.focus();
+                    }
+                  }
+                }}
+              >
                 <Textarea
                   value={dreamText}
                   onChange={(e) => {
@@ -140,10 +151,22 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
                   }}
                   disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
                   readOnly={inputMode === 'voice' && !isTranscribing}
+                  autoFocus={inputMode === 'text'}
+                  inputMode="text"
+                  enterKeyHint="done"
                   onInput={(e) => {
                     // Auto-scroll to bottom as user types
                     const textarea = e.target as HTMLTextAreaElement;
                     textarea.scrollTop = textarea.scrollHeight;
+                  }}
+                  onFocus={() => {
+                    // Ensure mobile keyboard appears by scrolling element into view
+                    const textarea = document.activeElement as HTMLElement;
+                    if (textarea) {
+                      setTimeout(() => {
+                        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 100);
+                    }
                   }}
                 />
                 {inputMode === 'text' && !dreamText.trim() && (
@@ -207,12 +230,24 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
             }}
             onDoubleClick={() => {
               // Double-click to toggle modes
-              setInputMode(inputMode === 'voice' ? 'text' : 'voice');
+              const newMode = inputMode === 'voice' ? 'text' : 'voice';
+              setInputMode(newMode);
               if (isTranscribing) {
                 setIsTranscribing(false);
                 setIsVoiceRecording(false);
                 stopListening();
                 resetTranscript();
+              }
+              
+              // When switching to text mode, focus the textarea to trigger mobile keyboard
+              if (newMode === 'text') {
+                setTimeout(() => {
+                  const textarea = document.querySelector('textarea');
+                  if (textarea) {
+                    textarea.focus();
+                    textarea.click(); // Additional trigger for mobile browsers
+                  }
+                }, 100);
               }
             }}
             className={`w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center ${isTranscribing ? 'animate-speak-pulse' : ''}`}
