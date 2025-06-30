@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamSpeak QR Code</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #E53E3E;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        
+        .qr-code {
+            margin: 20px 0;
+            border: 5px solid #E53E3E;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .url {
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+            word-break: break-all;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .instructions {
+            font-size: 1.1em;
+            color: #333;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+        
+        .features {
+            text-align: left;
+            margin-top: 20px;
+            color: #555;
+        }
+        
+        .features ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .features li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <div class="title">DreamSpeak</div>
+        <div class="subtitle">Jungian Dream Decoder</div>
+        
+        <div class="qr-code">
+            <img src="dreamspeak-deployment-qr.png" alt="DreamSpeak QR Code" width="300" height="300">
+        </div>
+        
+        <div class="instructions">
+            Scan this QR code with your phone camera to access the DreamSpeak app
+        </div>
+        
+        <div class="url">
+            https://b6e2195d-9d45-47f1-97d6-70f86c4eff86.replit.app
+        </div>
+        
+        <div class="features">
+            <strong>New Feature: Dream Memory Capsules</strong>
+            <ul>
+                <li>Create organized dream collections</li>
+                <li>Advanced filtering and search</li>
+                <li>Analytics and timeline views</li>
+                <li>Audio playback and export</li>
+                <li>Access via the "Memory" tab</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

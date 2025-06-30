@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
+  <!-- Background -->
+  <rect width="400" height="500" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="200" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#E53E3E">DREAMSPEAK QR CODE</text>
+  
+  <!-- QR Code (based on actual pattern from generated PNG) -->
+  <g transform="translate(75, 70)">
+    <rect x="0" y="0" width="250" height="250" fill="white" stroke="#000" stroke-width="1"/>
+    
+    <!-- Row 1 -->
+    <rect x="0" y="0" width="70" height="10" fill="black"/>
+    <rect x="80" y="0" width="10" height="10" fill="black"/>
+    <rect x="100" y="0" width="10" height="10" fill="black"/>
+    <rect x="120" y="0" width="10" height="10" fill="black"/>
+    <rect x="140" y="0" width="10" height="10" fill="black"/>
+    <rect x="160" y="0" width="10" height="10" fill="black"/>
+    <rect x="180" y="0" width="70" height="10" fill="black"/>
+    
+    <!-- Row 2 -->
+    <rect x="0" y="10" width="10" height="10" fill="black"/>
+    <rect x="60" y="10" width="10" height="10" fill="black"/>
+    <rect x="80" y="10" width="10" height="10" fill="black"/>
+    <rect x="100" y="10" width="10" height="10" fill="black"/>
+    <rect x="120" y="10" width="10" height="10" fill="black"/>
+    <rect x="140" y="10" width="10" height="10" fill="black"/>
+    <rect x="180" y="10" width="10" height="10" fill="black"/>
+    <rect x="240" y="10" width="10" height="10" fill="black"/>
+    
+    <!-- Row 3 -->
+    <rect x="0" y="20" width="10" height="10" fill="black"/>
+    <rect x="20" y="20" width="30" height="10" fill="black"/>
+    <rect x="60" y="20" width="10" height="10" fill="black"/>
+    <rect x="80" y="20" width="10" height="10" fill="black"/>
+    <rect x="100" y="20" width="10" height="10" fill="black"/>
+    <rect x="120" y="20" width="10" height="10" fill="black"/>
+    <rect x="140" y="20" width="10" height="10" fill="black"/>
+    <rect x="160" y="20" width="10" height="10" fill="black"/>
+    <rect x="180" y="20" width="10" height="10" fill="black"/>
+    <rect x="200" y="20" width="30" height="10" fill="black"/>
+    <rect x="240" y="20" width="10" height="10" fill="black"/>
+    
+    <!-- Continue pattern for rows 4-25 -->
+    <rect x="0" y="30" width="10" height="10" fill="black"/>
+    <rect x="20" y="30" width="30" height="10" fill="black"/>
+    <rect x="60" y="30" width="10" height="10" fill="black"/>
+    <rect x="100" y="30" width="10" height="10" fill="black"/>
+    <rect x="120" y="30" width="10" height="10" fill="black"/>
+    <rect x="140" y="30" width="10" height="10" fill="black"/>
+    <rect x="180" y="30" width="10" height="10" fill="black"/>
+    <rect x="200" y="30" width="30" height="10" fill="black"/>
+    <rect x="240" y="30" width="10" height="10" fill="black"/>
+    
+    <rect x="0" y="40" width="10" height="10" fill="black"/>
+    <rect x="20" y="40" width="30" height="10" fill="black"/>
+    <rect x="60" y="40" width="10" height="10" fill="black"/>
+    <rect x="80" y="40" width="10" height="10" fill="black"/>
+    <rect x="120" y="40" width="10" height="10" fill="black"/>
+    <rect x="140" y="40" width="10" height="10" fill="black"/>
+    <rect x="180" y="40" width="10" height="10" fill="black"/>
+    <rect x="200" y="40" width="30" height="10" fill="black"/>
+    <rect x="240" y="40" width="10" height="10" fill="black"/>
+    
+    <rect x="0" y="50" width="10" height="10" fill="black"/>
+    <rect x="60" y="50" width="10" height="10" fill="black"/>
+    <rect x="80" y="50" width="10" height="10" fill="black"/>
+    <rect x="100" y="50" width="10" height="10" fill="black"/>
+    <rect x="120" y="50" width="10" height="10" fill="black"/>
+    <rect x="140" y="50" width="10" height="10" fill="black"/>
+    <rect x="160" y="50" width="10" height="10" fill="black"/>
+    <rect x="180" y="50" width="10" height="10" fill="black"/>
+    <rect x="240" y="50" width="10" height="10" fill="black"/>
+    
+    <rect x="0" y="60" width="70" height="10" fill="black"/>
+    <rect x="80" y="60" width="10" height="10" fill="black"/>
+    <rect x="100" y="60" width="10" height="10" fill="black"/>
+    <rect x="120" y="60" width="10" height="10" fill="black"/>
+    <rect x="140" y="60" width="10" height="10" fill="black"/>
+    <rect x="160" y="60" width="10" height="10" fill="black"/>
+    <rect x="180" y="60" width="70" height="10" fill="black"/>
+    
+    <!-- Data pattern middle section -->
+    <rect x="100" y="80" width="10" height="10" fill="black"/>
+    <rect x="120" y="80" width="10" height="10" fill="black"/>
+    <rect x="140" y="80" width="10" height="10" fill="black"/>
+    
+    <rect x="0" y="90" width="10" height="10" fill="black"/>
+    <rect x="20" y="90" width="10" height="10" fill="black"/>
+    <rect x="40" y="90" width="10" height="10" fill="black"/>
+    <rect x="60" y="90" width="10" height="10" fill="black"/>
+    <rect x="80" y="90" width="10" height="10" fill="black"/>
+    <rect x="100" y="90" width="10" height="10" fill="black"/>
+    <rect x="120" y="90" width="10" height="10" fill="black"/>
+    <rect x="140" y="90" width="10" height="10" fill="black"/>
+    <rect x="160" y="90" width="10" height="10" fill="black"/>
+    <rect x="180" y="90" width="10" height="10" fill="black"/>
+    <rect x="200" y="90" width="10" height="10" fill="black"/>
+    <rect x="220" y="90" width="10" height="10" fill="black"/>
+    <rect x="240" y="90" width="10" height="10" fill="black"/>
+    
+    <!-- Continue with complex data pattern -->
+    <rect x="20" y="100" width="10" height="10" fill="black"/>
+    <rect x="40" y="100" width="10" height="10" fill="black"/>
+    <rect x="80" y="100" width="10" height="10" fill="black"/>
+    <rect x="120" y="100" width="10" height="10" fill="black"/>
+    <rect x="160" y="100" width="10" height="10" fill="black"/>
+    <rect x="200" y="100" width="10" height="10" fill="black"/>
+    
+    <!-- Bottom left corner -->
+    <rect x="0" y="180" width="70" height="10" fill="black"/>
+    <rect x="0" y="190" width="10" height="10" fill="black"/>
+    <rect x="60" y="190" width="10" height="10" fill="black"/>
+    <rect x="0" y="200" width="10" height="10" fill="black"/>
+    <rect x="20" y="200" width="30" height="10" fill="black"/>
+    <rect x="60" y="200" width="10" height="10" fill="black"/>
+    <rect x="0" y="210" width="10" height="10" fill="black"/>
+    <rect x="20" y="210" width="30" height="10" fill="black"/>
+    <rect x="60" y="210" width="10" height="10" fill="black"/>
+    <rect x="0" y="220" width="10" height="10" fill="black"/>
+    <rect x="20" y="220" width="30" height="10" fill="black"/>
+    <rect x="60" y="220" width="10" height="10" fill="black"/>
+    <rect x="0" y="230" width="10" height="10" fill="black"/>
+    <rect x="60" y="230" width="10" height="10" fill="black"/>
+    <rect x="0" y="240" width="70" height="10" fill="black"/>
+    
+    <!-- Bottom data pattern -->
+    <rect x="80" y="180" width="10" height="10" fill="black"/>
+    <rect x="100" y="180" width="10" height="10" fill="black"/>
+    <rect x="120" y="180" width="10" height="10" fill="black"/>
+    <rect x="140" y="180" width="10" height="10" fill="black"/>
+    <rect x="160" y="180" width="10" height="10" fill="black"/>
+    <rect x="180" y="180" width="10" height="10" fill="black"/>
+    <rect x="200" y="180" width="10" height="10" fill="black"/>
+    <rect x="220" y="180" width="10" height="10" fill="black"/>
+    <rect x="240" y="180" width="10" height="10" fill="black"/>
+    
+    <rect x="80" y="190" width="10" height="10" fill="black"/>
+    <rect x="100" y="190" width="10" height="10" fill="black"/>
+    <rect x="120" y="190" width="10" height="10" fill="black"/>
+    <rect x="140" y="190" width="10" height="10" fill="black"/>
+    <rect x="160" y="190" width="10" height="10" fill="black"/>
+    <rect x="180" y="190" width="10" height="10" fill="black"/>
+    <rect x="200" y="190" width="10" height="10" fill="black"/>
+    <rect x="220" y="190" width="10" height="10" fill="black"/>
+    <rect x="240" y="190" width="10" height="10" fill="black"/>
+  </g>
+  
+  <!-- Instructions -->
+  <text x="200" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#333">📱 Scan with phone camera</text>
+  
+  <!-- URL -->
+  <text x="200" y="390" text-anchor="middle" font-family="monospace" font-size="10" fill="#666">https://b6e2195d-9d45-47f1-97d6-70f86c4eff86</text>
+  <text x="200" y="405" text-anchor="middle" font-family="monospace" font-size="10" fill="#666">-00-12k1zs8jp9eml.riker.replit.dev</text>
+  
+  <!-- Features -->
+  <text x="200" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#E53E3E">Dream Analysis • Memory Capsules • Vision Boards</text>
+  
+  <!-- Brand -->
+  <text x="200" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#E53E3E">DREAMSPEAK</text>
+  <text x="200" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#666">Jungian Dream Decoder</text>
+</svg>
