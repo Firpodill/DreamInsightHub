@@ -94,6 +94,12 @@ DreamSpeak is a sophisticated dream analysis application that combines Carl Jung
 - **Responsive Design**: Mobile-first approach with touch optimization
 - **PWA Considerations**: Offline functionality and app-like experience
 
+### Version Control & Backups
+- **GitHub Integration**: Automated backup system via Replit Git integration
+- **Backup Script**: `backup-project.js` for manual project exports
+- **Setup Guide**: `GITHUB_SETUP.md` for complete backup instructions
+- **Auto-save**: Replit can auto-commit changes to connected GitHub repository
+
 ## Changelog
 - June 14, 2025: Initial setup
 - June 14, 2025: Chessie V3 voice successfully implemented as default with BETA credit-saving mode
