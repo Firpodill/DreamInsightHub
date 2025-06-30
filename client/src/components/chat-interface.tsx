@@ -28,6 +28,19 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
   
   const { showTooltip, dismissTooltip, dontShowAgain } = useVoiceInputTooltip();
 
+  // Force mobile keyboard when switching to text mode
+  useEffect(() => {
+    if (inputMode === 'text' && textareaRef.current) {
+      const timer = setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.setSelectionRange(textareaRef.current.value.length, textareaRef.current.value.length);
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [inputMode]);
+
   const {
     transcript,
     isListening,
@@ -121,16 +134,17 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
               <div 
                 className="w-full h-full flex flex-col relative"
                 onClick={() => {
-                  // When user taps in text mode, ensure textarea gets focus for mobile keyboard
-                  if (inputMode === 'text') {
-                    const textarea = document.querySelector('textarea');
-                    if (textarea) {
-                      textarea.focus();
-                    }
+                  // When user taps in text mode, force mobile keyboard to appear
+                  if (inputMode === 'text' && textareaRef.current) {
+                    textareaRef.current.focus();
+                    textareaRef.current.click();
+                    // Force cursor position to trigger keyboard on iOS
+                    textareaRef.current.setSelectionRange(textareaRef.current.value.length, textareaRef.current.value.length);
                   }
                 }}
               >
                 <Textarea
+                  ref={textareaRef}
                   value={dreamText}
                   onChange={(e) => {
                     setDreamText(e.target.value);
@@ -148,7 +162,9 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
                     overflowY: 'auto',
                     paddingLeft: '8px',
                     paddingRight: '8px',
-                    scrollBehavior: 'smooth'
+                    scrollBehavior: 'smooth',
+                    WebkitUserSelect: 'text',
+                    userSelect: 'text'
                   }}
                   disabled={isDecoding || (inputMode === 'voice' && !isTranscribing)}
                   readOnly={inputMode === 'voice' && !isTranscribing}
@@ -160,12 +176,17 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
                     const textarea = e.target as HTMLTextAreaElement;
                     textarea.scrollTop = textarea.scrollHeight;
                   }}
+                  onTouchStart={() => {
+                    // Force focus on mobile touch to trigger keyboard
+                    if (inputMode === 'text' && textareaRef.current) {
+                      textareaRef.current.focus();
+                    }
+                  }}
                   onFocus={() => {
                     // Ensure mobile keyboard appears by scrolling element into view
-                    const textarea = document.activeElement as HTMLElement;
-                    if (textarea) {
+                    if (textareaRef.current) {
                       setTimeout(() => {
-                        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        textareaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                       }, 100);
                     }
                   }}
@@ -240,15 +261,16 @@ export function ChatInterface({ onDecodeComplete }: ChatInterfaceProps = {}) {
                 resetTranscript();
               }
               
-              // When switching to text mode, focus the textarea to trigger mobile keyboard
+              // When switching to text mode, force mobile keyboard to appear
               if (newMode === 'text') {
                 setTimeout(() => {
-                  const textarea = document.querySelector('textarea');
-                  if (textarea) {
-                    textarea.focus();
-                    textarea.click(); // Additional trigger for mobile browsers
+                  if (textareaRef.current) {
+                    textareaRef.current.focus();
+                    textareaRef.current.click();
+                    // Force selection to ensure keyboard appears on iOS
+                    textareaRef.current.setSelectionRange(textareaRef.current.value.length, textareaRef.current.value.length);
                   }
-                }, 100);
+                }, 150);
               }
             }}
             className={`w-full h-full bg-transparent hover:bg-black hover:bg-opacity-10 transition-all duration-300 focus:outline-none flex items-center justify-center ${isTranscribing ? 'animate-speak-pulse' : ''}`}
