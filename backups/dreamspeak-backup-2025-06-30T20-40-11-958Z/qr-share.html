@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Decoder - Mobile Access</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .qr-container {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            display: inline-block;
+        }
+        #qrcode {
+            max-width: 200px;
+            height: auto;
+        }
+        .url {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        .instructions {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .instructions li {
+            margin: 8px 0;
+            color: #718096;
+        }
+        .features {
+            background: #f0fff4;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .features h3 {
+            color: #22543d;
+            margin-bottom: 10px;
+        }
+        .features ul {
+            text-align: left;
+            color: #2f855a;
+            font-size: 14px;
+        }
+        .share-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            .share-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌙 Dream Decoder</h1>
+        <p class="subtitle">AI-Powered Dream Analysis & Vision Boards</p>
+        
+        <div class="qr-container">
+            <div id="qrcode"></div>
+        </div>
+        
+        <div class="url" id="app-url">Loading...</div>
+        
+        <div class="instructions">
+            <h3>📱 How to Access:</h3>
+            <ol>
+                <li>Open your phone's camera app</li>
+                <li>Point it at the QR code above</li>
+                <li>Tap the notification to open</li>
+                <li>Start exploring your dreams!</li>
+            </ol>
+        </div>
+        
+        <div class="features">
+            <h3>✨ Mobile Features:</h3>
+            <ul>
+                <li>Voice dream recording</li>
+                <li>Touch-based vision boards</li>
+                <li>Photo integration from camera</li>
+                <li>Audio dream interpretations</li>
+                <li>Export & share functionality</li>
+            </ul>
+        </div>
+        
+        <div class="share-buttons">
+            <button class="btn btn-primary" onclick="copyUrl()">Copy Link</button>
+            <button class="btn btn-secondary" onclick="downloadQR()">Save QR Code</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // Generate QR code
+        const appUrl = 'https://b6e2195d-9d45-47f1-97d6-70f86c4eff86.replit.app';
+        document.getElementById('app-url').textContent = appUrl;
+        
+        QRCode.toCanvas(document.getElementById('qrcode'), appUrl, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF'
+            }
+        }, function (error) {
+            if (error) console.error(error);
+        });
+        
+        // Copy URL function
+        function copyUrl() {
+            navigator.clipboard.writeText(appUrl).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#48bb78';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+        
+        // Download QR code as image
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            const link = document.createElement('a');
+            link.download = 'dream-decoder-qr.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Share API for mobile devices
+        if (navigator.share) {
+            const shareBtn = document.createElement('button');
+            shareBtn.className = 'btn btn-primary';
+            shareBtn.textContent = 'Share';
+            shareBtn.onclick = () => {
+                navigator.share({
+                    title: 'Dream Decoder - AI Dream Analysis',
+                    text: 'Check out this amazing AI-powered dream interpretation app!',
+                    url: appUrl
+                });
+            };
+            document.querySelector('.share-buttons').appendChild(shareBtn);
+        }
+    </script>
+</body>
+</html>

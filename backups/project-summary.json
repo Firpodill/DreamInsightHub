@@ -1,0 +1,28 @@
+{
+  "projectName": "DreamSpeak - Jungian Dream Analysis",
+  "backupDate": "2025-06-30T20:40:12.856Z",
+  "description": "AI-powered dream interpretation platform with voice synthesis",
+  "technologies": [
+    "React + TypeScript",
+    "Express.js + Node.js",
+    "PostgreSQL + Drizzle ORM",
+    "OpenAI GPT-4o",
+    "ElevenLabs Voice AI",
+    "Tailwind CSS"
+  ],
+  "features": [
+    "Voice-to-text dream input",
+    "AI Jungian dream analysis",
+    "Text-to-speech with Chessie V3 voice",
+    "Interactive dream visualization",
+    "Mobile-optimized interface",
+    "Dream journal and insights"
+  ],
+  "files": {
+    "frontend": "client/",
+    "backend": "server/",
+    "shared": "shared/",
+    "database": "drizzle.config.ts",
+    "config": "package.json, tsconfig.json, vite.config.ts"
+  }
+}
