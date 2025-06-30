@@ -1,0 +1,361 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  .mobile-text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 30px rgba(220, 38, 38, 0.2), 0 0 40px rgba(220, 38, 38, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.6), 0 0 50px rgba(220, 38, 38, 0.4), 0 0 70px rgba(220, 38, 38, 0.2);
+  }
+}
+
+@keyframes spiral-border {
+  0% {
+    border-color: white;
+    box-shadow: 4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3);
+  }
+  25% {
+    border-color: #ff6b6b;
+    box-shadow: 4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5), 0 0 30px rgba(255,107,107,0.5);
+  }
+  50% {
+    border-color: #4ecdc4;
+    box-shadow: 4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5), 0 0 30px rgba(78,205,196,0.5);
+  }
+  75% {
+    border-color: #45b7d1;
+    box-shadow: 4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5), 0 0 30px rgba(69,183,209,0.5);
+  }
+  100% {
+    border-color: white;
+    box-shadow: 4px 4px 0px #ff6b6b, inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3);
+  }
+}
+
+@keyframes speakPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes micPulseRed {
+  0%, 100% {
+    color: #ef4444;
+    transform: scale(1);
+  }
+  50% {
+    color: #dc2626;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes micPulseGreen {
+  0%, 100% {
+    color: #22c55e;
+    transform: scale(1);
+  }
+  50% {
+    color: #16a34a;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes eyeballSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes eyeballGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.animate-speak-pulse {
+  animation: speakPulse 1s ease-in-out infinite;
+}
+
+.animate-mic-red-pulse {
+  animation: micPulseRed 1.5s ease-in-out infinite;
+}
+
+.animate-mic-green-pulse {
+  animation: micPulseGreen 1s ease-in-out infinite;
+}
+
+.animate-eyeball-spin {
+  animation: eyeballSpin 3s linear infinite, eyeballGlow 2s ease-in-out infinite;
+}
+
+:root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 70%;
+  --popover: 0 0% 0%;
+  --popover-foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --border: 0 0% 20%;
+  --input: 0 0% 15%;
+  --primary: 250 84% 54%; /* #4F46E5 - Deep mystical purple */
+  --primary-foreground: 250 100% 99%;
+  --primary-dark: 240 70% 40%; /* Darker purple for gradients */
+  --secondary: 280 65% 60%; /* #A855F7 - Mystical lavender */
+  --secondary-foreground: 280 100% 99%;
+  --accent: 310 60% 70%; /* #D946EF - Dream pink accent */
+  --accent-foreground: 310 20% 15%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 261 70% 54%;
+  --radius: 0.5rem;
+  
+  /* Custom moonlight theme colors */
+  --midnight: 237 40% 15%; /* #1E1B4B */
+  --lavender: 262 80% 75%; /* #C084FC */
+  --charcoal: 216 19% 27%; /* #374151 */
+}
+
+.dark {
+  --background: 237 40% 5%; /* Dark midnight */
+  --foreground: 261 100% 98%;
+  --muted: 237 20% 15%;
+  --muted-foreground: 237 10% 65%;
+  --popover: 237 40% 8%;
+  --popover-foreground: 261 100% 98%;
+  --card: 237 40% 8%;
+  --card-foreground: 261 100% 98%;
+  --border: 237 20% 20%;
+  --input: 237 20% 20%;
+  --primary: 261 70% 54%; /* Keep primary purple */
+  --primary-foreground: 261 100% 99%;
+  --secondary: 45 93% 47%; /* Keep golden secondary */
+  --secondary-foreground: 45 100% 99%;
+  --accent: 262 80% 75%;
+  --accent-foreground: 262 20% 90%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 261 70% 54%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased text-foreground;
+    background: linear-gradient(135deg, #0f0c29 0%, #24243e 50%, #302b63 100%);
+    min-height: 100vh;
+  }
+
+  /* Mobile optimizations */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Touch-friendly scrolling */
+  .chat-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Hide scrollbars for chat input */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom text containment for speech bubble */
+  .text-bubble-container {
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 60%, transparent 90%);
+  }
+
+  /* Custom animations for mobile */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Reverse spin animation to counter-rotate text */
+  @keyframes reverse-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .animate-reverse-spin {
+    animation: reverse-spin 3s linear infinite;
+  }
+
+  /* Speech bubble text container styling */
+  .speech-bubble-text {
+    mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 50%, transparent 85%);
+  }
+
+  .text-bubble-container {
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  }
+
+  /* Recording status pulse animation */
+  @keyframes recording-pulse {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+
+  /* Recording status fade out animation */
+  @keyframes recording-fade-out {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+  }
+
+  .recording-status-pulse {
+    animation: recording-pulse 2s ease-in-out infinite;
+  }
+
+  .recording-status-fade {
+    animation: recording-fade-out 0.8s ease-out forwards;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: calc(200px + 100%) 0; }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Voice recording modal background */
+  .voice-recording {
+    background: radial-gradient(circle, rgba(107, 70, 193, 0.1) 0%, rgba(107, 70, 193, 0.05) 70%);
+  }
+
+  /* Improved mobile typography */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions for tab switching */
+  .tab-content {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  /* Enhance focus states for accessibility */
+  .focus-ring:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Mobile-specific button enhancements */
+  .mobile-button {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Progress bar styling */
+  .progress-bar {
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+}
+
+/* PWA specific styles */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: 0 0% 20%;
+    --ring: 261 70% 40%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin {
+    animation: none;
+  }
+}
